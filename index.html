@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DarkMusic | Artist Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-flex">
+            <a href="#" onclick="location.reload()" class="brand">DARKMUSIC<span>.SITE</span></a>
+            
+            <div id="auth-guest" class="nav-right">
+                <button onclick="login()" class="btn-primary">Mulai Sekarang</button>
+            </div>
+
+            <div id="auth-user" class="nav-right hidden">
+                <div class="main-nav">
+                    <button class="nav-link" onclick="showSection('library')">Buat Rilis</button>
+                    <button class="nav-link" onclick="showSection('my-releases')">Lihat Rilis Saya</button>
+                </div>
+
+                <div class="profile-trigger" onclick="toggleProfile(event)">
+                    <img id="user-photo" src="" alt="Profile">
+                    <div id="profile-dropdown" class="dropdown">
+                        <p id="user-name-display" style="font-weight:800; margin-bottom:4px;"></p>
+                        <p id="user-email-display" style="font-size:10px; color:#999; margin-top:0;"></p>
+                        <hr>
+                        <a href="#" id="admin-link" class="hidden" onclick="showSection('admin-panel')">Panel Admin</a>
+                        <a href="#" onclick="showSection('withdraw')">Withdraw</a>
+                        <button onclick="logout()" class="btn-logout">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section id="hero" class="hero">
+        <div class="container">
+            <h1>Bawa Musikmu ke<br>Seluruh Dunia.</h1>
+            <p>Distribusi gratis ke platform global tanpa biaya berlangganan.</p>
+            <button onclick="login()" class="btn-primary large">Login dengan Google</button>
+        </div>
+    </section>
+
+    <section id="library" class="dashboard hidden">
+        <div class="container">
+            <h2 style="margin-bottom:30px; text-align: left;">Ajukan Rilis Baru</h2>
+            <div class="upload-card">
+                <div class="form-grid">
+                    <div class="upload-files">
+                        <label>Link Folder Google Drive</label>
+                        <input type="text" id="drive-link" placeholder="https://drive.google.com/..." required>
+                        <div class="instruction-box">
+                            <strong>Instruksi Penting:</strong>
+                            <p>Pastikan folder berisi file audio (.flac) dan cover (3000px). Set akses folder ke "Siapa saja yang memiliki link".</p>
+                        </div>
+                    </div>
+                    <div class="upload-meta">
+                        <input type="text" id="song-title" placeholder="Judul Lagu">
+                        <input type="text" id="artist-name" placeholder="Nama Artis">
+                        
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="writer-name" placeholder="Penulis" style="flex:1">
+                            <input type="text" id="producer-name" placeholder="Produser" style="flex:1">
+                        </div>
+
+                        <div style="display: flex; gap: 10px;">
+                            <select id="genre" style="flex:1">
+                                <option>Pilih Genre</option>
+                                <option>Pop</option>
+                                <option>Rock</option>
+                                <option>Electronica</option>
+                                <option>Ambient</option>
+                                <option>Lo-Fi</option>
+                            </select>
+                            <input type="date" id="release-date" style="flex:1">
+                        </div>
+
+                        <div class="store-selector">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                                <label style="font-size:12px; font-weight:800; color:#333;">Target Toko Musik:</label>
+                                <span onclick="toggleAllStores()" style="color:blue; cursor:pointer; font-size:11px; font-weight:600;">Centang Semua</span>
+                            </div>
+                            <div class="store-grid">
+                                <label class="store-item"><input type="checkbox" class="store-cb" value="Spotify"> Spotify</label>
+                                <label class="store-item"><input type="checkbox" class="store-cb" value="Apple Music"> Apple</label>
+                                <label class="store-item"><input type="checkbox" class="store-cb" value="TikTok/Meta"> TikTok</label>
+                                <label class="store-item"><input type="checkbox" class="store-cb" value="YouTube"> YouTube</label>
+                                <label class="store-item"><input type="checkbox" class="store-cb" value="Amazon"> Amazon</label>
+                                <label class="store-item"><input type="checkbox" class="store-cb" value="Deezer"> Deezer</label>
+                            </div>
+                        </div>
+
+                        <button onclick="distribute()" id="btn-submit" class="btn-distribute" style="margin-top:20px;">AJUKAN DISTRIBUSI</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="my-releases" class="dashboard hidden">
+        <div class="container" style="max-width: 1200px;">
+            <div style="text-align: left; margin-bottom: 20px;">
+                <h2 style="font-size: 1.5rem; font-weight: 800;">My Releases</h2>
+                <p style="font-size: 0.8rem; color: #666;">Kelola semua rilisan musik Anda di sini.</p>
+            </div>
+
+            <div class="table-container">
+                <table class="release-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 40%;">Title</th>
+                            <th>Release date</th>
+                            <th>Release Status</th>
+                            <th style="text-align: center;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="my-release-body">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section id="admin-panel" class="dashboard hidden">
+        <div class="container">
+            <h2>Panel Admin Control</h2>
+            <div id="admin-release-list" class="upload-card"></div>
+        </div>
+    </section>
+
+    <section id="withdraw" class="dashboard hidden">
+        <div class="container" style="max-width:500px">
+            <h2>Penarikan Royalti</h2>
+            <div class="upload-card">
+                <p>Saldo Tersedia: <strong>$0.00</strong></p>
+                <input type="text" id="wd-name" placeholder="Nama Sesuai PayPal">
+                <input type="email" id="wd-paypal" placeholder="Email PayPal">
+                <button class="btn-primary" style="width:100%" onclick="alert('Permintaan terkirim!')">Kirim Permintaan</button>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
