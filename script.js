@@ -268,3 +268,14 @@ document.querySelectorAll('.faq-question').forEach(button => {
         faqItem.classList.toggle('active');
     });
 });
+function showUploadForm() {
+    document.getElementById('upload-teaser').classList.add('hidden');
+    document.getElementById('real-upload-form').classList.remove('hidden');
+    // Scroll otomatis ke form
+    document.getElementById('real-upload-form').scrollIntoView({ behavior: 'smooth' });
+}
+
+function hideUploadForm() {
+    document.getElementById('upload-teaser').classList.remove('hidden');
+    document.getElementById('real-upload-form').classList.add('hidden');
+}
