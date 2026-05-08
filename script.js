@@ -164,34 +164,39 @@ function loadMyReleases(uid) {
 }
 
 // ==========================================
-// ADMIN LOGIC
-// ==========================================
-// ==========================================
-// ADMIN LOGIC (PERBAIKAN)
+// ADMIN LOGIC (VERSI LENGKAP SEMUA TOMBOL)
 // ==========================================
 function loadAdminPanel() {
+    const adminList = document.getElementById('admin-release-list');
+    if(!adminList) return;
+
     db.collection('releases').orderBy('timestamp', 'desc').onSnapshot(snap => {
-        const list = document.getElementById('admin-release-list');
-        list.innerHTML = "<h3 style='margin-top:20px;'>Daftar Rilis Masuk</h3>";
+        adminList.innerHTML = "<h3 style='margin: 20px 0 15px;'>Daftar Rilis Masuk</h3>";
         
-        if (snap.empty) {
-            list.innerHTML += "<p style='color:#888;'>Belum ada rilis masuk.</p>";
+        if(snap.empty) {
+            adminList.innerHTML += "<p style='color:#999;'>Tidak ada rilis masuk.</p>";
             return;
         }
 
         snap.forEach(doc => {
             const d = doc.data();
-            list.innerHTML += `
-                <div class="card-light" style="margin-bottom:15px; border-left: 5px solid var(--primary);">
-                    <p><strong>Judul:</strong> ${d.title}</p>
-                    <p><strong>Artis:</strong> ${d.artist}</p>
-                    <p style="font-size:12px; background:#eee; padding:5px; border-radius:5px; margin-top:5px;">
-                        <strong>UID Artis:</strong> <span class="uid-text">${d.uid}</span> 
-                        <button onclick="navigator.clipboard.writeText('${d.uid}'); alert('UID dicopy!')" style="font-size:10px; margin-left:10px;">Copy UID</button>
-                    </p>
-                    <div style="display:flex; gap:10px; margin-top:10px;">
-                        <button class="btn-soundon" style="padding:5px 15px; font-size:12px; background:green;" onclick="updateStatus('${doc.id}', 'Live')">Set Live</button>
-                        <button class="btn-soundon" style="padding:5px 15px; font-size:12px; background:black;" onclick="updateStatus('${doc.id}', 'Decline')">Decline</button>
+            adminList.innerHTML += `
+                <div class="card-light" style="border-bottom:1px solid #eee; padding:20px; background: #fff; margin-bottom: 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                    <p style="margin:0"><strong>${d.title}</strong> - ${d.artist}</p>
+                    <p style="font-size:12px; color:#666; margin: 5px 0;">User: ${d.email}</p>
+                    
+                    <div style="background:#f5f5f5; padding:8px; border-radius:6px; margin: 10px 0;">
+                        <span style="font-size:11px; color:#555;">UID Artis: <strong>${d.uid}</strong></span>
+                        <button onclick="navigator.clipboard.writeText('${d.uid}'); alert('UID dicopy!')" style="font-size:9px; margin-left:5px; cursor:pointer;">Copy</button>
+                    </div>
+
+                    <a href="${d.driveLink}" target="_blank" style="font-size:12px; color:var(--primary); display:block; margin-bottom: 15px; text-decoration:none; font-weight:600;">Buka Link Drive ↗</a>
+                    
+                    <div class="admin-controls" style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+                        <button style="background:#4CAF50; color:white; border:none; padding:8px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:bold;" onclick="updateStatus('${doc.id}', 'Approve')">APPROVE</button>
+                        <button style="background:#2196F3; color:white; border:none; padding:8px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:bold;" onclick="updateStatus('${doc.id}', 'Live')">SET LIVE</button>
+                        <button style="background:#f44336; color:white; border:none; padding:8px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:bold;" onclick="updateStatus('${doc.id}', 'Decline')">DECLINE</button>
+                        <button style="background:#333; color:white; border:none; padding:8px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:bold;" onclick="updateStatus('${doc.id}', 'Take Down')">TAKE DOWN</button>
                     </div>
                 </div>`;
         });
