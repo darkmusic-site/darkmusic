@@ -15,6 +15,9 @@ const provider = new firebase.auth.GoogleAuthProvider();
 
 const ADMIN_EMAIL = "samsungsultra665@gmail.com";
 
+// ==========================================
+// MONITOR STATUS LOGIN
+// ==========================================
 auth.onAuthStateChanged(user => {
     const landing = document.getElementById('landing-page');
     const navGuest = document.getElementById('nav-guest');
@@ -32,7 +35,7 @@ auth.onAuthStateChanged(user => {
         document.getElementById('user-name-welcome').innerText = user.displayName;
 
         loadMyReleases(user.uid);
-        listenToBalance(user.uid); // Load saldo realtime
+        listenToBalance(user.uid);
 
         if(user.email === ADMIN_EMAIL) {
             document.getElementById('admin-link').classList.remove('hidden');
@@ -47,7 +50,7 @@ auth.onAuthStateChanged(user => {
 });
 
 // ==========================================
-// LOGIKA SALDO & WITHDRAW (PILIHAN A)
+// SALDO & WITHDRAW LOGIC
 // ==========================================
 function listenToBalance(uid) {
     db.collection("users").doc(uid).onSnapshot(doc => {
@@ -63,11 +66,10 @@ async function requestWithdraw() {
     const currentBalance = parseFloat(document.getElementById('user-balance').innerText);
 
     if (!paypal.includes('@')) return alert("Masukkan email PayPal valid!");
-    if (currentBalance <= 0) return alert("Saldo Anda masih kosong.");
+    if (currentBalance <= 0) return alert("Saldo Anda kosong.");
 
-    if (confirm(`Tarik seluruh saldo sebesar $${currentBalance} ke PayPal ${paypal}?`)) {
+    if (confirm(`Tarik semua saldo sebesar $${currentBalance}?`)) {
         try {
-            // 1. Catat transaksi
             await db.collection('withdrawals').add({
                 uid: user.uid,
                 email: user.email,
@@ -76,53 +78,37 @@ async function requestWithdraw() {
                 status: 'Pending',
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
-
-            // 2. Nol-kan saldo di database (PILIHAN A)
             await db.collection('users').doc(user.uid).set({ balance: 0 }, { merge: true });
-
-            alert("Permintaan tarik saldo berhasil! Mohon tunggu proses transfer admin.");
-            showSection('library');
-        } catch (e) {
-            alert("Terjadi kesalahan.");
-        }
+            alert("Permintaan terkirim!");
+        } catch (e) { alert("Gagal."); }
     }
 }
 
 // ==========================================
-// ADMIN: UPDATE SALDO
-// ==========================================
-async function updateBalance() {
-    const uid = document.getElementById('admin-user-id').value;
-    const amount = parseFloat(document.getElementById('admin-amount').value);
-
-    if(!uid || isNaN(amount)) return alert("Isi UID dan Nominal!");
-
-    try {
-        await db.collection('users').doc(uid).set({ balance: amount }, { merge: true });
-        alert(`Berhasil! Saldo artis dengan UID ${uid} sekarang $${amount}`);
-        document.getElementById('admin-amount').value = "";
-    } catch (e) {
-        alert("Gagal update saldo.");
-    }
-}
-
-// ==========================================
-// FUNGSI AUTH & NAV
+// AUTH & NAV
 // ==========================================
 function login() { auth.signInWithPopup(provider); }
 function logout() { auth.signOut().then(() => location.reload()); }
 function toggleProfile(e) { e.stopPropagation(); document.getElementById('profile-dropdown').classList.toggle('active'); }
+
 function showSection(id) {
     document.querySelectorAll('.dashboard').forEach(s => s.classList.add('hidden'));
     document.getElementById(id).classList.remove('hidden');
     document.getElementById('profile-dropdown').classList.remove('active');
     window.scrollTo(0,0);
 }
-function showUploadForm() { document.getElementById('upload-teaser').classList.add('hidden'); document.getElementById('real-upload-form').classList.remove('hidden'); }
-function hideUploadForm() { document.getElementById('upload-teaser').classList.remove('hidden'); document.getElementById('real-upload-form').classList.add('hidden'); }
+
+function showUploadForm() { 
+    document.getElementById('upload-teaser').classList.add('hidden'); 
+    document.getElementById('real-upload-form').classList.remove('hidden'); 
+}
+function hideUploadForm() { 
+    document.getElementById('upload-teaser').classList.remove('hidden'); 
+    document.getElementById('real-upload-form').classList.add('hidden'); 
+}
 
 // ==========================================
-// RILIS & TABEL
+// RILIS & TABEL (DENGAN DETAIL LENGKAP)
 // ==========================================
 function toggleAllStores() {
     const cbs = document.querySelectorAll('.store-cb');
@@ -131,19 +117,23 @@ function toggleAllStores() {
 }
 
 async function distribute() {
-    const title = document.getElementById('song-title').value;
     const drive = document.getElementById('drive-link').value;
-    if(!title || !drive) return alert("Lengkapi data!");
+    const title = document.getElementById('song-title').value;
+    const artist = document.getElementById('artist-name').value;
+    const genre = document.getElementById('genre').value;
+    const releaseDate = document.getElementById('release-date').value;
+    const stores = Array.from(document.querySelectorAll('.store-cb:checked')).map(cb => cb.value);
+
+    if(!drive || !title || !artist || stores.length === 0) return alert("Lengkapi data!");
 
     await db.collection('releases').add({
         uid: auth.currentUser.uid,
         email: auth.currentUser.email,
-        title: title,
-        driveLink: drive,
+        title, artist, driveLink: drive, stores, genre, releaseDate,
         status: 'Review',
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
     });
-    alert("Berhasil dikirim!");
+    alert("Berhasil diajukan!");
     location.reload();
 }
 
@@ -152,31 +142,59 @@ function loadMyReleases(uid) {
         const body = document.getElementById('my-release-body');
         body.innerHTML = "";
         document.getElementById('total-release-count').innerText = snap.size;
+
         snap.forEach(doc => {
             const d = doc.data();
-            body.innerHTML += `<tr><td>${d.title}</td><td>-</td><td>${d.status}</td><td>-</td></tr>`;
+            let dotClass = "dot-review";
+            if(d.status === 'Live' || d.status === 'Approve') dotClass = "dot-live";
+            if(d.status === 'Decline') dotClass = "dot-decline";
+
+            body.innerHTML += `
+                <tr>
+                    <td>
+                        <div style="font-weight:700;">${d.title}</div>
+                        <div style="font-size:11px; color:#888;">${d.artist}</div>
+                    </td>
+                    <td>${d.releaseDate || "-"}</td>
+                    <td><span class="status-dot ${dotClass}"></span>${d.status}</td>
+                    <td>-</td>
+                </tr>`;
         });
     });
 }
 
+// ==========================================
+// ADMIN LOGIC
+// ==========================================
 function loadAdminPanel() {
     db.collection('releases').orderBy('timestamp', 'desc').onSnapshot(snap => {
         const list = document.getElementById('admin-release-list');
         list.innerHTML = "<h3>Daftar Rilis Masuk</h3>";
         snap.forEach(doc => {
             const d = doc.data();
-            list.innerHTML += `<div class="card-light" style="margin-bottom:10px;">
-                <p><strong>${d.title}</strong> (${d.email})</p>
-                <p style="font-size:10px; color:blue;">UID: ${d.uid}</p>
-                <button onclick="updateStatus('${doc.id}', 'Live')">Set Live</button>
-            </div>`;
+            list.innerHTML += `
+                <div class="card-light" style="margin-bottom:10px;">
+                    <p><strong>${d.title}</strong> - ${d.artist}</p>
+                    <p style="font-size:11px; color:blue;">UID Artis: ${d.uid}</p>
+                    <div style="display:flex; gap:10px; margin-top:10px;">
+                        <button onclick="updateStatus('${doc.id}', 'Live')">Set Live</button>
+                        <button onclick="updateStatus('${doc.id}', 'Decline')">Decline</button>
+                    </div>
+                </div>`;
         });
     });
 }
 
+async function updateBalance() {
+    const uid = document.getElementById('admin-user-id').value;
+    const amount = parseFloat(document.getElementById('admin-amount').value);
+    await db.collection('users').doc(uid).set({ balance: amount }, { merge: true });
+    alert("Saldo Berhasil diupdate!");
+}
+
 async function updateStatus(id, s) { await db.collection('releases').doc(id).update({ status: s }); }
 
-// FAQ Accordion
+// Accordion FAQ
 document.querySelectorAll('.faq-question').forEach(btn => {
     btn.addEventListener('click', () => btn.parentElement.classList.toggle('active'));
 });
