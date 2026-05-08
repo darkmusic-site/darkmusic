@@ -165,42 +165,70 @@
 
     <main id="dashboard-content" class="hidden">
         <section id="library" class="dashboard">
-            <div class="container">
-                <h2>Ajukan Rilis Baru</h2>
-                <div class="upload-card">
-                    <div class="form-grid">
-                        <div class="upload-files">
-                            <label>Link Folder Google Drive</label>
-                            <input type="text" id="drive-link" placeholder="https://drive.google.com/..." required>
-                        </div>
-                        <div class="upload-meta">
-                            <input type="text" id="song-title" placeholder="Judul Lagu">
-                            <input type="text" id="artist-name" placeholder="Nama Artis">
-                            <div style="display: flex; gap: 10px;">
-                                <input type="text" id="writer-name" placeholder="Penulis" style="flex:1">
-                                <input type="text" id="producer-name" placeholder="Produser" style="flex:1">
-                            </div>
-                            <div style="display: flex; gap: 10px;">
-                                <select id="genre" style="flex:1">
-                                    <option>Pop</option><option>Rock</option><option>Electronica</option>
-                                </select>
-                                <input type="date" id="release-date" style="flex:1">
-                            </div>
-                            <div class="store-selector">
-                                <span onclick="toggleAllStores()" style="color:var(--primary); cursor:pointer; font-size:11px;">Centang Semua</span>
-                                <div class="store-grid">
-                                    <label class="store-item"><input type="checkbox" class="store-cb" value="Spotify"> Spotify</label>
-                                    <label class="store-item"><input type="checkbox" class="store-cb" value="Apple Music"> Apple</label>
-                                    <label class="store-item"><input type="checkbox" class="store-cb" value="TikTok"> TikTok</label>
-                                    <label class="store-item"><input type="checkbox" class="store-cb" value="YouTube"> YouTube</label>
-                                </div>
-                            </div>
-                            <button onclick="distribute()" id="btn-submit" class="btn-soundon" style="width:100%; margin-top:20px;">AJUKAN DISTRIBUSI</button>
+    <div class="container">
+        <div class="welcome-header" style="margin-bottom: 40px;">
+            <h1 style="font-size: 2rem; font-weight: 800;">Halo, <span id="user-name-welcome" style="color: var(--primary);">Artis</span>! 👋</h1>
+            <p style="color: var(--text-muted);">Selamat datang di dashboard DarkMusic. Siap untuk merilis karya terbarumu hari ini?</p>
+        </div>
+
+        <div class="feature-grid" style="margin-bottom: 40px;">
+            <div class="card-light" style="padding: 25px; display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    <h4 style="color: var(--text-muted); font-size: 14px;">Total Rilis</h4>
+                    <p style="font-size: 24px; font-weight: 800;">0</p>
+                </div>
+                <button onclick="showUploadForm()" class="btn-soundon" style="padding: 10px 20px; font-size: 12px;">+ Rilis Baru</button>
+            </div>
+            <div class="card-light" style="padding: 25px;">
+                <h4 style="color: var(--text-muted); font-size: 14px;">Estimasi Saldo</h4>
+                <p style="font-size: 24px; font-weight: 800;">$0.00</p>
+            </div>
+        </div>
+
+        <div id="upload-teaser" class="card-dark" style="text-align: center; background: linear-gradient(45deg, #0a0a0a, #1a1a1a); border: 1px solid #333;">
+            <h2 style="margin-bottom: 10px;">Ready to Upload?</h2>
+            <p style="color: #888; margin-bottom: 25px;">Distribusikan musikmu ke Spotify, Apple Music, dan TikTok sekarang.</p>
+            <button onclick="showUploadForm()" class="btn-soundon" style="box-shadow: 0 10px 20px rgba(255, 0, 80, 0.3);">MULAI UPLOAD SEKARANG</button>
+        </div>
+
+        <div id="real-upload-form" class="upload-card hidden" style="margin-top: 40px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3>Formulir Distribusi</h3>
+                <button onclick="hideUploadForm()" style="background:none; border:none; color:var(--primary); cursor:pointer;">Batal</button>
+            </div>
+            <div class="form-grid">
+                <div class="upload-files">
+                    <label>Link Folder Google Drive</label>
+                    <input type="text" id="drive-link" placeholder="https://drive.google.com/..." required>
+                </div>
+                <div class="upload-meta">
+                    <input type="text" id="song-title" placeholder="Judul Lagu">
+                    <input type="text" id="artist-name" placeholder="Nama Artis">
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="writer-name" placeholder="Penulis" style="flex:1">
+                        <input type="text" id="producer-name" placeholder="Produser" style="flex:1">
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <select id="genre" style="flex:1">
+                            <option>Pop</option><option>Rock</option><option>Electronica</option><option>Hip Hop</option>
+                        </select>
+                        <input type="date" id="release-date" style="flex:1">
+                    </div>
+                    <div class="store-selector">
+                        <span onclick="toggleAllStores()" style="color:var(--primary); cursor:pointer; font-size:11px;">Centang Semua</span>
+                        <div class="store-grid">
+                            <label class="store-item"><input type="checkbox" class="store-cb" value="Spotify"> Spotify</label>
+                            <label class="store-item"><input type="checkbox" class="store-cb" value="Apple Music"> Apple</label>
+                            <label class="store-item"><input type="checkbox" class="store-cb" value="TikTok"> TikTok</label>
+                            <label class="store-item"><input type="checkbox" class="store-cb" value="YouTube"> YouTube</label>
                         </div>
                     </div>
+                    <button onclick="distribute()" id="btn-submit" class="btn-soundon" style="width:100%; margin-top:20px;">KIRIM KE MODERASI</button>
                 </div>
             </div>
-        </section>
+        </div>
+    </div>
+</section>
 
         <section id="my-releases" class="dashboard hidden">
             <div class="container">
