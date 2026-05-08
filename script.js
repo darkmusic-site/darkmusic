@@ -235,12 +235,14 @@ async function updateBalance() {
     }
 }
 
-async function updateStatus(id, s) { 
-    try {
-        await db.collection('releases').doc(id).update({ status: s });
-        alert(`Status berhasil diubah ke: ${s}`);
-    } catch (e) {
-        alert("Gagal mengubah status.");
+async function updateStatus(id, newStatus) {
+    if(confirm(`Ubah status rilis menjadi ${newStatus}?`)) {
+        try {
+            await db.collection('releases').doc(id).update({ status: newStatus });
+            alert("Status berhasil diperbarui!");
+        } catch (e) {
+            alert("Gagal memperbarui status.");
+        }
     }
 }
 
