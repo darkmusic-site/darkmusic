@@ -166,19 +166,32 @@ function loadMyReleases(uid) {
 // ==========================================
 // ADMIN LOGIC
 // ==========================================
+// ==========================================
+// ADMIN LOGIC (PERBAIKAN)
+// ==========================================
 function loadAdminPanel() {
     db.collection('releases').orderBy('timestamp', 'desc').onSnapshot(snap => {
         const list = document.getElementById('admin-release-list');
-        list.innerHTML = "<h3>Daftar Rilis Masuk</h3>";
+        list.innerHTML = "<h3 style='margin-top:20px;'>Daftar Rilis Masuk</h3>";
+        
+        if (snap.empty) {
+            list.innerHTML += "<p style='color:#888;'>Belum ada rilis masuk.</p>";
+            return;
+        }
+
         snap.forEach(doc => {
             const d = doc.data();
             list.innerHTML += `
-                <div class="card-light" style="margin-bottom:10px;">
-                    <p><strong>${d.title}</strong> - ${d.artist}</p>
-                    <p style="font-size:11px; color:blue;">UID Artis: ${d.uid}</p>
+                <div class="card-light" style="margin-bottom:15px; border-left: 5px solid var(--primary);">
+                    <p><strong>Judul:</strong> ${d.title}</p>
+                    <p><strong>Artis:</strong> ${d.artist}</p>
+                    <p style="font-size:12px; background:#eee; padding:5px; border-radius:5px; margin-top:5px;">
+                        <strong>UID Artis:</strong> <span class="uid-text">${d.uid}</span> 
+                        <button onclick="navigator.clipboard.writeText('${d.uid}'); alert('UID dicopy!')" style="font-size:10px; margin-left:10px;">Copy UID</button>
+                    </p>
                     <div style="display:flex; gap:10px; margin-top:10px;">
-                        <button onclick="updateStatus('${doc.id}', 'Live')">Set Live</button>
-                        <button onclick="updateStatus('${doc.id}', 'Decline')">Decline</button>
+                        <button class="btn-soundon" style="padding:5px 15px; font-size:12px; background:green;" onclick="updateStatus('${doc.id}', 'Live')">Set Live</button>
+                        <button class="btn-soundon" style="padding:5px 15px; font-size:12px; background:black;" onclick="updateStatus('${doc.id}', 'Decline')">Decline</button>
                     </div>
                 </div>`;
         });
@@ -186,13 +199,45 @@ function loadAdminPanel() {
 }
 
 async function updateBalance() {
-    const uid = document.getElementById('admin-user-id').value;
-    const amount = parseFloat(document.getElementById('admin-amount').value);
-    await db.collection('users').doc(uid).set({ balance: amount }, { merge: true });
-    alert("Saldo Berhasil diupdate!");
+    const uid = document.getElementById('admin-user-id').value.trim();
+    const amountStr = document.getElementById('admin-amount').value;
+    const amount = parseFloat(amountStr);
+
+    if (!uid) {
+        alert("Mohon masukkan UID Artis!");
+        return;
+    }
+    if (isNaN(amount)) {
+        alert("Mohon masukkan nominal angka yang valid!");
+        return;
+    }
+
+    try {
+        // Menggunakan doc(uid).set dengan {merge: true} agar tidak menghapus data user lainnya
+        await db.collection('users').doc(uid).set({ 
+            balance: amount,
+            lastUpdate: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+        
+        alert(`Berhasil! Saldo untuk UID ${uid} sekarang: $${amount}`);
+        
+        // Reset form
+        document.getElementById('admin-user-id').value = "";
+        document.getElementById('admin-amount').value = "";
+    } catch (error) {
+        console.error("Error updating balance: ", error);
+        alert("Gagal update saldo. Pastikan UID benar dan koneksi stabil.");
+    }
 }
 
-async function updateStatus(id, s) { await db.collection('releases').doc(id).update({ status: s }); }
+async function updateStatus(id, s) { 
+    try {
+        await db.collection('releases').doc(id).update({ status: s });
+        alert(`Status berhasil diubah ke: ${s}`);
+    } catch (e) {
+        alert("Gagal mengubah status.");
+    }
+}
 
 // Accordion FAQ
 document.querySelectorAll('.faq-question').forEach(btn => {
