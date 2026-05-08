@@ -105,8 +105,8 @@
             <section class="faq-section container">
                 <h2 class="section-title">Pertanyaan Umum</h2>
                 <div class="faq-container">
-                    <div class="faq-item"><button class="faq-question">Lama rilis? <span>+</span></button><div class="faq-answer"><p>2-7 hari kerja.</p></div></div>
-                    <div class="faq-item"><button class="faq-question">Hak cipta? <span>+</span></button><div class="faq-answer"><p>100% milik Anda.</p></div></div>
+                    <div class="faq-item"><button class="faq-question">Berapa lama waktu rilis musik? <span>+</span></button><div class="faq-answer"><p>2-7 hari kerja tergantung platform.</p></div></div>
+                    <div class="faq-item"><button class="faq-question">Apakah saya memegang 100% hak cipta? <span>+</span></button><div class="faq-answer"><p>Ya, Anda memegang kendali penuh.</p></div></div>
                 </div>
             </section>
         </div>
@@ -115,11 +115,11 @@
     <main id="dashboard-content" class="hidden">
         <section id="library" class="dashboard">
             <div class="container">
-                <div class="welcome-header">
+                <div class="welcome-header" style="margin-bottom:40px;">
                     <h1>Halo, <span id="user-name-welcome" style="color: var(--primary);">Artis</span>! 👋</h1>
-                    <p style="color: var(--text-muted);">Siap untuk merilis karya terbarumu hari ini?</p>
+                    <p style="color: var(--text-muted);">Selamat datang kembali di DarkMusic.</p>
                 </div>
-                <div class="feature-grid">
+                <div class="feature-grid" style="margin-bottom:40px;">
                     <div class="card-light" style="padding: 25px; display: flex; align-items: center; justify-content: space-between;">
                         <div><h4 style="font-size:14px; color:#888;">Total Rilis</h4><p id="total-release-count" style="font-size:24px; font-weight:800;">0</p></div>
                         <button onclick="showUploadForm()" class="btn-soundon" style="padding:10px 20px; font-size:12px;">+ Rilis Baru</button>
@@ -129,25 +129,43 @@
                         <p style="font-size:24px; font-weight:800;">$<span id="user-balance">0.00</span></p>
                     </div>
                 </div>
+                
                 <div id="upload-teaser" class="card-dark" style="text-align: center; background: linear-gradient(45deg, #0a0a0a, #1a1a1a);">
                     <h2>Ready to Upload?</h2>
-                    <p style="color:#888; margin-bottom:20px;">Kirim musikmu ke seluruh dunia sekarang.</p>
-                    <button onclick="showUploadForm()" class="btn-soundon">MULAI UPLOAD SEKARANG</button>
+                    <button onclick="showUploadForm()" class="btn-soundon" style="margin-top:20px;">MULAI UPLOAD SEKARANG</button>
                 </div>
+
                 <div id="real-upload-form" class="upload-card hidden">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
                         <h3>Formulir Distribusi</h3>
                         <button onclick="hideUploadForm()" style="color:var(--primary); background:none; border:none; cursor:pointer;">Batal</button>
                     </div>
                     <div class="form-grid">
-                        <div class="upload-files"><label>Link Google Drive</label><input type="text" id="drive-link" placeholder="https://drive.google.com/..."></div>
+                        <div class="upload-files">
+                            <label>Link Folder Google Drive</label>
+                            <input type="text" id="drive-link" placeholder="https://drive.google.com/..." required>
+                        </div>
                         <div class="upload-meta">
                             <input type="text" id="song-title" placeholder="Judul Lagu">
                             <input type="text" id="artist-name" placeholder="Nama Artis">
                             <div style="display:flex; gap:10px;"><input type="text" id="writer-name" placeholder="Penulis" style="flex:1"><input type="text" id="producer-name" placeholder="Produser" style="flex:1"></div>
-                            <div style="display:flex; gap:10px;"><select id="genre" style="flex:1"><option>Pop</option><option>Hip Hop</option></select><input type="date" id="release-date" style="flex:1"></div>
-                            <div class="store-selector"><span onclick="toggleAllStores()" style="color:var(--primary); cursor:pointer; font-size:11px;">Centang Semua</span><div class="store-grid"><label class="store-item"><input type="checkbox" class="store-cb" value="Spotify"> Spotify</label><label class="store-item"><input type="checkbox" class="store-cb" value="TikTok"> TikTok</label></div></div>
-                            <button onclick="distribute()" id="btn-submit" class="btn-soundon" style="width:100%; margin-top:20px;">KIRIM KE MODERASI</button>
+                            <div style="display:flex; gap:10px;">
+                                <select id="genre" style="flex:1">
+                                    <option>Pop</option><option>Rock</option><option>Electronica</option>
+                                    <option>Hip Hop</option><option>Jazz</option><option>R&B</option>
+                                </select>
+                                <input type="date" id="release-date" style="flex:1">
+                            </div>
+                            <div class="store-selector">
+                                <span onclick="toggleAllStores()" style="color:var(--primary); cursor:pointer; font-size:11px;">Centang Semua</span>
+                                <div class="store-grid">
+                                    <label class="store-item"><input type="checkbox" class="store-cb" value="Spotify"> Spotify</label>
+                                    <label class="store-item"><input type="checkbox" class="store-cb" value="Apple Music"> Apple Music</label>
+                                    <label class="store-item"><input type="checkbox" class="store-cb" value="TikTok"> TikTok</label>
+                                    <label class="store-item"><input type="checkbox" class="store-cb" value="YouTube"> YouTube Music</label>
+                                </div>
+                            </div>
+                            <button onclick="distribute()" id="btn-submit" class="btn-soundon" style="width:100%; margin-top:20px;">AJUKAN DISTRIBUSI</button>
                         </div>
                     </div>
                 </div>
@@ -155,15 +173,23 @@
         </section>
 
         <section id="my-releases" class="dashboard hidden">
-            <div class="container"><h2>My Releases</h2><div class="table-container"><table class="release-table"><thead><tr><th>Title</th><th>Date</th><th>Status</th><th>Action</th></tr></thead><tbody id="my-release-body"></tbody></table></div></div>
+            <div class="container">
+                <h2>My Releases</h2>
+                <div class="table-container">
+                    <table class="release-table">
+                        <thead><tr><th>Title</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>
+                        <tbody id="my-release-body"></tbody>
+                    </table>
+                </div>
+            </div>
         </section>
 
         <section id="withdraw" class="dashboard hidden">
             <div class="container" style="max-width:500px">
                 <h2>Withdraw</h2>
                 <div class="upload-card">
-                    <p style="margin-bottom:10px;">Saldo Tersedia: <strong>$<span id="user-balance-wd">0.00</span></strong></p>
-                    <input type="email" id="wd-paypal" placeholder="Email PayPal Anda">
+                    <p style="margin-bottom:15px;">Saldo: <strong>$<span id="user-balance-wd">0.00</span></strong></p>
+                    <input type="email" id="wd-paypal" placeholder="Email PayPal">
                     <button onclick="requestWithdraw()" class="btn-soundon" style="width:100%">Tarik Semua Saldo</button>
                 </div>
             </div>
@@ -174,8 +200,8 @@
                 <h2>Admin Panel</h2>
                 <div class="upload-card" style="margin-bottom:30px;">
                     <h3>Update Saldo Artis</h3>
-                    <input type="text" id="admin-user-id" placeholder="User ID (UID) Artis">
-                    <input type="number" id="admin-amount" placeholder="Nominal Saldo (Bersih)">
+                    <input type="text" id="admin-user-id" placeholder="UID Artis (Cek di bawah)">
+                    <input type="number" id="admin-amount" placeholder="Nominal Saldo Akhir">
                     <button onclick="updateBalance()" class="btn-soundon">Update Saldo</button>
                 </div>
                 <div id="admin-release-list"></div>
@@ -186,9 +212,18 @@
     <footer class="footer-main">
         <div class="container">
             <div class="footer-grid">
-                <div><h3>DARKMUSIC</h3><p style="color:#666; font-size:12px;">Distribusi musik independen.</p></div>
-                <div><h4>Menu</h4><a href="#" onclick="showSection('library')" class="footer-link">Home</a></div>
-                <div><h4>Legal</h4><a href="#" class="footer-link">Privacy Policy</a></div>
+                <div><h3>DARKMUSIC</h3><p style="color:#666; font-size:12px;">Distribusi musik independen dengan teknologi modern.</p></div>
+                <div>
+                    <h4>Menu</h4>
+                    <a href="#" onclick="showSection('library')" class="footer-link">Home</a>
+                    <a href="#" class="footer-link">About</a>
+                    <a href="#" class="footer-link">Contact Us</a>
+                </div>
+                <div>
+                    <h4>Legal</h4>
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                    <a href="#" class="footer-link">Terms & Service</a>
+                </div>
             </div>
             <hr style="border-color:#222;">
             <p style="text-align:center; color:#555; font-size:12px; margin-top:20px;">&copy; 2026 DarkMusic. All rights reserved.</p>
