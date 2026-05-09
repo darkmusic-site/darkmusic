@@ -1,5 +1,3 @@
-Tentu, ini adalah kode script.js versi lengkap yang sudah saya perbarui dengan fitur **Nama Pemilik PayPal**, **Riwayat Pendapatan**, dan logika penarikan yang lebih aman sesuai permintaan Anda. Semua kode asli Anda tetap terjaga dan tidak ada yang terbuang.
-```javascript
 // CONFIGURASI FIREBASE
 const firebaseConfig = {
     apiKey: "AIzaSyAgAoT8Wcdm5_eyp6o9uc0lHiDVQ91HDHI",
