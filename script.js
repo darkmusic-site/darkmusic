@@ -36,11 +36,14 @@ auth.onAuthStateChanged(user => {
 
         loadMyReleases(user.uid);
         listenToBalance(user.uid);
-        loadEarningsHistory(user.uid); // Memuat riwayat pendapatan
+        loadEarningsHistory(user.uid); // Memuat riwayat pendapatan otomatis saat login
 
         if(user.email === ADMIN_EMAIL) {
-            document.getElementById('admin-link').classList.remove('hidden');
-            loadAdminPanel();
+            const adminLink = document.getElementById('admin-link');
+            if(adminLink) {
+                adminLink.classList.remove('hidden');
+                loadAdminPanel();
+            }
         }
     } else {
         if(landing) landing.classList.remove('hidden');
@@ -62,15 +65,15 @@ function listenToBalance(uid) {
 }
 
 async function requestWithdraw() {
-    console.log("Tombol Withdraw diklik..."); // Cek di console
+    console.log("Tombol Withdraw diklik...");
     const user = auth.currentUser;
     
-    // Ambil elemen
+    // Ambil elemen dari HTML
     const elName = document.getElementById('wd-paypal-name');
     const elEmail = document.getElementById('wd-paypal-email');
     const elBalance = document.getElementById('user-balance');
 
-    // Validasi elemen (Jika ini error, berarti HTML dan JS tidak sinkron)
+    // Validasi elemen
     if (!elName || !elEmail || !elBalance) {
         alert("Sistem Error: Elemen input tidak ditemukan di HTML.");
         return;
@@ -80,20 +83,19 @@ async function requestWithdraw() {
     const paypalEmail = elEmail.value.trim();
     const currentBalance = parseFloat(elBalance.innerText) || 0;
 
-    console.log("Data Input:", { paypalName, paypalEmail, currentBalance });
-
-    // Validasi Input
+    // Validasi Input Kosong
     if (!paypalName || !paypalEmail) {
         alert("Mohon lengkapi Nama Pemilik dan Email PayPal!");
         return;
     }
 
+    // Validasi Saldo
     if (currentBalance <= 0) {
         alert("Saldo Anda $0.00. Tidak ada saldo untuk ditarik.");
         return;
     }
 
-    const confirmMsg = `Konfirmasi Penarikan:\n\nNama Pemilik: ${paypalName}\nEmail PayPal: ${paypalEmail}\nJumlah: $${currentBalance.toFixed(2)}\n\nLanjutkan?`;
+    const confirmMsg = `Konfirmasi Penarikan:\n\nNama Pemilik: ${paypalName}\nEmail PayPal: ${paypalEmail}\nJumlah: $${currentBalance.toFixed(2)}\n\nHarap cek kembali. Kesalahan input data bukan tanggung jawab kami. Lanjutkan?`;
 
     if (confirm(confirmMsg)) {
         try {
@@ -115,19 +117,19 @@ async function requestWithdraw() {
 
             alert("Permintaan penarikan berhasil dikirim!");
             
-            // Bersihkan form & pindah section
+            // Bersihkan form
             elName.value = "";
             elEmail.value = "";
+            
+            // Pindah ke section riwayat pendapatan
             showSection('earnings-history');
 
         } catch (e) { 
             console.error("Firebase Error:", e);
-            alert("Gagal ke Firebase: " + e.message); 
+            alert("Gagal memproses penarikan: " + e.message); 
         }
     }
 }
-
-
 
 // ==========================================
 // RIWAYAT PENDAPATAN
@@ -145,8 +147,13 @@ function loadEarningsHistory(uid) {
                 return;
             }
 
-            snap.forEach(doc => {
-                const d = doc.data();
+            let docs = [];
+            snap.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
+            
+            // Urutkan riwayat berdasarkan waktu terbaru
+            docs.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
+
+            docs.forEach(d => {
                 const date = d.timestamp ? d.timestamp.toDate().toLocaleDateString('id-ID') : '-';
                 
                 let dotClass = "dot-review"; // Pending (Kuning)
@@ -163,7 +170,7 @@ function loadEarningsHistory(uid) {
                         <td style="font-weight:800;">$${d.amount.toFixed(2)}</td>
                         <td>
                             <span class="status-dot ${dotClass}"></span>
-                            <span style="font-size:12px;">${d.status}</span>
+                            <span style="font-size:12px;">${d.status || 'Pending'}</span>
                         </td>
                     </tr>
                 `;
@@ -174,14 +181,21 @@ function loadEarningsHistory(uid) {
 // ==========================================
 // AUTH & NAV
 // ==========================================
-function login() { auth.signInWithPopup(provider); }
-function logout() { auth.signOut().then(() => location.reload()); }
+function login() { auth.signInWithPopup(provider).catch(err => alert("Gagal Login: " + err.message)); }
+function logout() { 
+    if(confirm("Yakin ingin keluar?")) {
+        auth.signOut().then(() => location.reload()); 
+    }
+}
 function toggleProfile(e) { e.stopPropagation(); document.getElementById('profile-dropdown').classList.toggle('active'); }
 
 function showSection(id) {
     document.querySelectorAll('.dashboard').forEach(s => s.classList.add('hidden'));
-    document.getElementById(id).classList.remove('hidden');
-    document.getElementById('profile-dropdown').classList.remove('active');
+    const target = document.getElementById(id);
+    if(target) target.classList.remove('hidden');
+    
+    const dropdown = document.getElementById('profile-dropdown');
+    if(dropdown) dropdown.classList.remove('active');
     window.scrollTo(0,0);
 }
 
@@ -195,7 +209,7 @@ function hideUploadForm() {
 }
 
 // ==========================================
-// RILIS & TABEL (DENGAN DETAIL LENGKAP)
+// RILIS & TABEL
 // ==========================================
 function toggleAllStores() {
     const cbs = document.querySelectorAll('.store-cb');
@@ -213,20 +227,31 @@ async function distribute() {
 
     if(!drive || !title || !artist || stores.length === 0) return alert("Lengkapi data!");
 
-    await db.collection('releases').add({
-        uid: auth.currentUser.uid,
-        email: auth.currentUser.email,
-        title, artist, driveLink: drive, stores, genre, releaseDate,
-        status: 'Review',
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    });
-    alert("Berhasil diajukan!");
-    location.reload();
+    const btn = document.getElementById('btn-submit');
+    btn.disabled = true;
+    btn.innerText = "Sedang Mengirim...";
+
+    try {
+        await db.collection('releases').add({
+            uid: auth.currentUser.uid,
+            email: auth.currentUser.email,
+            title, artist, driveLink: drive, stores, genre, releaseDate,
+            status: 'Review',
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        alert("Berhasil diajukan!");
+        location.reload();
+    } catch(e) {
+        alert("Gagal mengirim.");
+        btn.disabled = false;
+        btn.innerText = "AJUKAN DISTRIBUSI";
+    }
 }
 
 function loadMyReleases(uid) {
     db.collection('releases').where('uid', '==', uid).onSnapshot(snap => {
         const body = document.getElementById('my-release-body');
+        if(!body) return;
         body.innerHTML = "";
         document.getElementById('total-release-count').innerText = snap.size;
 
@@ -251,7 +276,7 @@ function loadMyReleases(uid) {
 }
 
 // ==========================================
-// ADMIN LOGIC (VERSI LENGKAP SEMUA TOMBOL)
+// ADMIN LOGIC
 // ==========================================
 function loadAdminPanel() {
     const adminList = document.getElementById('admin-release-list');
@@ -331,9 +356,17 @@ async function updateStatus(id, newStatus) {
     }
 }
 
+// Tutup dropdown jika klik di luar
+window.onclick = function(event) {
+    const dropdown = document.getElementById('profile-dropdown');
+    if (dropdown && dropdown.classList.contains('active')) {
+        if (!event.target.closest('.profile-trigger')) {
+            dropdown.classList.remove('active');
+        }
+    }
+};
+
 // Accordion FAQ
 document.querySelectorAll('.faq-question').forEach(btn => {
     btn.addEventListener('click', () => btn.parentElement.classList.toggle('active'));
 });
-
-```
