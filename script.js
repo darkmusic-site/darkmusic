@@ -62,42 +62,42 @@ function listenToBalance(uid) {
 }
 
 async function requestWithdraw() {
+    console.log("Tombol Withdraw diklik..."); // Cek di console
     const user = auth.currentUser;
     
-    // Ambil elemen input
-    const inputName = document.getElementById('wd-paypal-name');
-    const inputEmail = document.getElementById('wd-paypal-email');
-    const balanceDisplay = document.getElementById('user-balance');
+    // Ambil elemen
+    const elName = document.getElementById('wd-paypal-name');
+    const elEmail = document.getElementById('wd-paypal-email');
+    const elBalance = document.getElementById('user-balance');
 
-    // Validasi apakah elemen ada
-    if (!inputName || !inputEmail || !balanceDisplay) {
-        console.error("Elemen input tidak ditemukan!");
+    // Validasi elemen (Jika ini error, berarti HTML dan JS tidak sinkron)
+    if (!elName || !elEmail || !elBalance) {
+        alert("Sistem Error: Elemen input tidak ditemukan di HTML.");
         return;
     }
 
-    const paypalName = inputName.value.trim();
-    const paypalEmail = inputEmail.value.trim();
-    const currentBalance = parseFloat(balanceDisplay.innerText);
+    const paypalName = elName.value.trim();
+    const paypalEmail = elEmail.value.trim();
+    const currentBalance = parseFloat(elBalance.innerText) || 0;
+
+    console.log("Data Input:", { paypalName, paypalEmail, currentBalance });
 
     // Validasi Input
     if (!paypalName || !paypalEmail) {
         alert("Mohon lengkapi Nama Pemilik dan Email PayPal!");
         return;
     }
-    if (!paypalEmail.includes('@')) {
-        alert("Masukkan email PayPal yang valid!");
-        return;
-    }
+
     if (currentBalance <= 0) {
-        alert("Saldo Anda masih kosong atau $0.00");
+        alert("Saldo Anda $0.00. Tidak ada saldo untuk ditarik.");
         return;
     }
 
-    const confirmMsg = `Konfirmasi Penarikan:\n\nNama Pemilik: ${paypalName}\nEmail PayPal: ${paypalEmail}\nJumlah: $${currentBalance.toFixed(2)}\n\nHarap cek kembali. Kesalahan input data bukan tanggung jawab kami. Lanjutkan?`;
+    const confirmMsg = `Konfirmasi Penarikan:\n\nNama Pemilik: ${paypalName}\nEmail PayPal: ${paypalEmail}\nJumlah: $${currentBalance.toFixed(2)}\n\nLanjutkan?`;
 
     if (confirm(confirmMsg)) {
         try {
-            // 1. Simpan data ke koleksi 'withdrawals'
+            // 1. Simpan ke koleksi withdrawals
             await db.collection('withdrawals').add({
                 uid: user.uid,
                 email: user.email,
@@ -108,25 +108,25 @@ async function requestWithdraw() {
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
 
-            // 2. Nol-kan saldo di koleksi 'users'
+            // 2. Update saldo menjadi 0 di Firestore
             await db.collection('users').doc(user.uid).set({ 
                 balance: 0 
             }, { merge: true });
 
-            alert("Permintaan penarikan berhasil terkirim!");
+            alert("Permintaan penarikan berhasil dikirim!");
             
-            // Kosongkan form
-            inputName.value = "";
-            inputEmail.value = "";
-            
-            // Pindah ke halaman riwayat pendapatan
+            // Bersihkan form & pindah section
+            elName.value = "";
+            elEmail.value = "";
             showSection('earnings-history');
+
         } catch (e) { 
-            console.error(e);
-            alert("Gagal memproses penarikan: " + e.message); 
+            console.error("Firebase Error:", e);
+            alert("Gagal ke Firebase: " + e.message); 
         }
     }
 }
+
 
 
 // ==========================================
