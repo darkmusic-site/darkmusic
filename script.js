@@ -63,24 +63,41 @@ function listenToBalance(uid) {
 
 async function requestWithdraw() {
     const user = auth.currentUser;
-    const paypalName = document.getElementById('wd-paypal-name').value.trim();
-    const paypalEmail = document.getElementById('wd-paypal-email').value.trim();
-    const currentBalance = parseFloat(document.getElementById('user-balance').innerText);
+    
+    // Ambil elemen input
+    const inputName = document.getElementById('wd-paypal-name');
+    const inputEmail = document.getElementById('wd-paypal-email');
+    const balanceDisplay = document.getElementById('user-balance');
 
+    // Validasi apakah elemen ada
+    if (!inputName || !inputEmail || !balanceDisplay) {
+        console.error("Elemen input tidak ditemukan!");
+        return;
+    }
+
+    const paypalName = inputName.value.trim();
+    const paypalEmail = inputEmail.value.trim();
+    const currentBalance = parseFloat(balanceDisplay.innerText);
+
+    // Validasi Input
     if (!paypalName || !paypalEmail) {
-        return alert("Mohon lengkapi Nama Pemilik dan Email PayPal!");
+        alert("Mohon lengkapi Nama Pemilik dan Email PayPal!");
+        return;
     }
     if (!paypalEmail.includes('@')) {
-        return alert("Masukkan email PayPal yang valid!");
+        alert("Masukkan email PayPal yang valid!");
+        return;
     }
     if (currentBalance <= 0) {
-        return alert("Saldo Anda masih kosong.");
+        alert("Saldo Anda masih kosong atau $0.00");
+        return;
     }
 
-    const confirmMsg = `Konfirmasi Penarikan:\n\nNama Pemilik: ${paypalName}\nEmail PayPal: ${paypalEmail}\nJumlah: $${currentBalance}\n\nHarap cek kembali. Kesalahan input data bukan tanggung jawab kami. Lanjutkan?`;
+    const confirmMsg = `Konfirmasi Penarikan:\n\nNama Pemilik: ${paypalName}\nEmail PayPal: ${paypalEmail}\nJumlah: $${currentBalance.toFixed(2)}\n\nHarap cek kembali. Kesalahan input data bukan tanggung jawab kami. Lanjutkan?`;
 
     if (confirm(confirmMsg)) {
         try {
+            // 1. Simpan data ke koleksi 'withdrawals'
             await db.collection('withdrawals').add({
                 uid: user.uid,
                 email: user.email,
@@ -90,18 +107,27 @@ async function requestWithdraw() {
                 status: 'Pending',
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
-            await db.collection('users').doc(user.uid).set({ balance: 0 }, { merge: true });
+
+            // 2. Nol-kan saldo di koleksi 'users'
+            await db.collection('users').doc(user.uid).set({ 
+                balance: 0 
+            }, { merge: true });
+
             alert("Permintaan penarikan berhasil terkirim!");
             
-            // Reset input
-            document.getElementById('wd-paypal-name').value = "";
-            document.getElementById('wd-paypal-email').value = "";
+            // Kosongkan form
+            inputName.value = "";
+            inputEmail.value = "";
+            
+            // Pindah ke halaman riwayat pendapatan
             showSection('earnings-history');
         } catch (e) { 
-            alert("Gagal memproses penarikan."); 
+            console.error(e);
+            alert("Gagal memproses penarikan: " + e.message); 
         }
     }
 }
+
 
 // ==========================================
 // RIWAYAT PENDAPATAN
