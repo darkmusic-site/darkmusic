@@ -449,20 +449,21 @@ input:focus {
     color: var(--primary);
 }
 
-/* --- TOMBOL WITHDRAW DASHBOARD --- */
+/* --- TOMBOL WITHDRAW PREMIUM (SAMA DENGAN RILIS BARU) --- */
 .btn-withdraw-small {
-    background: transparent;
-    color: var(--primary);
-    border: 2px solid var(--primary);
-    padding: 8px 16px;
-    border-radius: 50px;
-    font-weight: 800;
+    background: var(--primary); /* Menggunakan warna merah utama */
+    color: white;               /* Teks putih */
+    border: none;               /* Tanpa garis tepi */
+    padding: 10px 20px;         /* Ukuran padding yang pas */
+    border-radius: 50px;        /* Sudut membulat sempurna */
+    font-weight: 800;           /* Teks tebal premium */
     cursor: pointer;
-    font-size: 12px;
+    font-size: 12px;            /* Ukuran teks kecil dan rapi */
     transition: 0.3s;
+    box-shadow: 0 4px 15px rgba(255, 0, 80, 0.2); /* Efek bayangan halus merah */
 }
 
 .btn-withdraw-small:hover {
-    background: var(--primary);
-    color: white;
+    background: #e60048;        /* Warna merah sedikit lebih gelap saat disentuh */
+    transform: translateY(-2px); /* Efek melayang sedikit */
 }
