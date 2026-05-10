@@ -126,10 +126,13 @@
                         <div><h4 style="font-size:14px; color:#888;">Total Rilis</h4><p id="total-release-count" style="font-size:24px; font-weight:800;">0</p></div>
                         <button onclick="showUploadForm()" class="btn-soundon" style="padding:10px 20px; font-size:12px;">+ Rilis Baru</button>
                     </div>
-                    <div class="card-light" style="padding: 25px;">
-                        <h4 style="font-size:14px; color:#888;">Estimasi Saldo</h4>
-                        <p style="font-size:24px; font-weight:800;">$<span id="user-balance">0.00</span></p>
-                    </div>
+                    <div class="card-light" style="padding: 25px; display: flex; align-items: center; justify-content: space-between;">
+    <div>
+        <h4 style="font-size:14px; color:#888;">Estimasi Saldo</h4>
+        <p style="font-size:24px; font-weight:800;">$<span id="user-balance">0.00</span></p>
+    </div>
+    <button onclick="showSection('withdraw')" class="btn-withdraw-small">Withdraw</button>
+</div>
                 </div>
                 
                 <div id="upload-teaser" class="card-dark" style="text-align: center; background: linear-gradient(45deg, #0a0a0a, #1a1a1a);">
