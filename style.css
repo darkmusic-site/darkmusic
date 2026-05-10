@@ -448,3 +448,21 @@ input:focus {
     transform: rotate(45deg);
     color: var(--primary);
 }
+
+/* --- TOMBOL WITHDRAW DASHBOARD --- */
+.btn-withdraw-small {
+    background: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-weight: 800;
+    cursor: pointer;
+    font-size: 12px;
+    transition: 0.3s;
+}
+
+.btn-withdraw-small:hover {
+    background: var(--primary);
+    color: white;
+}
