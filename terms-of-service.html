@@ -3,30 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Syarat & Ketentuan - VanTone</title>
+    <title>Syarat dan Ketentuan - Vantone Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f9f9f9; margin: 0; }
-        nav { background: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .logo { font-weight: 800; text-decoration: none; color: #111; }
-        .logo span { color: #ff0050; }
-        .container { max-width: 800px; margin: 50px auto; padding: 40px; background: white; border-radius: 16px; }
-        .alert { background: #fff0f3; padding: 15px; border-radius: 8px; border-left: 5px solid #ff0050; color: #d00041; font-weight: bold; }
+        body {
+            background-color: #0f172a; /* Warna gelap konsisten dengan dashboard */
+            color: #f1f5f9;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
     </style>
 </head>
-<body>
-    <nav>
-        <a href="index.html" class="logo">VAN<span>TONE</span></a>
-        <a href="index.html" style="text-decoration:none; color:#111; font-weight:600;">BERANDA</a>
+<body class="font-sans leading-relaxed">
+
+    <nav class="fixed top-0 w-full glass-card z-50">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="font-bold text-xl tracking-tight text-blue-400">VANTONE<span class="text-white">.STORE</span></div>
+            <a href="/" class="text-sm font-medium hover:text-blue-400 transition-colors flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                Beranda
+            </a>
+        </div>
     </nav>
-    <div class="container">
-        <h1>Syarat & Ketentuan</h1>
-        <p>Dengan mendaftar di VanTone, Anda setuju pada aturan berikut:</p>
-        <h2>1. Hak Cipta</h2>
-        <p>Anda menjamin bahwa karya yang diunggah adalah milik Anda. Pelanggaran hak cipta akan mengakibatkan takedown instan.</p>
-        <h2>2. Larangan Bot/Fraud</h2>
-        <p class="alert">Kami tidak mentoleransi manipulasi stream. Akun yang menggunakan bot akan ditutup secara permanen.</p>
-        <h2>3. Royalti</h2>
-        <p>Royalti akan dibayarkan sesuai laporan dari platform streaming. Pembayaran dikirim via PayPal.</p>
-    </div>
+
+    <main class="max-w-4xl mx-auto px-4 pt-32 pb-20">
+        <div class="glass-card rounded-2xl p-8 md:p-12 shadow-2xl">
+            
+            <header class="mb-12 border-b border-slate-700 pb-8 text-center md:text-left">
+                <h1 class="text-4xl md:text-5xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400">
+                    Syarat dan Ketentuan
+                </h1>
+                <p class="text-slate-400 text-sm">Terakhir Diperbarui: 12 Mei 2026</p>
+            </header>
+
+            <article class="space-y-8 text-slate-300">
+                
+                <section>
+                    <p class="text-lg">
+                        Selamat datang di <span class="text-white font-semibold">vantone.store</span>. Syarat dan Ketentuan berikut ("Syarat") berlaku untuk semua pengguna situs web vantone.store dan layanan terkait yang dioperasikan oleh Vantone Store ("Kami").
+                    </p>
+                </section>
+
+                <section>
+                    <h2 class="text-xl font-bold text-white mb-3 flex items-center gap-2">
+                        <span class="text-blue-500 text-2xl">01</span> Kelayakan (Eligibility)
+                    </h2>
+                    <p>Untuk menggunakan situs ini, Anda harus setidaknya berusia 18 tahun, atau setidaknya 13 tahun dengan izin dari orang tua atau wali sah. Anda menyatakan bahwa Anda mampu secara hukum untuk menyepakati Syarat dan Ketentuan ini.</p>
+                </section>
+
+                <section>
+                    <h2 class="text-xl font-bold text-white mb-3 flex items-center gap-2">
+                        <span class="text-blue-500 text-2xl">02</span> Modifikasi Syarat
+                    </h2>
+                    <p>Kami berhak untuk mengubah, memodifikasi, menambah, atau menghapus bagian dari Syarat ini kapan saja. Perubahan akan segera berlaku setelah diposting di halaman ini.</p>
+                </section>
+
+                <section>
+                    <h2 class="text-xl font-bold text-white mb-3 flex items-center gap-2">
+                        <span class="text-blue-500 text-2xl">03</span> Hak Milik Intelektual
+                    </h2>
+                    <p>Semua materi di situs ini termasuk teks, grafik, logo, dan kode komputer adalah milik <span class="text-white">Vantone Store</span>. Penggunaan tanpa izin tertulis sangat dilarang.</p>
+                </section>
+
+                <section class="bg-slate-800/50 p-6 rounded-xl border-l-4 border-blue-500">
+                    <h2 class="text-xl font-bold text-white mb-3">Kontak & Dukungan</h2>
+                    <p class="mb-4 text-sm">Jika Anda memiliki pertanyaan hukum atau klaim hak cipta, silakan hubungi tim kami:</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="flex items-center gap-3">
+                            <span class="text-slate-400 italic">Bantuan Umum:</span>
+                            <a href="mailto:contact@vantone.store" class="text-blue-400 hover:underline">contact@vantone.store</a>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-slate-400 italic">Hak Cipta:</span>
+                            <a href="mailto:copyright@vantone.store" class="text-blue-400 hover:underline">copyright@vantone.store</a>
+                        </div>
+                    </div>
+                </section>
+
+            </article>
+        </div>
+
+        <footer class="mt-12 text-center text-slate-500 text-sm">
+            &copy; 2026 Vantone Store. Seluruh Hak Cipta Dilindungi.
+        </footer>
+    </main>
+
 </body>
 </html>
