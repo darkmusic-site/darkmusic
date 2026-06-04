@@ -153,7 +153,12 @@
                         </div>
                         <div class="upload-meta">
                             <input type="text" id="song-title" placeholder="Judul Lagu">
-                            <input type="text" id="artist-name" placeholder="Nama Artis">
+                            <div style="width: 100%; text-align: left;">
+                            <input type="text" id="artist-name" placeholder="Nama Artis" style="width: 100%; margin-bottom: 0px;">
+                            <p id="info-artist-locked" class="hidden" style="color: #888; font-size: 11px; font-style: italic; margin-top: 4px; margin-bottom: 10px;">
+                            🔒 Nama artis dikunci otomatis berdasarkan rilis pertama Anda yang telah disetujui.
+                            </p>
+                            </div>
                             <div style="display:flex; gap:10px;"><input type="text" id="writer-name" placeholder="Penulis" style="flex:1"><input type="text" id="producer-name" placeholder="Produser" style="flex:1"></div>
                             <div style="display:flex; gap:10px;">
                                 <select id="genre" style="flex:1">
