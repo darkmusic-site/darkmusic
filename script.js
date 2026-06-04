@@ -34,9 +34,12 @@ auth.onAuthStateChanged(user => {
         document.getElementById('user-name-display').innerText = user.displayName;
         document.getElementById('user-name-welcome').innerText = user.displayName;
 
+        // --- TAMBAHKAN FUNGSI INI ---
+        checkAndLockArtist(user.uid); 
+
         loadMyReleases(user.uid);
         listenToBalance(user.uid);
-        loadEarningsHistory(user.uid); // Memuat riwayat pendapatan otomatis saat login
+        loadEarningsHistory(user.uid);
 
         if(user.email === ADMIN_EMAIL) {
             const adminLink = document.getElementById('admin-link');
@@ -52,6 +55,42 @@ auth.onAuthStateChanged(user => {
         if(dashboard) dashboard.classList.add('hidden');
     }
 });
+
+// ==========================================
+// LOGIKA LOCK NAMA ARTIS
+// ==========================================
+function checkAndLockArtist(uid) {
+    const inputArtis = document.getElementById('artist-name');
+    const txtInfoKunci = document.getElementById('info-artist-locked');
+
+    if (!inputArtis) return;
+
+    // Cari di koleksi 'releases' yang milik UID ini dan statusnya 'Approve' atau 'Live'
+    db.collection('releases')
+        .where('uid', '==', uid)
+        .onSnapshot(snap => {
+            let approvedArtistName = "";
+
+            snap.forEach(doc => {
+                const d = doc.data();
+                if (d.status === 'Approve' || d.status === 'Live') {
+                    approvedArtistName = d.artist; // Ambil nama artis yang sudah sukses rilis
+                }
+            });
+
+            // Jika ditemukan rilis yang sudah di-approve
+            if (approvedArtistName !== "") {
+                inputArtis.value = approvedArtistName; // Set otomatis nilainya
+                inputArtis.disabled = true;           // Kunci kolom inputnya
+                if (txtInfoKunci) txtInfoKunci.classList.remove('hidden'); // Tampilkan info
+            } else {
+                // Jika belum ada rilis yang di-approve, biarkan terbuka normal
+                inputArtis.disabled = false;
+                if (txtInfoKunci) txtInfoKunci.classList.add('hidden');
+            }
+        });
+}
+
 
 // ==========================================
 // SALDO & WITHDRAW LOGIC
