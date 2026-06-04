@@ -505,3 +505,55 @@ window.onclick = function(event) {
 document.querySelectorAll('.faq-question').forEach(btn => {
     btn.addEventListener('click', () => btn.parentElement.classList.toggle('active'));
 });
+
+// ==========================================
+// LOGIKA INSTANT PREVIEW AUDIO & ARTWORK
+// ==========================================
+
+// 1. Preview Jalankan Otomatis Saat File Audio Dipilih
+document.getElementById('audio-file').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    const previewContainer = document.getElementById('audio-preview-container');
+    const player = document.getElementById('audio-preview-player');
+
+    if (file) {
+        // Buat url lokal instan tanpa upload ke internet terlebih dahulu
+        const blobUrl = URL.createObjectURL(file);
+        player.src = blobUrl;
+        
+        // Munculkan pemutar musiknya
+        previewContainer.classList.remove('hidden');
+    } else {
+        previewContainer.classList.add('hidden');
+    }
+});
+
+// 2. Preview Jalankan Otomatis Saat File Artwork Dipilih + Validasi Resolusi
+document.getElementById('artwork-file').addEventListener('change', async function(event) {
+    const file = event.target.files[0];
+    const previewContainer = document.getElementById('artwork-preview-container');
+    const previewImg = document.getElementById('artwork-preview-img');
+    const errorDimen = document.getElementById('error-artwork-dimen');
+
+    if (file) {
+        errorDimen.classList.add('hidden');
+        
+        // Panggil fungsi validasi resolusi 3000x3000px
+        const isImageValid = await validateImageResolution(file);
+        
+        if (!isImageValid) {
+            errorDimen.classList.remove('hidden');
+            previewContainer.classList.add('hidden');
+            event.target.value = ""; // Reset inputan jika tidak valid
+            alert("Gagal: Ukuran artwork Anda tidak memenuhi standar minimal 3000x3000px.");
+            return;
+        }
+
+        // Jika valid, buat url lokal instan dan tampilkan gambarnya di web
+        const blobUrl = URL.createObjectURL(file);
+        previewImg.src = blobUrl;
+        previewContainer.classList.remove('hidden');
+    } else {
+        previewContainer.classList.add('hidden');
+    }
+});
