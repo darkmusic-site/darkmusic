@@ -256,36 +256,132 @@ function toggleAllStores() {
     cbs.forEach(c => c.checked = !all);
 }
 
+// Konfigurasi Cloudinary Anda (Ganti dengan data dari dashboard Anda)
+const CLOUDINARY_CLOUD_NAME = "dqb0x46ny";
+const CLOUDINARY_UPLOAD_PRESET = "Vantone_preset"; // Contoh: vantone_preset
+
+// Fungsi memvalidasi dimensi gambar minimum 3000x3000px
+function validateImageResolution(file) {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function (e) {
+            const image = new Image();
+            image.src = e.target.result;
+            image.onload = function () {
+                if (this.width < 3000 || this.height < 3000) {
+                    resolve(false);
+                } else {
+                    resolve(true);
+                }
+            };
+        };
+    });
+}
+
 async function distribute() {
-    const drive = document.getElementById('drive-link').value;
-    const title = document.getElementById('song-title').value;
-    const artist = document.getElementById('artist-name').value;
+    const audioInput = document.getElementById('audio-file');
+    const artworkInput = document.getElementById('artwork-file');
+    const title = document.getElementById('song-title').value.trim();
+    const artist = document.getElementById('artist-name').value.trim();
     const genre = document.getElementById('genre').value;
     const releaseDate = document.getElementById('release-date').value;
     const stores = Array.from(document.querySelectorAll('.store-cb:checked')).map(cb => cb.value);
-
-    if(!drive || !title || !artist || stores.length === 0) return alert("Lengkapi data!");
-
+    
+    const errorDimen = document.getElementById('error-artwork-dimen');
+    const progressContainer = document.getElementById('upload-progress-container');
+    const progressBar = document.getElementById('upload-progress-bar');
+    const statusText = document.getElementById('upload-status-text');
     const btn = document.getElementById('btn-submit');
+
+    // 1. Validasi Input Dasar
+    if(!audioInput.files[0] || !artworkInput.files[0] || !title || !artist || stores.length === 0) {
+        return alert("Mohon lengkapi semua data dan pilih file yang ingin diunggah!");
+    }
+
+    const audioFile = audioInput.files[0];
+    const artworkFile = artworkInput.files[0];
+
+    // 2. Validasi Resolusi Artwork (Minimal 3000x3000px)
+    if(errorDimen) errorDimen.classList.add('hidden');
+    const isImageValid = await validateImageResolution(artworkFile);
+    if (!isImageValid) {
+        if(errorDimen) errorDimen.classList.remove('hidden');
+        alert("Gagal: Ukuran artwork Anda tidak memenuhi standar minimal 3000x3000px.");
+        return;
+    }
+
+    // Aktifkan loading status & progress bar
     btn.disabled = true;
-    btn.innerText = "Sedang Mengirim...";
+    btn.innerText = "Memproses Pengunggahan...";
+    if(progressContainer) progressContainer.classList.remove('hidden');
+    if(statusText) statusText.classList.remove('hidden');
 
     try {
+        const urlCloudinary = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/upload`;
+
+        // 3. Upload File Audio MP3 ke Cloudinary
+        statusText.innerText = "Mengunggah file audio MP3 ke Cloudinary...";
+        if(progressBar) progressBar.style.width = "30%";
+
+        const formDataAudio = new FormData();
+        formDataAudio.append("file", audioFile);
+        formDataAudio.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+        formDataAudio.append("resource_type", "video"); // Cloudinary mendeteksi mp3 sebagai tipe video/raw
+
+        const resAudio = await fetch(urlCloudinary, { method: "POST", body: formDataAudio });
+        const dataAudio = await resAudio.json();
+        
+        if(!dataAudio.secure_url) throw new Error("Gagal mengunggah audio ke Cloudinary");
+        const audioUrl = dataAudio.secure_url;
+
+        // 4. Upload File Artwork ke Cloudinary
+        statusText.innerText = "Mengunggah file Artwork Cover ke Cloudinary...";
+        if(progressBar) progressBar.style.width = "70%";
+
+        const formDataArtwork = new FormData();
+        formDataArtwork.append("file", artworkFile);
+        formDataArtwork.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+        formDataArtwork.append("resource_type", "image");
+
+        const resArtwork = await fetch(urlCloudinary, { method: "POST", body: formDataArtwork });
+        const dataArtwork = await resArtwork.json();
+
+        if(!dataArtwork.secure_url) throw new Error("Gagal mengunggah artwork ke Cloudinary");
+        const artworkUrl = dataArtwork.secure_url;
+
+        // 5. Simpan Semua URL ke Firestore Gratisan Anda
+        statusText.innerText = "Menyimpan data rilis ke sistem VanTone...";
+        if(progressBar) progressBar.style.width = "90%";
+
         await db.collection('releases').add({
             uid: auth.currentUser.uid,
             email: auth.currentUser.email,
-            title, artist, driveLink: drive, stores, genre, releaseDate,
+            title, 
+            artist, 
+            audioLink: audioUrl,     
+            artworkLink: artworkUrl, 
+            stores, 
+            genre, 
+            releaseDate,
             status: 'Review',
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
-        alert("Berhasil diajukan!");
+
+        if(progressBar) progressBar.style.width = "100%";
+        alert("Lagu dan Artwork berhasil diajukan!");
         location.reload();
+
     } catch(e) {
-        alert("Gagal mengirim.");
+        console.error(e);
+        alert("Terjadi kesalahan saat mengunggah file: " + e.message);
         btn.disabled = false;
         btn.innerText = "AJUKAN DISTRIBUSI";
+        if(progressContainer) progressContainer.classList.add('hidden');
+        if(statusText) statusText.classList.add('hidden');
     }
 }
+
 
 function loadMyReleases(uid) {
     db.collection('releases').where('uid', '==', uid).onSnapshot(snap => {
