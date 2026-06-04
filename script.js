@@ -411,7 +411,7 @@ function loadMyReleases(uid) {
 }
 
 // ==========================================
-// ADMIN LOGIC
+// ADMIN PANEL LOGIC (REPLACE TOTAL FUNGSI INI)
 // ==========================================
 function loadAdminPanel() {
     const adminList = document.getElementById('admin-release-list');
@@ -427,6 +427,15 @@ function loadAdminPanel() {
 
         snap.forEach(doc => {
             const d = doc.data();
+            
+            // Pengaman jika ada data rilis lama yang masih menggunakan format Google Drive
+            const linkAudio = d.audioLink || d.driveLink || "#";
+            const linkArtwork = d.artworkLink || "https://via.placeholder.com/150?text=No+Artwork";
+
+            let dotClass = "dot-review";
+            if(d.status === 'Live' || d.status === 'Approve') dotClass = "dot-live";
+            if(d.status === 'Decline') dotClass = "dot-decline";
+
             adminList.innerHTML += `
                 <div class="card-light" style="border-bottom:1px solid #eee; padding:20px; background: #fff; margin-bottom: 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
                     <p style="margin:0"><strong>${d.title}</strong> - ${d.artist}</p>
@@ -437,7 +446,19 @@ function loadAdminPanel() {
                         <button onclick="navigator.clipboard.writeText('${d.uid}'); alert('UID dicopy!')" style="font-size:9px; margin-left:5px; cursor:pointer;">Copy</button>
                     </div>
 
-                    <a href="${d.driveLink}" target="_blank" style="font-size:12px; color:var(--primary); display:block; margin-bottom: 15px; text-decoration:none; font-weight:600;">Buka Link Drive ↗</a>
+                    <!-- AREA PREVIEW TERBARU DI PANEL ADMIN (CLOUDINARY) -->
+                    <div style="margin: 15px 0; background: #fafafa; padding: 12px; border-radius: 8px; border: 1px solid #eaeaea;">
+                        <p style="font-size:11px; margin: 0 0 5px; color: #555; font-weight: bold;">🎨 Artwork Cover (Klik untuk Perbesar):</p>
+                        <a href="${linkArtwork}" target="_blank" style="display: inline-block; margin-bottom: 12px;">
+                            <img src="${linkArtwork}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 6px; border: 1px solid #ddd; display: block;" alt="Artwork Admin">
+                        </a>
+                        
+                        <p style="font-size:11px; margin: 0 0 5px; color: #555; font-weight: bold;">🎵 Audio Pemutar (Format: MP3):</p>
+                        <audio controls style="width: 100%; max-width: 280px; height: 32px; display: block;">
+                            <source src="${linkAudio}" type="audio/mpeg">
+                            Browser Anda tidak mendukung pemutar audio langsung.
+                        </audio>
+                    </div>
                     
                     <div class="admin-controls" style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
                         <button style="background:#4CAF50; color:white; border:none; padding:8px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:bold;" onclick="updateStatus('${doc.id}', 'Approve')">APPROVE</button>
@@ -449,6 +470,7 @@ function loadAdminPanel() {
         });
     });
 }
+
 
 async function updateBalance() {
     const uid = document.getElementById('admin-user-id').value.trim();
