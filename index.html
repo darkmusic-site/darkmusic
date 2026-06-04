@@ -147,10 +147,25 @@
                         <button onclick="hideUploadForm()" style="color:var(--primary); background:none; border:none; cursor:pointer;">Batal</button>
                     </div>
                     <div class="form-grid">
-                        <div class="upload-files">
-                            <label>Link Folder Google Drive</label>
-                            <input type="text" id="drive-link" placeholder="https://drive.google.com/..." required>
-                        </div>
+                        <div class="upload-files" style="display: flex; flex-direction: column; gap: 20px;">
+    <div>
+        <label style="font-size: 12px; font-weight: 700; display: block; margin-bottom: 5px;">File Audio (Format: MP3 saja)</label>
+        <input type="file" id="audio-file" accept="audio/mp3" style="width:100%; padding: 10px; border: 1px dashed #ccc; border-radius: 8px;" required>
+    </div>
+
+    <div>
+        <label style="font-size: 12px; font-weight: 700; display: block; margin-bottom: 5px;">Artwork / Cover Lagu (Min. 3000 x 3000 px, JPG/PNG)</label>
+        <input type="file" id="artwork-file" accept="image/jpeg, image/png" style="width:100%; padding: 10px; border: 1px dashed #ccc; border-radius: 8px;" required>
+        <p id="error-artwork-dimen" class="hidden" style="color: red; font-size: 11px; font-weight: bold; margin-top: 5px;">
+            ❌ Ukuran artwork minimal harus 3000 x 3000 piksel!
+        </p>
+    </div>
+
+    <div id="upload-progress-container" class="hidden" style="width: 100%; background: #eee; border-radius: 10px; overflow: hidden; height: 10px; margin-top: 10px;">
+        <div id="upload-progress-bar" style="width: 0%; height: 100%; background: var(--primary); transition: width 0.3s;"></div>
+    </div>
+    <p id="upload-status-text" class="hidden" style="font-size: 11px; color: #666; text-align: center; margin-top: -10px;"></p>
+</div>
                         <div class="upload-meta">
                             <input type="text" id="song-title" placeholder="Judul Lagu">
                             <div style="width: 100%; text-align: left;">
