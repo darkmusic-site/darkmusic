@@ -9,9 +9,11 @@
         nav { background: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         .logo { font-weight: 800; text-decoration: none; color: #111; }
         .logo span { color: #ff0050; }
-        .container { max-width: 800px; margin: 50px auto; padding: 40px; background: white; border-radius: 16px; }
-        h2 { color: #ff0050; border-left: 4px solid #ff0050; padding-left: 15px; margin-top: 30px; }
-        p, li { color: #555; line-height: 1.6; }
+        .container { max-width: 800px; margin: 50px auto; padding: 40px; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); text-align: justify; }
+        h2 { color: #ff0050; border-left: 4px solid #ff0050; padding-left: 15px; margin-top: 35px; font-size: 20px; }
+        p, li { color: #444; line-height: 1.7; font-size: 14px; md:font-size: 15px; }
+        ul { margin-top: 10px; margin-bottom: 10px; padding-left: 20px; }
+        li { margin-bottom: 8px; }
     </style>
 </head>
 <body>
@@ -20,14 +22,56 @@
         <a href="index.html" style="text-decoration:none; color:#111; font-weight:600;">BERANDA</a>
     </nav>
     <div class="container">
-        <h1>Kebijakan Privasi</h1>
-        <p>Terakhir diperbarui: 11 Mei 2026</p>
-        <h2>1. Data yang Kami Simpan</h2>
-        <p>Kami menyimpan informasi profil Google Anda, email PayPal untuk pembayaran, dan metadata lagu yang Anda distribusikan.</p>
-        <h2>2. Keamanan</h2>
-        <p>Data Anda aman bersama kami. Kami menggunakan enkripsi tingkat tinggi untuk memastikan informasi sensitif Anda tidak bocor ke pihak ketiga.</p>
-        <h2>3. Penggunaan Data</h2>
-        <p>Data hanya digunakan untuk kepentingan distribusi musik dan pengiriman royalti ke akun PayPal Anda.</p>
+        <h1 style="margin-bottom: 5px; font-size: 32px; font-weight: 800; color: #111;">Kebijakan Privasi</h1>
+        <p style="color: #888; font-size: 13px; margin-bottom: 30px;">Terakhir Diperbarui: 5 Juni 2026</p>
+        
+        <p>Kebijakan Privasi ini menerangkan bagaimana <span style="font-weight: 700;">Vantone Store</span> ("Kami", "Platform") mengumpulkan, menggunakan, mengelola, mengolah, dan melindungi informasi pribadi serta data sensitif milik Pengguna ("Anda", "Artis", "Kreator") saat mengakses situs web <span style="color: #ff0050;">vantone.store</span> beserta seluruh rangkaian layanan distribusi musik digital global terkait.</p>
+        
+        <p style="margin-top: 15px;">Kami sangat berkomitmen untuk menjaga kerahasiaan dan privasi data Anda. Dengan mendaftarkan akun, menggunakan skema login sosial, atau mengunggah konten apa pun di platform kami, Anda secara sadar memberikan persetujuan penuh atas pengumpulan dan pemrosesan data Anda sesuai dengan ketentuan-ketentuan yang dijabarkan dalam dokumen ini.</p>
+
+        <h2>1. Informasi dan Data yang Kami Kumpulkan</h2>
+        <p>Guna menyediakan layanan distribusi musik yang andal, efisien, dan mematuhi regulasi perbankan serta lisensi digital, kami mengumpulkan beberapa kategori data berikut dari Anda:</p>
+        <ul>
+            <li><span style="font-weight: 700;">Data Autentikasi Profil Google:</span> Saat Anda mendaftar atau masuk menggunakan akun Google, sistem kami mengambil dan menyimpan informasi profil dasar Anda seperti Nama Lengkap, Alamat Email (Gmail), Foto Profil, serta User ID (UID) unik yang diberikan oleh Firebase Authentication.</li>
+            <li><span style="font-weight: 700;">Data Keuangan & Pembayaran (PayPal):</span> Untuk memproses pencairan dan penarikan pendapatan royalti (*withdrawal*), kami mengumpulkan dan menyimpan nama pemilik akun PayPal dan alamat email PayPal aktif Anda. Kami tidak mengumpulkan data nomor kartu kredit atau detail perbankan internal lainnya.</li>
+            <li><span style="font-weight: 700;">Metadata Musik & Aset Digital:</span> Kami mengumpulkan materi file audio (format MP3), file gambar sampul album/singel (*artwork/cover art*), serta teks penunjang rilis meliputi judul lagu, nama artis, nama penulis lirik, produser, genre musik, dan tanggal rilis resmi untuk didistribusikan ke Toko Musik Digital (DSP).</li>
+            <li><span style="font-weight: 700;">Data Teknis & Log Aktivitas:</span> Sistem kami mengumpulkan data teknis berupa alamat IP (Internet Protocol), tipe peramban (*browser*), riwayat aktivitas klik navigasi menu dashboard, serta catatan pengunggahan file demi menjaga keamanan performa sistem.</li>
+        </ul>
+
+        <h2>2. Penggunaan Data dan Informasi Pengguna</h2>
+        <p>Seluruh informasi pribadi dan data digital yang dikumpulkan oleh Vantone Store semata-mata dimanfaatkan untuk tujuan operasional dan pengembangan platform yang legal, antara lain:</p>
+        <ul>
+            <li><span style="font-weight: 700;">Penyediaan Layanan Distribusi:</span> Mengolah metadata dan menyalurkan aset lagu Anda ke platform musik digital mitra global (seperti Spotify, Apple Music, TikTok, YouTube Music).</li>
+            <li><span style="font-weight: 700;">Pemrosesan Finansial & Royalti:</span> Melacak total performa pemutaran musik (*streams*), mencatat penambahan saldo, serta mengeksekusi transfer pencairan saldo royalti ke akun PayPal Anda sesuai dengan data formulir penarikan.</li>
+            <li><span style="font-weight: 700;">Keamanan & Verifikasi Metadata:</span> Mencegah terjadinya manipulasi streaming (*artificial streaming fraud*), mendeteksi pelanggaran klaim hak cipta bajakan, serta memvalidasi kesesuaian dimensi artwork di sisi client.</li>
+            <li><span style="font-weight: 700;">Komunikasi Layanan & Support:</span> Mengirimkan konfirmasi status peninjauan rilis (*Review, Approve, Live, Decline*), verifikasi administratif, atau merespons keluhan teknis yang Anda ajukan melalui formulir hubungi kami.</li>
+        </ul>
+
+        <h2>3. Keamanan Data dan Teknologi Enkripsi</h2>
+        <p>Kami menerapkan langkah-langkah keamanan teknis dan organisasional yang sangat ketat untuk melindungi data pribadi Anda dari akses tanpa izin, perubahan tidak sah, kebocoran, atau penghancuran data secara ilegal. Semua interaksi data pada situs web dikirimkan melalui jalur komunikasi aman yang dienkripsi menggunakan protokol **SSL/TLS (Secure Sockets Layer)**.</p>
+        <p style="margin-top: 10px;">Penyimpanan basis data digital Anda dikelola di bawah infrastruktur cloud terenkripsi tingkat tinggi serta penyimpanan file CDN yang aman untuk memastikan informasi sensitif seperti dokumen akun, nama panggung, riwayat saldo, serta file master lagu Anda terisolasi dengan aman dari ancaman siber.</p>
+
+        <h2>4. Pengungkapan Data kepada Pihak Ketiga</h2>
+        <p>Vantone Store berkomitmen penuh untuk <span style="font-weight: 700; color: #ff0050;">TIDAK AKAN PERNAH</span> menjual, menyewakan, menukarkan, atau membocorkan data pribadi Anda kepada pihak ketiga mana pun untuk kepentingan periklanan komersial. Kami hanya membagikan data Anda kepada entitas terbatas berikut yang mutlak diperlukan untuk keberlangsungan layanan:</p>
+        <ul>
+            <li><span style="font-weight: 700;">Mitra Platform Musik Digital (DSP):</span> Kami mengirimkan metadata rilis, nama artis, dan file audio Anda kepada platform streaming global agar lagu Anda dapat ditayangkan secara publik.</li>
+            <li><span style="font-weight: 700;">Penyedia Layanan Cloud & API:</span> Kami menggunakan infrastruktur Firebase Firestore untuk database, Cloudinary untuk penyimpanan file aset digital temporer, serta Formspree untuk memproses penerusan keluhan formulir ke email support.</li>
+            <li><span style="font-weight: 700;">Kepatuhan Hukum Negara:</span> Kami dapat mengungkapkan informasi Anda jika diwajibkan oleh undang-undang atau perintah pengadilan resmi dari otoritas hukum yang berwenang demi mematuhi kewajiban hukum yang berlaku.</li>
+        </ul>
+
+        <h2>5. Penyimpanan dan Penghapusan Data (Data Retention & Deletion)</h2>
+        <p>Kami akan menyimpan informasi pribadi Anda selama akun Anda tetap berstatus aktif di platform Vantone Store guna kepentingan akumulasi riwayat royalti jangka panjang. Anda memiliki hak penuh untuk mengajukan permohonan penutupan akun serta penghapusan seluruh data pribadi Anda dari sistem kami secara permanen.</p>
+        <p style="margin-top: 10px;">Untuk mengajukan penghapusan data atau pembatalan lisensi distribusi lagu (*take down*), Anda dapat mengirimkan permohonan tertulis resmi ke alamat email penanganan kami di <a href="mailto:support@vantone.store" style="color: #ff0050; text-decoration: none; font-weight: bold;">support@vantone.store</a>. Setelah diverifikasi, proses penghapusan data akan diselesaikan dalam kurun waktu yang wajar sesuai koridor hukum perdagangan digital.</p>
+
+        <h2>6. Kebijakan Cookies</h2>
+        <p>Situs web kami menggunakan *cookies* kecil yang disimpan di perangkat Anda untuk mengenali sesi login akun, mengingat preferensi navigasi dasbor Anda, serta mengumpulkan analitik anonim lalu lintas situs. Anda dapat menonaktifkan fitur *cookies* ini melalui pengaturan peramban (*browser*) Anda, namun perlu diketahui bahwa beberapa fungsi utama dasbor distribusi mungkin tidak akan berjalan secara optimal.</p>
+
+        <h2>7. Kontak dan Hubungan Support</h2>
+        <p>Jika Anda memiliki pertanyaan mendalam mengenai Kebijakan Privasi ini, tata cara pemrosesan perlindungan data, atau ingin mengajukan klaim hak privasi digital Anda, jangan ragu untuk menghubungi perwakilan tim manajemen kami melalui kontak resmi di bawah ini:</p>
+        <p style="margin-top: 10px; background: #f0f0f0; padding: 15px; border-radius: 8px; font-size: 13px;">
+            📧 <span style="font-weight: 700;">Layanan Bantuan Umum & Privasi:</span> <a href="mailto:support@vantone.store" style="color: #ff0050; text-decoration: none;">support@vantone.store</a><br>
+            🔒 <span style="font-weight: 700;">Urusan Hak Cipta & Keamanan Data:</span> <a href="mailto:copyright@vantone.store" style="color: #ff0050; text-decoration: none;">copyright@vantone.store</a>
+        </p>
     </div>
 </body>
 </html>
