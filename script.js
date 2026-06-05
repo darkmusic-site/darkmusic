@@ -722,3 +722,45 @@ async function submitRoyaltyAndAnalytics() {
     }
 }
 
+// ==========================================
+// VALIDASI KALENDER: MINIMAL 7 HARI KE DEPAN
+// ==========================================
+function batasiTanggalRilis() {
+    const dateInput = document.getElementById('release-date');
+    if (!dateInput) return;
+
+    const hariIni = new Date();
+    hariIni.setDate(hariIni.getDate() + 7); // Kunci 7 hari ke depan
+
+    const tahun = hariIni.getFullYear();
+    const bulan = String(hariIni.getMonth() + 1).padStart(2, '0');
+    const tanggal = String(hariIni.getDate()).padStart(2, '0');
+
+    const tglMinimal = `${tahun}-${bulan}-${tanggal}`;
+    dateInput.min = tglMinimal;
+    dateInput.value = tglMinimal;
+}
+
+// ==========================================
+// KONTROL SELECTION PLATFORM (26 DSP)
+// ==========================================
+function hitungPilihan() {
+    const checkedCount = document.querySelectorAll('.store-cb:checked').length;
+    const displayCount = document.getElementById('selected-count');
+    if (displayCount) {
+        displayCount.innerText = checkedCount;
+    }
+}
+
+function toggleAllStores(forceState = null) {
+    const checkboxes = document.querySelectorAll('.store-cb');
+    const checkTarget = (forceState !== null) ? forceState : document.querySelectorAll('.store-cb:checked').length < checkboxes.length;
+
+    checkboxes.forEach(cb => {
+        cb.checked = checkTarget;
+    });
+    hitungPilihan();
+}
+
+// Panggil fungsi pembatasan tanggal agar langsung aktif saat halaman dimuat
+batasiTanggalRilis();
