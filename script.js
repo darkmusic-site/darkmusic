@@ -40,6 +40,7 @@ auth.onAuthStateChanged(user => {
         loadMyReleases(user.uid);
         listenToBalance(user.uid);
         loadEarningsHistory(user.uid);
+        loadUserAnalytics(user.uid); // Memuat analitik dan grafik
 
         if(user.email === ADMIN_EMAIL) {
             const adminLink = document.getElementById('admin-link');
@@ -579,3 +580,145 @@ document.getElementById('artwork-file').addEventListener('change', async functio
         previewContainer.classList.add('hidden');
     }
 });
+
+// Variabel global untuk menyimpan objek grafik agar tidak duplikat saat diredraw
+let myChartInstance = null;
+
+// ==========================================
+// LOGIKA USER: MEMUAT ANALITIK & GRAFIK
+// ==========================================
+function loadUserAnalytics(uid) {
+    const royaltyTable = document.getElementById('royalty-table-body');
+    if (!royaltyTable) return;
+
+    db.collection('analytics').where('uid', '==', uid).onSnapshot(snap => {
+        if (snap.empty) return;
+
+        royaltyTable.innerHTML = "";
+        let totalStreams = 0;
+        let topSongName = "-";
+        let maxStreams = 0;
+
+        // Penampung data grafik bulanan (Simulasi 3 Bulan)
+        let monthlyData = { "April": 0, "Mei": 0, "Juni": 0 }; 
+
+        snap.forEach(doc => {
+            const d = doc.data();
+            totalStreams += parseInt(d.streams || 0);
+
+            // Cari lagu terpopuler
+            if (parseInt(d.streams || 0) > maxStreams) {
+                maxStreams = d.streams;
+                topSongName = d.title;
+            }
+
+            // Kelompokkan data streams untuk grafik (Sederhana berdasarkan data masuk)
+            // Di dunia nyata ini dicocokkan dengan timestamp bulan dokumen dimasukkan
+            monthlyData["Juni"] += parseInt(d.streams || 0); 
+
+            // Render baris tabel royalti per lagu
+            royaltyTable.innerHTML += `
+                <tr>
+                    <td style="font-weight:700; font-size:13px;">${d.title}</td>
+                    <td><span style="background:#e3f2fd; color:#0d47a1; padding:3px 8px; border-radius:12px; font-size:11px; font-weight:bold;">${d.topPlatform || 'Spotify'}</span></td>
+                    <td style="font-weight:600;">${parseInt(d.streams).toLocaleString('id-ID')} Streams</td>
+                    <td style="font-weight:800; color:#2e7d32;">+$${parseFloat(d.amount || 0).toFixed(2)}</td>
+                </tr>
+            `;
+        });
+
+        // Update teks ringkasan di dashboard atas
+        document.getElementById('total-streams-display').innerText = totalStreams.toLocaleString('id-ID');
+        document.getElementById('top-song-display').innerText = topSongName;
+
+        // Render atau update Grafik Chart.js
+        renderAnalyticsChart(Object.keys(monthlyData), Object.values(monthlyData));
+    });
+}
+
+function renderAnalyticsChart(labels, dataValues) {
+    const ctx = document.getElementById('analyticsChart');
+    if (!ctx) return;
+
+    // Hancurkan grafik lama jika ada, mencegah error tumpang tindih saat data diperbarui
+    if (myChartInstance) {
+        myChartInstance.destroy();
+    }
+
+    myChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Total Pemutaran Musik',
+                data: dataValues,
+                borderColor: '#ff0050', // Warna merah khas VanTone
+                backgroundColor: 'rgba(255, 0, 80, 0.1)',
+                borderWidth: 3,
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { beginAtZero: true, grid: { display: false } },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+}
+
+// ==========================================
+// LOGIKA ADMIN: INPUT ROYALTI & ANALITIK baru
+// ==========================================
+async function submitRoyaltyAndAnalytics() {
+    const uid = document.getElementById('admin-royalty-uid').value.trim();
+    const title = document.getElementById('admin-royalty-title').value.trim();
+    const platform = document.getElementById('admin-royalty-platform').value.trim();
+    const streams = parseInt(document.getElementById('admin-royalty-streams').value);
+    const amount = parseFloat(document.getElementById('admin-royalty-amount').value);
+
+    if(!uid || !title || !platform || isNaN(streams) || isNaN(amount)) {
+        return alert("Mohon isi semua kolom input data royalti secara valid!");
+    }
+
+    try {
+        // 1. Masukkan log performa ke koleksi 'analytics'
+        await db.collection('analytics').add({
+            uid, title, topPlatform: platform, streams, amount,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        // 2. Ambil saldo user saat ini untuk ditambahkan dengan nilai royalti baru otomatis
+        const userRef = db.collection('users').doc(uid);
+        const userDoc = await userRef.get();
+        let currentBalance = 0;
+        
+        if (userDoc.exists) {
+            currentBalance = parseFloat(userDoc.data().balance || 0);
+        }
+
+        // 3. Update total saldo akhir user di database agar mereka bisa melakukan withdraw
+        await userRef.set({
+            balance: currentBalance + amount,
+            lastUpdate: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+
+        alert(`Sukses! Data analitik berhasil disimpan dan saldo artis otomatis bertambah sebesar $${amount}`);
+        
+        // Bersihkan Form input admin
+        document.getElementById('admin-royalty-uid').value = "";
+        document.getElementById('admin-royalty-title').value = "";
+        document.getElementById('admin-royalty-platform').value = "";
+        document.getElementById('admin-royalty-streams').value = "";
+        document.getElementById('admin-royalty-amount').value = "";
+
+    } catch (e) {
+        console.error(e);
+        alert("Gagal memproses data royalti: " + e.message);
+    }
+}
+
