@@ -294,6 +294,14 @@ async function distribute() {
     const progressBar = document.getElementById('upload-progress-bar');
     const statusText = document.getElementById('upload-status-text');
     const btn = document.getElementById('btn-submit');
+        // Pengecekan Checklist Legalitas & Bagi Hasil
+    const checkCopyright = document.getElementById('check-copyright');
+    const checkRoyalty = document.getElementById('check-royalty');
+    if (!checkCopyright?.checked || !checkRoyalty?.checked) {
+        alert("⚠️ Maaf, Anda wajib mencentang semua kotak persetujuan legalitas dan bagi hasil sebelum mengirim rilis!");
+        return;
+    }
+
 
     // 1. Validasi Input Dasar
     if(!audioInput.files[0] || !artworkInput.files[0] || !title || !artist || stores.length === 0) {
