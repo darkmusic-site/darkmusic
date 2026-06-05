@@ -23,6 +23,7 @@
         .hidden { display: none !important; }
         .nav-logged-in { background: white; border-bottom: 1px solid #eee; padding: 15px 0; position: sticky; top: 0; z-index: 1000; }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -229,24 +230,60 @@
         </section>
 
         <section id="earnings-history" class="dashboard hidden">
-            <div class="container">
-                <h2 style="margin-bottom: 20px;">Pendapatan & Riwayat Penarikan</h2>
-                <div class="table-container">
-                    <table class="release-table">
-                        <thead>
-                            <tr>
-                                <th>Tanggal</th>
-                                <th>Detail Penarikan</th>
-                                <th>Jumlah</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="earnings-table-body">
-                        </tbody>
-                    </table>
-                </div>
+    <div class="container">
+        <h2 style="margin-bottom: 20px;">Analitik & Pendapatan Saya</h2>
+        
+        <div class="feature-grid" style="margin-bottom:30px;">
+            <div class="card-light" style="padding: 20px; text-align: center;">
+                <h4 style="font-size:13px; color:#888; margin-bottom: 5px;">Total Pemutaran (Streams)</h4>
+                <p id="total-streams-display" style="font-size:28px; font-weight:800; color: var(--dark);">0</p>
             </div>
-        </section>
+            <div class="card-light" style="padding: 20px; text-align: center;">
+                <h4 style="font-size:13px; color:#888; margin-bottom: 5px;">Lagu Paling Populer</h4>
+                <p id="top-song-display" style="font-size:16px; font-weight:800; color: var(--primary); margin-top: 10px;">-</p>
+            </div>
+        </div>
+
+        <div class="card-light" style="padding: 20px; margin-bottom: 40px;">
+            <h3 style="font-size: 16px; margin-bottom: 15px;">📊 Tren Performa Musik (3 Bulan Terakhir)</h3>
+            <div style="position: relative; height:200px; width:100%">
+                <canvas id="analyticsChart"></canvas>
+            </div>
+        </div>
+
+        <h3 style="margin-bottom: 15px; font-size: 16px;">🎵 Detail Royalti Per Lagu</h3>
+        <div class="table-container" style="margin-bottom: 40px;">
+            <table class="release-table">
+                <thead>
+                    <tr>
+                        <th>Judul Lagu</th>
+                        <th>Platform Teratas</th>
+                        <th>Total Streams</th>
+                        <th>Royalti Terkumpul</th>
+                    </tr>
+                </thead>
+                <tbody id="royalty-table-body">
+                    <tr><td colspan="4" style="text-align:center; padding:20px; color:#999;">Belum ada data royalti bulan ini.</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 style="margin-bottom: 15px; font-size: 16px;">💸 Riwayat Penarikan Saldo</h3>
+        <div class="table-container">
+            <table class="release-table">
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Detail Penarikan</th>
+                        <th>Jumlah</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="earnings-table-body"></tbody>
+            </table>
+        </div>
+    </div>
+</section>
 
         <section id="withdraw" class="dashboard hidden">
             <div class="container" style="max-width:500px">
@@ -283,6 +320,16 @@
                 <div id="admin-release-list"></div>
             </div>
         </section>
+        <div class="upload-card" style="margin-bottom:30px; margin-top:20px;">
+    <h3>Input Data Analitik & Royalti Musik</h3>
+    <input type="text" id="admin-royalty-uid" placeholder="UID Artis">
+    <input type="text" id="admin-royalty-title" placeholder="Judul Lagu (Harus Sama Tepat)">
+    <input type="text" id="admin-royalty-platform" placeholder="Platform Teratas (Contoh: Spotify)">
+    <input type="number" id="admin-royalty-streams" placeholder="Jumlah Streams Bulan Ini">
+    <input type="number" step="0.01" id="admin-royalty-amount" placeholder="Nominal Royalti ($)">
+    <button onclick="submitRoyaltyAndAnalytics()" class="btn-soundon" style="margin-top: 10px;">Kirim Data Royalti</button>
+    </div>
+        
     </main>
 
     <footer class="footer-main">
