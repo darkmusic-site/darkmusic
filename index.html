@@ -342,22 +342,46 @@
             </label>
         </div>
 
-        <div class="legal-agreement-box" style="margin-top: 25px; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 15px; text-align: left;">
+        <!-- KOTAK PERJANJIAN & CHECKLIST DENGAN FITUR AUTO-LOCK TOMBOL -->
+<div class="legal-agreement-box" style="margin-top: 25px; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 15px; text-align: left;">
     <h4 style="margin: 0 0 12px 0; font-size: 13px; font-weight: 800; color: #1e293b;">📋 Konfirmasi Legalitas Rilis Musik</h4>
     
+    <!-- Checklist 1: Hak Cipta -->
     <label style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; cursor: pointer; font-size: 12px; color: #475569; font-weight: 600; line-height: 1.5;">
-        <input type="checkbox" id="check-copyright" required style="margin-top: 3px;">
+        <input type="checkbox" id="check-copyright" onchange="validasiTombol()" style="margin-top: 3px;">
         <span>Saya berjanji bahwa saya memegang <strong>hak cipta penuh 100%</strong> atas lagu, aransemen, lirik, dan gambar sampul ini, serta tidak mengandung unsur plagiarisme atau hak milik pihak lain tanpa izin resmi.</span>
     </label>
 
+    <!-- Checklist 2: Pembagian Royalti -->
     <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-size: 12px; color: #475569; font-weight: 600; line-height: 1.5;">
-        <input type="checkbox" id="check-royalty" required style="margin-top: 3px;">
+        <input type="checkbox" id="check-royalty" onchange="validasiTombol()" style="margin-top: 3px;">
         <span>Saya menyetujui bahwa layanan ini 100% gratis, dan memberikan hak kepada VanTone Store untuk mengumpulkan royalti global rilis ini dengan skema bagi hasil <strong>80% untuk Artis dan 20% potong administrasi Platform</strong>.</span>
-        </label>
-          </div>
-        </div>
-        <button onclick="distribute()" id="btn-submit" class="btn-soundon" style="width:100%; margin-top:20px;">AJUKAN DISTRIBUSI</button>
-        </div>
+    </label>
+</div>
+
+<!-- TOMBOL OTOMATIS TERKUNCI (DISABLED) DI AWAL -->
+<button onclick="distribute()" id="btn-submit" class="btn-soundon" disabled style="width:100%; margin-top:20px; opacity: 0.5; cursor: not-allowed;">AJUKAN DISTRIBUSI</button>
+
+<!-- SCRIPT PENGUNCI TOMBOL -->
+<script>
+function validasiTombol() {
+    const cb1 = document.getElementById('check-copyright');
+    const cb2 = document.getElementById('check-royalty');
+    const btn = document.getElementById('btn-submit');
+    
+    if (cb1 && cb2 && btn) {
+        if (cb1.checked && cb2.checked) {
+            btn.disabled = false;
+            btn.style.opacity = "1";
+            btn.style.cursor = "pointer";
+        } else {
+            btn.disabled = true;
+            btn.style.opacity = "0.5";
+            btn.style.cursor = "not-allowed";
+        }
+    }
+}
+</script>
 
         </section>
 
