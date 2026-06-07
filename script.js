@@ -34,13 +34,21 @@ auth.onAuthStateChanged(user => {
         document.getElementById('user-name-display').innerText = user.displayName;
         document.getElementById('user-name-welcome').innerText = user.displayName;
 
-        // --- TAMBAHKAN FUNGSI INI ---
+        // OTOMATIS TAMBAH DETAIL DATA USER TANPA MENGHAPUS SALDO
+        db.collection('users').doc(user.uid).set({
+            uid: user.uid,
+            name: user.displayName,
+            email: user.email,
+            photoURL: user.photoURL,
+            lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+
         checkAndLockArtist(user.uid); 
 
         loadMyReleases(user.uid);
         listenToBalance(user.uid);
         loadEarningsHistory(user.uid);
-        loadUserAnalytics(user.uid); // Memuat analitik dan grafik
+        loadUserAnalytics(user.uid);
 
         if(user.email === ADMIN_EMAIL) {
             const adminLink = document.getElementById('admin-link');
