@@ -411,35 +411,35 @@ function loadMyReleases(uid) {
             const d = doc.data();
             const docId = doc.id;
             
-            // 1. LOGIKA POP-UP NOTIFIKASI SEKALI MUNCUL (RELIABLE ALERT)
+            // Mengubah status ke huruf kecil semua agar pengecekan selalu akurat
+            const statusLagu = d.status ? d.status.toLowerCase() : 'review';
+            
+            // 1. LOGIKA POP-UP NOTIFIKASI SEKALI MUNCUL
             if (d.isNewStatus === true) {
-                // Matikan field isNewStatus di Firebase secara real-time agar tidak muncul lagi saat di-refresh
                 db.collection('releases').doc(docId).update({ isNewStatus: false });
 
-                if (d.status === 'Approve') {
+                if (statusLagu === 'approve') {
                     alert(`🎉 Horey.. lagu anda "${d.title}" berhasil di approve, dan akan live beberapa jam dan kami telah berusaha untuk mengirim lagu anda ke seluruh dunia!`);
-                } else if (d.status === 'Decline') {
+                } else if (statusLagu === 'decline') {
                     alert(`⚠️ Perhatian: Maaf, pengajuan lagu Anda yang berjudul "${d.title}" ditolak oleh tim kurator VanTone Store.`);
                 }
             }
 
             // 2. LOGIKA WARNA DOT STATUS
-            let dotClass = "dot-review"; // Kuning untuk Review
-            if(d.status === 'Live' || d.status === 'Approve') dotClass = "dot-live"; // Hijau
-            if(d.status === 'Decline') dotClass = "dot-decline"; // Merah
+            let dotClass = "dot-review"; 
+            if(statusLagu === 'live' || statusLagu === 'approve') dotClass = "dot-live"; 
+            if(statusLagu === 'decline') dotClass = "dot-decline"; 
 
             // 3. LOGIKA KONTROL KOLOM ACTION (DINAMIS)
             let actionHTML = "-";
             
-            if (d.status === 'Live') {
-                // Jika status Live, tampilkan tombol Lihat Data dengan mengirimkan ID dokumen
+            if (statusLagu === 'live') {
                 actionHTML = `
                     <button onclick="lihatMetadataArtis('${docId}')" style="background:#e2e8f0; color:#1e293b; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700;">
                         📄 Lihat Data
                     </button>
                 `;
-            } else if (d.status === 'Decline') {
-                // Jika status Decline, tampilkan ikon/tombol sampah merah untuk menghapus dokumen
+            } else if (statusLagu === 'decline') {
                 actionHTML = `
                     <button onclick="hapusRilisDecline('${docId}', '${d.title}')" style="background:#fee2e2; color:#ef4444; border:none; padding:4px 8px; border-radius:6px; cursor:pointer; font-size:11px; display:inline-flex; align-items:center; justify-content:center;" title="Hapus Lagu Ini">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
@@ -463,6 +463,7 @@ function loadMyReleases(uid) {
                 </tr>`;
         });
     });
+}
 }
 
 // ==========================================
