@@ -409,10 +409,45 @@ function loadMyReleases(uid) {
 
         snap.forEach(doc => {
             const d = doc.data();
-            let dotClass = "dot-review";
-            if(d.status === 'Live' || d.status === 'Approve') dotClass = "dot-live";
-            if(d.status === 'Decline') dotClass = "dot-decline";
+            const docId = doc.id;
+            
+            // 1. LOGIKA POP-UP NOTIFIKASI SEKALI MUNCUL (RELIABLE ALERT)
+            if (d.isNewStatus === true) {
+                // Matikan field isNewStatus di Firebase secara real-time agar tidak muncul lagi saat di-refresh
+                db.collection('releases').doc(docId).update({ isNewStatus: false });
 
+                if (d.status === 'Approve') {
+                    alert(`🎉 Horey.. lagu anda "${d.title}" berhasil di approve, dan akan live beberapa jam dan kami telah berusaha untuk mengirim lagu anda ke seluruh dunia!`);
+                } else if (d.status === 'Decline') {
+                    alert(`⚠️ Perhatian: Maaf, pengajuan lagu Anda yang berjudul "${d.title}" ditolak oleh tim kurator VanTone Store.`);
+                }
+            }
+
+            // 2. LOGIKA WARNA DOT STATUS
+            let dotClass = "dot-review"; // Kuning untuk Review
+            if(d.status === 'Live' || d.status === 'Approve') dotClass = "dot-live"; // Hijau
+            if(d.status === 'Decline') dotClass = "dot-decline"; // Merah
+
+            // 3. LOGIKA KONTROL KOLOM ACTION (DINAMIS)
+            let actionHTML = "-";
+            
+            if (d.status === 'Live') {
+                // Jika status Live, tampilkan tombol Lihat Data dengan mengirimkan ID dokumen
+                actionHTML = `
+                    <button onclick="lihatMetadataArtis('${docId}')" style="background:#e2e8f0; color:#1e293b; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:700;">
+                        📄 Lihat Data
+                    </button>
+                `;
+            } else if (d.status === 'Decline') {
+                // Jika status Decline, tampilkan ikon/tombol sampah merah untuk menghapus dokumen
+                actionHTML = `
+                    <button onclick="hapusRilisDecline('${docId}', '${d.title}')" style="background:#fee2e2; color:#ef4444; border:none; padding:4px 8px; border-radius:6px; cursor:pointer; font-size:11px; display:inline-flex; align-items:center; justify-content:center;" title="Hapus Lagu Ini">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                    </button>
+                `;
+            }
+
+            // Render baris tabel ke HTML
             body.innerHTML += `
                 <tr>
                     <td>
@@ -420,8 +455,11 @@ function loadMyReleases(uid) {
                         <div style="font-size:11px; color:#888;">${d.artist}</div>
                     </td>
                     <td>${d.releaseDate || "-"}</td>
-                    <td><span class="status-dot ${dotClass}"></span>${d.status}</td>
-                    <td>-</td>
+                    <td>
+                        <span class="status-dot ${dotClass}"></span>
+                        <span style="font-size:12px; text-transform: capitalize;">${d.status}</span>
+                    </td>
+                    <td>${actionHTML}</td>
                 </tr>`;
         });
     });
@@ -522,7 +560,11 @@ async function updateBalance() {
 async function updateStatus(id, newStatus) {
     if(confirm(`Ubah status rilis menjadi ${newStatus}?`)) {
         try {
-            await db.collection('releases').doc(id).update({ status: newStatus });
+            // Kita tambahkan isNewStatus: true agar memicu notifikasi pop-up di akun artis
+            await db.collection('releases').doc(id).update({ 
+                status: newStatus,
+                isNewStatus: true 
+            });
             alert("Status berhasil diperbarui!");
         } catch (e) {
             alert("Gagal memperbarui status.");
@@ -780,3 +822,42 @@ function toggleAllStores(forceState = null) {
 
 // Panggil fungsi pembatasan tanggal agar langsung aktif saat halaman dimuat
 batasiTanggalRilis();
+
+// ==========================================
+// FUNGSI AKSI ARTIS: LIHAT METADATA LAGU LIVE
+// ==========================================
+function lihatMetadataArtis(id) {
+    db.collection('releases').doc(id).get().then(doc => {
+        if (!doc.exists) return alert("Data tidak ditemukan.");
+        const d = doc.data();
+        
+        // Gabungkan data stores menjadi baris teks terpisah koma
+        const daftarToko = d.stores ? d.stores.join(', ') : '-';
+        
+        // Tampilkan rangkuman metadata dalam bentuk pop-up info yang rapi
+        alert(
+            `📊 DETAIL METADATA RILIS VANTONE\n\n` +
+            `• Judul Lagu : ${d.title}\n` +
+            `• Nama Artis : ${d.artist}\n` +
+            `• Genre Musik: ${d.genre || '-'}\n` +
+            `• Tanggal Rilis: ${d.releaseDate || '-'}\n` +
+            `• Didistribusikan Ke: ${daftarToko}\n\n` +
+            `Status Lagu Anda saat ini aktif dan terverifikasi di seluruh platform dunia.`
+        );
+    }).catch(err => alert("Gagal memuat metadata: " + err.message));
+}
+
+// ==========================================
+// FUNGSI AKSI ARTIS: HAPUS RILIS YANG DI-DECLINE
+// ==========================================
+async function hapusRilisDecline(id, judulLagu) {
+    if (confirm(`Apakah Anda yakin ingin menghapus pengajuan lagu "${judulLagu}" yang ditolak ini dari riwayat Anda?`)) {
+        try {
+            await db.collection('releases').doc(id).delete();
+            alert("Rilis berhasil dihapus dari daftar.");
+        } catch (e) {
+            console.error(e);
+            alert("Gagal menghapus data: " + e.message);
+        }
+    }
+}
