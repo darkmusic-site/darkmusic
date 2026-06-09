@@ -269,6 +269,11 @@ async function distribute() {
     const artworkInput = document.getElementById('artwork-file');
     const title = document.getElementById('song-title').value.trim();
     const artist = document.getElementById('artist-name').value.trim();
+    
+    // AMBIL DATA INPUT PENULIS & PRODUSER BARU (SINKRON DENGAN HTML)
+    const writer = document.getElementById('song-writer') ? document.getElementById('song-writer').value.trim() : '';
+    const producer = document.getElementById('song-producer') ? document.getElementById('song-producer').value.trim() : '';
+    
     const genre = document.getElementById('genre').value;
     const releaseDate = document.getElementById('release-date').value;
     const stores = Array.from(document.querySelectorAll('.store-cb:checked')).map(cb => cb.value);
@@ -286,8 +291,9 @@ async function distribute() {
         return;
     }
 
-    if(!audioInput.files[0] || !artworkInput.files[0] || !title || !artist || stores.length === 0) {
-        return alert("Mohon lengkapi semua data dan pilih file yang ingin diunggah!");
+    // Validasi input wajib terisi, termasuk penulis dan produser
+    if(!audioInput.files[0] || !artworkInput.files[0] || !title || !artist || !writer || !producer || stores.length === 0) {
+        return alert("Mohon lengkapi semua data, termasuk Penulis dan Produser, sebelum mengunggah!");
     }
 
     const audioFile = audioInput.files[0];
@@ -345,6 +351,8 @@ async function distribute() {
             email: auth.currentUser.email,
             title, 
             artist, 
+            writer,      // Mengirim field penulis ke Firestore
+            producer,    // Mengirim field produser ke Firestore
             audioLink: audioUrl,     
             artworkLink: artworkUrl, 
             stores, 
@@ -451,7 +459,11 @@ function loadAdminPanel() {
             adminList.innerHTML += `
                 <div class="card-light" style="border-bottom:1px solid #eee; padding:20px; background: #fff; margin-bottom: 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
                     <p style="margin:0"><strong>${d.title}</strong> - ${d.artist}</p>
-                    <p style="font-size:12px; color:#666; margin: 5px 0;">User: ${d.email}</p>
+                    
+                    <!-- MENAMPILKAN KREDIT PENULIS & PRODUSER DI PANEL ADMIN UNTUK DISTRIBUSI KE YOUTUBE -->
+                    <p style="font-size:12px; color:#475569; margin: 5px 0;">✍️ Penulis: <strong>${d.writer || '-'}</strong> | 🎛️ Produser: <strong>${d.producer || '-'}</strong></p>
+                    
+                    <p style="font-size:12px; color:#666; margin: 2px 0;">User: ${d.email}</p>
                     
                     <div style="background:#f5f5f5; padding:8px; border-radius:6px; margin: 10px 0;">
                         <span style="font-size:11px; color:#555;">UID Artis: <strong>${d.uid}</strong></span>
@@ -726,6 +738,8 @@ function lihatMetadataArtis(id) {
             `📊 DETAIL METADATA RILIS VANTONE\n\n` +
             `• Judul Lagu : ${d.title}\n` +
             `• Nama Artis : ${d.artist}\n` +
+            `• Penulis Lagu: ${d.writer || '-'}\n` +   // Menampilkan penulis di pop-up info artis
+            `• Produser Musik: ${d.producer || '-'}\n` + // Menampilkan produser di pop-up info artis
             `• Genre Musik: ${d.genre || '-'}\n` +
             `• Tanggal Rilis: ${d.releaseDate || '-'}\n` +
             `• Didistribusikan Ke: ${daftarToko}\n\n` +
