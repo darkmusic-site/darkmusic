@@ -437,7 +437,7 @@ function loadMyReleases(uid) {
 }
 
 // ==========================================
-// ADMIN PANEL LOGIC
+// ADMIN PANEL LOGIC (KREDIT PENULIS & PRODUSER LENGKAP)
 // ==========================================
 function loadAdminPanel() {
     const adminList = document.getElementById('admin-release-list');
@@ -460,8 +460,9 @@ function loadAdminPanel() {
                 <div class="card-light" style="border-bottom:1px solid #eee; padding:20px; background: #fff; margin-bottom: 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
                     <p style="margin:0"><strong>${d.title}</strong> - ${d.artist}</p>
                     
-                    <!-- MENAMPILKAN KREDIT PENULIS & PRODUSER DI PANEL ADMIN UNTUK DISTRIBUSI KE YOUTUBE -->
-                    <p style="font-size:12px; color:#475569; margin: 5px 0;">✍️ Penulis: <strong>${d.writer || '-'}</strong> | 🎛️ Produser: <strong>${d.producer || '-'}</strong></p>
+                    <p style="font-size:12px; color:#475569; margin: 6px 0; font-weight: 600;">
+                        ✍️ Penulis: <span style="color:#ff0050;">${d.writer || '-'}</span> | 🎛️ Produser: <span style="color:#ff0050;">${d.producer || '-'}</span>
+                    </p>
                     
                     <p style="font-size:12px; color:#666; margin: 2px 0;">User: ${d.email}</p>
                     
