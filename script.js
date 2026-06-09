@@ -74,7 +74,6 @@ function checkAndLockArtist(uid) {
 
     if (!inputArtis) return;
 
-    // Cari di koleksi 'releases' yang milik UID ini dan statusnya 'Approve' atau 'Live'
     db.collection('releases')
         .where('uid', '==', uid)
         .onSnapshot(snap => {
@@ -83,23 +82,20 @@ function checkAndLockArtist(uid) {
             snap.forEach(doc => {
                 const d = doc.data();
                 if (d.status === 'Approve' || d.status === 'Live') {
-                    approvedArtistName = d.artist; // Ambil nama artis yang sudah sukses rilis
+                    approvedArtistName = d.artist;
                 }
             });
 
-            // Jika ditemukan rilis yang sudah di-approve
             if (approvedArtistName !== "") {
-                inputArtis.value = approvedArtistName; // Set otomatis nilainya
-                inputArtis.disabled = true;           // Kunci kolom inputnya
-                if (txtInfoKunci) txtInfoKunci.classList.remove('hidden'); // Tampilkan info
+                inputArtis.value = approvedArtistName;
+                inputArtis.disabled = true;
+                if (txtInfoKunci) txtInfoKunci.classList.remove('hidden');
             } else {
-                // Jika belum ada rilis yang di-approve, biarkan terbuka normal
                 inputArtis.disabled = false;
                 if (txtInfoKunci) txtInfoKunci.classList.add('hidden');
             }
         });
 }
-
 
 // ==========================================
 // SALDO & WITHDRAW LOGIC
@@ -116,12 +112,10 @@ async function requestWithdraw() {
     console.log("Tombol Withdraw diklik...");
     const user = auth.currentUser;
     
-    // Ambil elemen dari HTML
     const elName = document.getElementById('wd-paypal-name');
     const elEmail = document.getElementById('wd-paypal-email');
     const elBalance = document.getElementById('user-balance');
 
-    // Validasi elemen
     if (!elName || !elEmail || !elBalance) {
         alert("Sistem Error: Elemen input tidak ditemukan di HTML.");
         return;
@@ -131,13 +125,11 @@ async function requestWithdraw() {
     const paypalEmail = elEmail.value.trim();
     const currentBalance = parseFloat(elBalance.innerText) || 0;
 
-    // Validasi Input Kosong
     if (!paypalName || !paypalEmail) {
         alert("Mohon lengkapi Nama Pemilik dan Email PayPal!");
         return;
     }
 
-    // Validasi Saldo
     if (currentBalance <= 0) {
         alert("Saldo Anda $0.00. Tidak ada saldo untuk ditarik.");
         return;
@@ -147,7 +139,6 @@ async function requestWithdraw() {
 
     if (confirm(confirmMsg)) {
         try {
-            // 1. Simpan ke koleksi withdrawals
             await db.collection('withdrawals').add({
                 uid: user.uid,
                 email: user.email,
@@ -158,20 +149,14 @@ async function requestWithdraw() {
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
 
-            // 2. Update saldo menjadi 0 di Firestore
             await db.collection('users').doc(user.uid).set({ 
                 balance: 0 
             }, { merge: true });
 
             alert("Permintaan penarikan berhasil dikirim!");
-            
-            // Bersihkan form
             elName.value = "";
             elEmail.value = "";
-            
-            // Pindah ke section riwayat pendapatan
             showSection('earnings-history');
-
         } catch (e) { 
             console.error("Firebase Error:", e);
             alert("Gagal memproses penarikan: " + e.message); 
@@ -198,15 +183,14 @@ function loadEarningsHistory(uid) {
             let docs = [];
             snap.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
             
-            // Urutkan riwayat berdasarkan waktu terbaru
             docs.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
 
             docs.forEach(d => {
                 const date = d.timestamp ? d.timestamp.toDate().toLocaleDateString('id-ID') : '-';
                 
-                let dotClass = "dot-review"; // Pending (Kuning)
-                if (d.status === 'Paid') dotClass = "dot-live"; // Hijau
-                if (d.status === 'Reject') dotClass = "dot-decline"; // Merah
+                let dotClass = "dot-review"; 
+                if (d.status === 'Paid') dotClass = "dot-live"; 
+                if (d.status === 'Reject') dotClass = "dot-decline"; 
 
                 tableBody.innerHTML += `
                     <tr>
@@ -259,17 +243,9 @@ function hideUploadForm() {
 // ==========================================
 // RILIS & TABEL
 // ==========================================
-function toggleAllStores() {
-    const cbs = document.querySelectorAll('.store-cb');
-    const all = Array.from(cbs).every(c => c.checked);
-    cbs.forEach(c => c.checked = !all);
-}
-
-// Konfigurasi Cloudinary Anda (Ganti dengan data dari dashboard Anda)
 const CLOUDINARY_CLOUD_NAME = "dqb0x46ny";
-const CLOUDINARY_UPLOAD_PRESET = "Vantone_preset"; // Contoh: vantone_preset
+const CLOUDINARY_UPLOAD_PRESET = "Vantone_preset"; 
 
-// Fungsi memvalidasi dimensi gambar minimum 3000x3000px
 function validateImageResolution(file) {
     return new Promise((resolve) => {
         const reader = new FileReader();
@@ -302,16 +278,14 @@ async function distribute() {
     const progressBar = document.getElementById('upload-progress-bar');
     const statusText = document.getElementById('upload-status-text');
     const btn = document.getElementById('btn-submit');
-        // Pengecekan Checklist Legalitas & Bagi Hasil
     const checkCopyright = document.getElementById('check-copyright');
     const checkRoyalty = document.getElementById('check-royalty');
+
     if (!checkCopyright?.checked || !checkRoyalty?.checked) {
         alert("⚠️ Maaf, Anda wajib mencentang semua kotak persetujuan legalitas dan bagi hasil sebelum mengirim rilis!");
         return;
     }
 
-
-    // 1. Validasi Input Dasar
     if(!audioInput.files[0] || !artworkInput.files[0] || !title || !artist || stores.length === 0) {
         return alert("Mohon lengkapi semua data dan pilih file yang ingin diunggah!");
     }
@@ -319,7 +293,6 @@ async function distribute() {
     const audioFile = audioInput.files[0];
     const artworkFile = artworkInput.files[0];
 
-    // 2. Validasi Resolusi Artwork (Minimal 3000x3000px)
     if(errorDimen) errorDimen.classList.add('hidden');
     const isImageValid = await validateImageResolution(artworkFile);
     if (!isImageValid) {
@@ -328,7 +301,6 @@ async function distribute() {
         return;
     }
 
-    // Aktifkan loading status & progress bar
     btn.disabled = true;
     btn.innerText = "Memproses Pengunggahan...";
     if(progressContainer) progressContainer.classList.remove('hidden');
@@ -337,14 +309,13 @@ async function distribute() {
     try {
         const urlCloudinary = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/upload`;
 
-        // 3. Upload File Audio MP3 ke Cloudinary
         statusText.innerText = "Mengunggah file audio MP3 ke Cloudinary...";
         if(progressBar) progressBar.style.width = "30%";
 
         const formDataAudio = new FormData();
         formDataAudio.append("file", audioFile);
         formDataAudio.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
-        formDataAudio.append("resource_type", "video"); // Cloudinary mendeteksi mp3 sebagai tipe video/raw
+        formDataAudio.append("resource_type", "video"); 
 
         const resAudio = await fetch(urlCloudinary, { method: "POST", body: formDataAudio });
         const dataAudio = await resAudio.json();
@@ -352,7 +323,6 @@ async function distribute() {
         if(!dataAudio.secure_url) throw new Error("Gagal mengunggah audio ke Cloudinary");
         const audioUrl = dataAudio.secure_url;
 
-        // 4. Upload File Artwork ke Cloudinary
         statusText.innerText = "Mengunggah file Artwork Cover ke Cloudinary...";
         if(progressBar) progressBar.style.width = "70%";
 
@@ -367,7 +337,6 @@ async function distribute() {
         if(!dataArtwork.secure_url) throw new Error("Gagal mengunggah artwork ke Cloudinary");
         const artworkUrl = dataArtwork.secure_url;
 
-        // 5. Simpan Semua URL ke Firestore Gratisan Anda
         statusText.innerText = "Menyimpan data rilis ke sistem VanTone...";
         if(progressBar) progressBar.style.width = "90%";
 
@@ -399,7 +368,6 @@ async function distribute() {
     }
 }
 
-
 function loadMyReleases(uid) {
     db.collection('releases').where('uid', '==', uid).onSnapshot(snap => {
         const body = document.getElementById('my-release-body');
@@ -411,10 +379,8 @@ function loadMyReleases(uid) {
             const d = doc.data();
             const docId = doc.id;
             
-            // Mengubah status ke huruf kecil semua agar pengecekan selalu akurat
             const statusLagu = d.status ? d.status.toLowerCase() : 'review';
             
-            // 1. LOGIKA POP-UP NOTIFIKASI SEKALI MUNCUL
             if (d.isNewStatus === true) {
                 db.collection('releases').doc(docId).update({ isNewStatus: false });
 
@@ -425,12 +391,10 @@ function loadMyReleases(uid) {
                 }
             }
 
-            // 2. LOGIKA WARNA DOT STATUS
             let dotClass = "dot-review"; 
             if(statusLagu === 'live' || statusLagu === 'approve') dotClass = "dot-live"; 
             if(statusLagu === 'decline') dotClass = "dot-decline"; 
 
-            // 3. LOGIKA KONTROL KOLOM ACTION (DINAMIS)
             let actionHTML = "-";
             
             if (statusLagu === 'live') {
@@ -447,7 +411,6 @@ function loadMyReleases(uid) {
                 `;
             }
 
-            // Render baris tabel ke HTML
             body.innerHTML += `
                 <tr>
                     <td>
@@ -464,10 +427,9 @@ function loadMyReleases(uid) {
         });
     });
 }
-}
 
 // ==========================================
-// ADMIN PANEL LOGIC (REPLACE TOTAL FUNGSI INI)
+// ADMIN PANEL LOGIC
 // ==========================================
 function loadAdminPanel() {
     const adminList = document.getElementById('admin-release-list');
@@ -483,14 +445,8 @@ function loadAdminPanel() {
 
         snap.forEach(doc => {
             const d = doc.data();
-            
-            // Pengaman jika ada data rilis lama yang masih menggunakan format Google Drive
             const linkAudio = d.audioLink || d.driveLink || "#";
             const linkArtwork = d.artworkLink || "https://via.placeholder.com/150?text=No+Artwork";
-
-            let dotClass = "dot-review";
-            if(d.status === 'Live' || d.status === 'Approve') dotClass = "dot-live";
-            if(d.status === 'Decline') dotClass = "dot-decline";
 
             adminList.innerHTML += `
                 <div class="card-light" style="border-bottom:1px solid #eee; padding:20px; background: #fff; margin-bottom: 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
@@ -502,7 +458,6 @@ function loadAdminPanel() {
                         <button onclick="navigator.clipboard.writeText('${d.uid}'); alert('UID dicopy!')" style="font-size:9px; margin-left:5px; cursor:pointer;">Copy</button>
                     </div>
 
-                    <!-- AREA PREVIEW TERBARU DI PANEL ADMIN (CLOUDINARY) -->
                     <div style="margin: 15px 0; background: #fafafa; padding: 12px; border-radius: 8px; border: 1px solid #eaeaea;">
                         <p style="font-size:11px; margin: 0 0 5px; color: #555; font-weight: bold;">🎨 Artwork Cover (Klik untuk Perbesar):</p>
                         <a href="${linkArtwork}" target="_blank" style="display: inline-block; margin-bottom: 12px;">
@@ -512,7 +467,6 @@ function loadAdminPanel() {
                         <p style="font-size:11px; margin: 0 0 5px; color: #555; font-weight: bold;">🎵 Audio Pemutar (Format: MP3):</p>
                         <audio controls style="width: 100%; max-width: 280px; height: 32px; display: block;">
                             <source src="${linkAudio}" type="audio/mpeg">
-                            Browser Anda tidak mendukung pemutar audio langsung.
                         </audio>
                     </div>
                     
@@ -527,20 +481,12 @@ function loadAdminPanel() {
     });
 }
 
-
 async function updateBalance() {
     const uid = document.getElementById('admin-user-id').value.trim();
     const amountStr = document.getElementById('admin-amount').value;
     const amount = parseFloat(amountStr);
 
-    if (!uid) {
-        alert("Mohon masukkan UID Artis!");
-        return;
-    }
-    if (isNaN(amount)) {
-        alert("Mohon masukkan nominal angka yang valid!");
-        return;
-    }
+    if (!uid || isNaN(amount)) return alert("Mohon masukkan data UID dan Nominal valid!");
 
     try {
         await db.collection('users').doc(uid).set({ 
@@ -549,19 +495,16 @@ async function updateBalance() {
         }, { merge: true });
         
         alert(`Berhasil! Saldo untuk UID ${uid} sekarang: $${amount}`);
-        
         document.getElementById('admin-user-id').value = "";
         document.getElementById('admin-amount').value = "";
     } catch (error) {
-        console.error("Error updating balance: ", error);
-        alert("Gagal update saldo. Pastikan UID benar dan koneksi stabil.");
+        alert("Gagal update saldo: " + error.message);
     }
 }
 
 async function updateStatus(id, newStatus) {
     if(confirm(`Ubah status rilis menjadi ${newStatus}?`)) {
         try {
-            // Kita tambahkan isNewStatus: true agar memicu notifikasi pop-up di akun artis
             await db.collection('releases').doc(id).update({ 
                 status: newStatus,
                 isNewStatus: true 
@@ -573,17 +516,14 @@ async function updateStatus(id, newStatus) {
     }
 }
 
-// Tutup dropdown jika klik di luar
+// Handler Dropdown & UI FAQ
 window.onclick = function(event) {
     const dropdown = document.getElementById('profile-dropdown');
     if (dropdown && dropdown.classList.contains('active')) {
-        if (!event.target.closest('.profile-trigger')) {
-            dropdown.classList.remove('active');
-        }
+        if (!event.target.closest('.profile-trigger')) dropdown.classList.remove('active');
     }
 };
 
-// Accordion FAQ
 document.querySelectorAll('.faq-question').forEach(btn => {
     btn.addEventListener('click', () => btn.parentElement.classList.toggle('active'));
 });
@@ -591,26 +531,16 @@ document.querySelectorAll('.faq-question').forEach(btn => {
 // ==========================================
 // LOGIKA INSTANT PREVIEW AUDIO & ARTWORK
 // ==========================================
-
-// 1. Preview Jalankan Otomatis Saat File Audio Dipilih
 document.getElementById('audio-file').addEventListener('change', function(event) {
     const file = event.target.files[0];
     const previewContainer = document.getElementById('audio-preview-container');
     const player = document.getElementById('audio-preview-player');
-
-    if (file) {
-        // Buat url lokal instan tanpa upload ke internet terlebih dahulu
-        const blobUrl = URL.createObjectURL(file);
-        player.src = blobUrl;
-        
-        // Munculkan pemutar musiknya
+    if (file && previewContainer && player) {
+        player.src = URL.createObjectURL(file);
         previewContainer.classList.remove('hidden');
-    } else {
-        previewContainer.classList.add('hidden');
     }
 });
 
-// 2. Preview Jalankan Otomatis Saat File Artwork Dipilih + Validasi Resolusi
 document.getElementById('artwork-file').addEventListener('change', async function(event) {
     const file = event.target.files[0];
     const previewContainer = document.getElementById('artwork-preview-container');
@@ -618,79 +548,61 @@ document.getElementById('artwork-file').addEventListener('change', async functio
     const errorDimen = document.getElementById('error-artwork-dimen');
 
     if (file) {
-        errorDimen.classList.add('hidden');
-        
-        // Panggil fungsi validasi resolusi 3000x3000px
+        if(errorDimen) errorDimen.classList.add('hidden');
         const isImageValid = await validateImageResolution(file);
         
         if (!isImageValid) {
-            errorDimen.classList.remove('hidden');
-            previewContainer.classList.add('hidden');
-            event.target.value = ""; // Reset inputan jika tidak valid
+            if(errorDimen) errorDimen.classList.remove('hidden');
+            if(previewContainer) previewContainer.classList.add('hidden');
+            event.target.value = ""; 
             alert("Gagal: Ukuran artwork Anda tidak memenuhi standar minimal 3000x3000px.");
             return;
         }
-
-        // Jika valid, buat url lokal instan dan tampilkan gambarnya di web
-        const blobUrl = URL.createObjectURL(file);
-        previewImg.src = blobUrl;
-        previewContainer.classList.remove('hidden');
-    } else {
-        previewContainer.classList.add('hidden');
+        if(previewImg && previewContainer) {
+            previewImg.src = URL.createObjectURL(file);
+            previewContainer.classList.remove('hidden');
+        }
     }
 });
-
-// Variabel global untuk menyimpan objek grafik agar tidak duplikat saat diredraw
-let myChartInstance = null;
 
 // ==========================================
 // LOGIKA USER: MEMUAT ANALITIK & GRAFIK
 // ==========================================
+let myChartInstance = null;
+
 function loadUserAnalytics(uid) {
     const royaltyTable = document.getElementById('royalty-table-body');
     if (!royaltyTable) return;
 
     db.collection('analytics').where('uid', '==', uid).onSnapshot(snap => {
         if (snap.empty) return;
-
         royaltyTable.innerHTML = "";
         let totalStreams = 0;
         let topSongName = "-";
         let maxStreams = 0;
-
-        // Penampung data grafik bulanan (Simulasi 3 Bulan)
         let monthlyData = { "April": 0, "Mei": 0, "Juni": 0 }; 
 
         snap.forEach(doc => {
             const d = doc.data();
             totalStreams += parseInt(d.streams || 0);
 
-            // Cari lagu terpopuler
             if (parseInt(d.streams || 0) > maxStreams) {
                 maxStreams = d.streams;
                 topSongName = d.title;
             }
-
-            // Kelompokkan data streams untuk grafik (Sederhana berdasarkan data masuk)
-            // Di dunia nyata ini dicocokkan dengan timestamp bulan dokumen dimasukkan
             monthlyData["Juni"] += parseInt(d.streams || 0); 
 
-            // Render baris tabel royalti per lagu
             royaltyTable.innerHTML += `
                 <tr>
                     <td style="font-weight:700; font-size:13px;">${d.title}</td>
                     <td><span style="background:#e3f2fd; color:#0d47a1; padding:3px 8px; border-radius:12px; font-size:11px; font-weight:bold;">${d.topPlatform || 'Spotify'}</span></td>
                     <td style="font-weight:600;">${parseInt(d.streams).toLocaleString('id-ID')} Streams</td>
                     <td style="font-weight:800; color:#2e7d32;">+$${parseFloat(d.amount || 0).toFixed(2)}</td>
-                </tr>
-            `;
+                </tr>`;
         });
 
-        // Update teks ringkasan di dashboard atas
         document.getElementById('total-streams-display').innerText = totalStreams.toLocaleString('id-ID');
         document.getElementById('top-song-display').innerText = topSongName;
-
-        // Render atau update Grafik Chart.js
         renderAnalyticsChart(Object.keys(monthlyData), Object.values(monthlyData));
     });
 }
@@ -699,10 +611,7 @@ function renderAnalyticsChart(labels, dataValues) {
     const ctx = document.getElementById('analyticsChart');
     if (!ctx) return;
 
-    // Hancurkan grafik lama jika ada, mencegah error tumpang tindih saat data diperbarui
-    if (myChartInstance) {
-        myChartInstance.destroy();
-    }
+    if (myChartInstance) myChartInstance.destroy();
 
     myChartInstance = new Chart(ctx, {
         type: 'line',
@@ -711,7 +620,7 @@ function renderAnalyticsChart(labels, dataValues) {
             datasets: [{
                 label: 'Total Pemutaran Musik',
                 data: dataValues,
-                borderColor: '#ff0050', // Warna merah khas VanTone
+                borderColor: '#ff0050', 
                 backgroundColor: 'rgba(255, 0, 80, 0.1)',
                 borderWidth: 3,
                 tension: 0.4,
@@ -731,7 +640,7 @@ function renderAnalyticsChart(labels, dataValues) {
 }
 
 // ==========================================
-// LOGIKA ADMIN: INPUT ROYALTI & ANALITIK baru
+// LOGIKA ADMIN: INPUT ROYALTI & ANALITIK
 // ==========================================
 async function submitRoyaltyAndAnalytics() {
     const uid = document.getElementById('admin-royalty-uid').value.trim();
@@ -745,97 +654,74 @@ async function submitRoyaltyAndAnalytics() {
     }
 
     try {
-        // 1. Masukkan log performa ke koleksi 'analytics'
         await db.collection('analytics').add({
             uid, title, topPlatform: platform, streams, amount,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
 
-        // 2. Ambil saldo user saat ini untuk ditambahkan dengan nilai royalti baru otomatis
         const userRef = db.collection('users').doc(uid);
         const userDoc = await userRef.get();
         let currentBalance = 0;
         
-        if (userDoc.exists) {
-            currentBalance = parseFloat(userDoc.data().balance || 0);
-        }
+        if (userDoc.exists) currentBalance = parseFloat(userDoc.data().balance || 0);
 
-        // 3. Update total saldo akhir user di database agar mereka bisa melakukan withdraw
         await userRef.set({
             balance: currentBalance + amount,
             lastUpdate: firebase.firestore.FieldValue.serverTimestamp()
         }, { merge: true });
 
-        alert(`Sukses! Data analitik berhasil disimpan dan saldo artis otomatis bertambah sebesar $${amount}`);
+        alert(`Sukses! Data royalti disimpan, saldo bertambah $${amount}`);
         
-        // Bersihkan Form input admin
         document.getElementById('admin-royalty-uid').value = "";
         document.getElementById('admin-royalty-title').value = "";
         document.getElementById('admin-royalty-platform').value = "";
         document.getElementById('admin-royalty-streams').value = "";
         document.getElementById('admin-royalty-amount').value = "";
-
     } catch (e) {
-        console.error(e);
-        alert("Gagal memproses data royalti: " + e.message);
+        alert("Gagal memproses royalti: " + e.message);
     }
 }
 
 // ==========================================
-// VALIDASI KALENDER: MINIMAL 7 HARI KE DEPAN
+// VALIDASI KALENDER & DSP SELECTION
 // ==========================================
 function batasiTanggalRilis() {
     const dateInput = document.getElementById('release-date');
     if (!dateInput) return;
 
     const hariIni = new Date();
-    hariIni.setDate(hariIni.getDate() + 7); // Kunci 7 hari ke depan
+    hariIni.setDate(hariIni.getDate() + 7); 
 
-    const tahun = hariIni.getFullYear();
-    const bulan = String(hariIni.getMonth() + 1).padStart(2, '0');
-    const tanggal = String(hariIni.getDate()).padStart(2, '0');
-
-    const tglMinimal = `${tahun}-${bulan}-${tanggal}`;
+    const tglMinimal = `${hariIni.getFullYear()}-${String(hariIni.getMonth() + 1).padStart(2, '0')}-${String(hariIni.getDate()).padStart(2, '0')}`;
     dateInput.min = tglMinimal;
     dateInput.value = tglMinimal;
 }
 
-// ==========================================
-// KONTROL SELECTION PLATFORM (26 DSP)
-// ==========================================
 function hitungPilihan() {
     const checkedCount = document.querySelectorAll('.store-cb:checked').length;
     const displayCount = document.getElementById('selected-count');
-    if (displayCount) {
-        displayCount.innerText = checkedCount;
-    }
+    if (displayCount) displayCount.innerText = checkedCount;
 }
 
 function toggleAllStores(forceState = null) {
     const checkboxes = document.querySelectorAll('.store-cb');
     const checkTarget = (forceState !== null) ? forceState : document.querySelectorAll('.store-cb:checked').length < checkboxes.length;
 
-    checkboxes.forEach(cb => {
-        cb.checked = checkTarget;
-    });
+    checkboxes.forEach(cb => { cb.checked = checkTarget; });
     hitungPilihan();
 }
 
-// Panggil fungsi pembatasan tanggal agar langsung aktif saat halaman dimuat
 batasiTanggalRilis();
 
 // ==========================================
-// FUNGSI AKSI ARTIS: LIHAT METADATA LAGU LIVE
+// FUNGSI AKSI ARTIS: LIHAT METADATA & HAPUS
 // ==========================================
 function lihatMetadataArtis(id) {
     db.collection('releases').doc(id).get().then(doc => {
         if (!doc.exists) return alert("Data tidak ditemukan.");
         const d = doc.data();
-        
-        // Gabungkan data stores menjadi baris teks terpisah koma
         const daftarToko = d.stores ? d.stores.join(', ') : '-';
         
-        // Tampilkan rangkuman metadata dalam bentuk pop-up info yang rapi
         alert(
             `📊 DETAIL METADATA RILIS VANTONE\n\n` +
             `• Judul Lagu : ${d.title}\n` +
@@ -848,16 +734,12 @@ function lihatMetadataArtis(id) {
     }).catch(err => alert("Gagal memuat metadata: " + err.message));
 }
 
-// ==========================================
-// FUNGSI AKSI ARTIS: HAPUS RILIS YANG DI-DECLINE
-// ==========================================
 async function hapusRilisDecline(id, judulLagu) {
     if (confirm(`Apakah Anda yakin ingin menghapus pengajuan lagu "${judulLagu}" yang ditolak ini dari riwayat Anda?`)) {
         try {
             await db.collection('releases').doc(id).delete();
             alert("Rilis berhasil dihapus dari daftar.");
         } catch (e) {
-            console.error(e);
             alert("Gagal menghapus data: " + e.message);
         }
     }
