@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Services - Vantone Musik</title>
     <style>
-        /* --- KONSISTENSI PALET WARNA & BASE STYLE --- */
+        /* --- KONSISTENSI PALET WARNA (SOUNDON STYLE) & BASE STYLE --- */
         :root {
-            --bg-main: #0b0c10;       /* Latar belakang utama (Gelap) */
-            --bg-card: #1f2833;       /* Latar belakang kartu layanan */
-            --accent: #66fcf1;        /* Warna aksen utama (Cyan/Neon Aqua) */
-            --accent-hover: #45a29e;  /* Warna aksen saat hover */
-            --text-light: #ffffff;    /* Teks judul */
-            --text-muted: #c5c6c7;    /* Teks deskripsi */
+            --bg-main: #000000;       /* Latar belakang utama (Hitam Pekat) */
+            --bg-card: #121212;       /* Latar belakang kartu (Hitam Obsidian/Gelap) */
+            --accent: #ff003b;        /* Warna aksen utama (Merah Vibrant / SoundOn Red) */
+            --accent-hover: #cc002f;  /* Warna aksen saat hover (Merah Gelap) */
+            --text-light: #ffffff;    /* Teks judul & elemen kontras (Putih) */
+            --text-muted: #e0e0e0;    /* Teks deskripsi (Putih Keabuan agar nyaman dibaca) */
+            --border-color: #262626;  /* Garis batas tipis untuk estetika premium */
         }
 
         * {
@@ -58,6 +59,7 @@
             font-size: 1.1rem;
             max-width: 600px;
             margin: 0 auto;
+            font-weight: 500;
         }
 
         /* --- GRID & KARTU LAYANAN (SERVICES) --- */
@@ -70,7 +72,7 @@
 
         .service-card {
             background-color: var(--bg-card);
-            border: 1px solid rgba(102, 252, 241, 0.2);
+            border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 25px;
             text-align: center;
@@ -80,7 +82,7 @@
         .service-card:hover {
             transform: translateY(-8px);
             border-color: var(--accent);
-            box-shadow: 0 12px 24px rgba(102, 252, 241, 0.15);
+            box-shadow: 0 12px 24px rgba(255, 0, 59, 0.2);
         }
 
         /* --- MULTI-LAYER IMAGE PROTECTION BLOCK --- */
@@ -92,6 +94,7 @@
             overflow: hidden;
             margin-bottom: 22px;
             background-color: var(--bg-main);
+            border: 1px solid var(--border-color);
         }
 
         .image-container img {
@@ -102,7 +105,7 @@
             user-select: none;
         }
 
-        /* Lapisan Proteksi 2: Overlay Transparan di atas gambar (Mencegah Klik Kanan Langsung ke Objek Gambar) */
+        /* Lapisan Proteksi 2: Overlay Transparan di atas gambar (Mencegah Klik Kanan Langsung) */
         .image-container .shield-overlay {
             position: absolute;
             top: 0;
@@ -127,10 +130,10 @@
             text-justify: inter-word;
         }
 
-        /* --- TOMBOL BACK TO HOME --- */
+        /* --- BUTTON STYLE --- */
         .navigation-area {
             text-align: center;
-            margin-top: 20px;
+            margin-bottom: 25px;
         }
 
         .btn-back {
@@ -138,21 +141,37 @@
             align-items: center;
             justify-content: center;
             background-color: transparent;
-            color: var(--accent);
-            border: 2px solid var(--accent);
+            color: var(--text-light);
+            border: 2px solid var(--text-light);
             padding: 12px 30px;
             border-radius: 30px;
             text-decoration: none;
             font-weight: 600;
             font-size: 1rem;
-            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+            transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
         }
 
         .btn-back:hover {
             background-color: var(--accent);
-            color: var(--bg-main);
+            border-color: var(--accent);
+            color: var(--text-light);
             transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(102, 252, 241, 0.4);
+            box-shadow: 0 0 15px rgba(255, 0, 59, 0.4);
+        }
+
+        /* --- FOOTER PERUSAHAAN --- */
+        .site-footer {
+            margin-top: auto;
+            padding-top: 40px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            width: 100%;
+        }
+
+        .footer-copyright {
+            font-size: 0.85rem;
+            color: #888888;
+            letter-spacing: 0.5px;
         }
 
         /* Responsif untuk layar HP */
@@ -199,7 +218,7 @@
                 <p>Kendali penuh atas data Anda. Pantau perkembangan grafik pendengar, performa peluncuran lagu, dan metrik demografis audiens secara terperinci melalui dasbor analisis real-time kami.</p>
             </div>
 
-            <!-- Layanan 3: Royalty Transparancy -->
+            <!-- Layanan 3: Royalty Transparency -->
             <div class="service-card">
                 <div class="image-container protected-zone">
                     <img src="https://vantone.store/images/vantone-financial-infographic.jpeg" alt="Royalty Financial Splits" draggable="false">
@@ -220,8 +239,8 @@
             </div>
 
         </main>
-        
-                <!-- FOOTER RESMI -->
+
+        <!-- FOOTER RESMI DENGAN NAVIGASI -->
         <footer class="site-footer">
             <div class="navigation-area">
                 <a href="index.html" class="btn-back">
@@ -232,7 +251,6 @@
                 &copy; 2026 Vantone Musik. All Rights Reserved. Protecting and Distributing Independent Sound.
             </p>
         </footer>
-
     </div>
 
     <!-- Lapisan Proteksi 3: JavaScript Blokir Klik Kanan Spesifik Area Gambar -->
