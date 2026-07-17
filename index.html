@@ -154,13 +154,13 @@
         .horizontal-specs { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; }
         .horizontal-specs div { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 15px 30px; border-radius: 50px; font-weight: 600; font-size: 0.95rem; }
 
-        /* DATA STATISTIK & TESTIMONI */
+        /* DATA STATISTIK */
         .stats-grid { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 30px; padding: 60px 0; border-top: 1px solid var(--border-color); }
         .stat-item { text-align: center; }
         .stat-number { font-size: 3rem; font-weight: 800; color: var(--primary); margin-bottom: 5px; }
         .stat-label { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; }
 
-        /* --- FAQ DROPDOWN ACCORDION STYLE --- */
+        /* --- FAQ ACCORDION STYLE --- */
         .faq-section { margin: 80px auto 40px; max-width: 800px; }
         .section-title { font-size: 2.2rem; font-weight: 800; text-align: center; margin-bottom: 40px; }
         .faq-accordion { display: flex; flex-direction: column; gap: 15px; }
@@ -173,7 +173,6 @@
         .faq-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background: rgba(0,0,0,0.2); }
         .faq-content p { padding: 0 28px 24px; color: var(--text-muted); line-height: 1.6; font-size: 0.95rem; }
         
-        /* Kondisi FAQ Aktif */
         .faq-item.active .faq-icon { transform: rotate(45deg); color: var(--primary); }
         .faq-item.active .faq-content { max-height: 200px; }
 
@@ -181,7 +180,9 @@
         .footer-main { background: #000000; color: white; padding: 80px 0 30px; border-top: 1px solid var(--border-color); }
         .footer-link { color: var(--text-muted); text-decoration: none; display: block; margin-bottom: 12px; font-size: 0.9rem; transition: color 0.2s; }
         .footer-link:hover { color: var(--primary); }
-        .hidden { display: none !important; }
+        
+        /* --- PROTEKSI TOTAL AREA BACKEND AGAR TIDAK BOCOR KE UI --- */
+        .hidden, #dashboard-content, #nav-guest, #nav-user { display: none !important; }
         
         @media (max-width: 992px) {
             .nav-menu-desktop { display: none; }
@@ -197,12 +198,10 @@
 <!-- NAVIGATION HEADER GLOBAL -->
 <header class="main-navbar">
     <div class="container nav-container">
-        <!-- Logo Vantone -->
         <a href="index.html" class="nav-logo">
             <img src="images/vantonelogo.png" alt="Vantone Musik Logo" onerror="this.src='vantonelogo.png';">
             <span>VANTONE</span>
         </a>
-        <!-- Navigasi Menu Utama -->
         <nav class="nav-menu-desktop">
             <a href="index.html" style="color: var(--primary);">Home</a>
             <a href="what-is-vantone.html">What is VanTone</a>
@@ -211,7 +210,6 @@
             <a href="faq-vantone.html">FAQ</a>
             <a href="pricing.html">Pricing</a>
         </nav>
-        <!-- Tombol Garis Bar / Hamburger Dropdown -->
         <button class="hamburger-toggle" id="hamburgerBtn" aria-label="Toggle Menu">
             <span class="bar"></span>
             <span class="bar"></span>
@@ -221,7 +219,6 @@
 
     <!-- DROPDOWN SLIDE PANEL -->
     <div class="dropdown-panel" id="dropdownPanel">
-        <!-- Menu Tautan di Mobile -->
         <div class="dropdown-section mobile-only-links">
             <a href="index.html" class="dropdown-link">Home</a>
             <a href="what-is-vantone.html" class="dropdown-link">What is VanTone</a>
@@ -232,14 +229,12 @@
             <hr class="dropdown-divider">
         </div>
         
-        <!-- Tautan Pendukung Hukum & Kontak Support -->
         <div class="dropdown-extra-links">
             <a href="contact.html" class="dropdown-link-sub">Contact Us</a>
             <a href="terms-of-service.html" class="dropdown-link-sub">Terms of Service</a>
             <a href="privacy-policy.html" class="dropdown-link-sub">Privacy Policy</a>
         </div>
         
-        <!-- Media Sosial Resmi -->
         <div class="dropdown-socials">
             <p>FOLLOW OUR SOUND</p>
             <div class="social-icons">
@@ -251,23 +246,20 @@
     </div>
 </header>
 
-<!-- BACKEND FIREBASE LINK STUB (DI-HIDDEN UNTUK MENJAGA KEUTUHAN SCRIPT) -->
+<!-- BACKEND STUB (DIISOLASI TOTAL) -->
 <nav id="nav-guest" class="hidden"></nav>
 <nav id="nav-user" class="hidden"></nav>
 
 <!-- KONTEN UTAMA HALAMAN HOME -->
 <div id="landing-page">
-    <!-- SECTION HERO MAIN BANNER -->
     <section class="hero-soundon">
         <div class="container">
             <h1>Distribute and promote<br>your music <span>globally</span></h1>
             <p>Platform terintegrasi all-in-one skala premium untuk musisi dan label independen. Ekspor karyamu ke ranah internasional dengan kendali penuh.</p>
-            <!-- Tombol Jelajahi Lebih Lanjut Sesuai Permintaan -->
             <a href="outservice.html" class="btn-soundon">Jelajahi Lebih Lanjut</a>
         </div>
     </section>
 
-    <!-- SECTION FITUR UTAMA -->
     <section class="container">
         <div class="feature-grid">
             <div class="card-dark">
@@ -290,7 +282,6 @@
         </div>
     </section>
 
-    <!-- SECTION STATISTIK PENYIARAN -->
     <section class="container">
         <div class="stats-grid">
             <div class="stat-item"><div class="stat-number">150+</div><div class="stat-label">DSPs Terintegrasi Global</div></div>
@@ -299,7 +290,7 @@
         </div>
     </section>
 
-    <!-- SECTION FAQ DROPDOWN ACCORDION INTERAKTIF -->
+    <!-- FAQ DROPDOWN ACCORDION -->
     <section class="container faq-section">
         <h2 class="section-title">Pertanyaan Umum</h2>
         <div class="faq-accordion">
@@ -338,7 +329,7 @@
     </section>
 </div>
 
-<!-- DATA DASBOR INTERNAL (TETAP TERJAGA AMAN DI DALAM STRUKTUR) -->
+<!-- DILOCK SEMENTARA AGAR TIDAK MERUSAK UI PADA DISPLAY MOBILE -->
 <main id="dashboard-content" class="hidden">
     <section id="library"><input type="file" id="audio-file"><input type="file" id="artwork-file"><input type="text" id="song-title"><input type="text" id="artist-name"><input type="text" id="song-writer"><input type="text" id="song-producer"><select id="genre"></select><input type="date" id="release-date"><input type="checkbox" id="check-copyright"><input type="checkbox" id="check-royalty"><button id="btn-submit"></button><p id="total-release-count">0</p><p id="user-balance">0.00</p></section>
     <section id="my-releases"><tbody id="my-release-body"></tbody></section>
@@ -347,7 +338,7 @@
     <section id="admin-panel"><input type="text" id="admin-user-id"><input type="number" id="admin-amount"><input type="text" id="admin-royalty-uid"><input type="text" id="admin-royalty-title"><input type="text" id="admin-royalty-platform"><input type="number" id="admin-royalty-streams"><input type="number" id="admin-royalty-amount"><div id="admin-release-list"></div></section>
 </main>
 
-<!-- FOOTER UTAMA DENGAN HAK CIPTA HAK KONSISTEN -->
+<!-- FOOTER -->
 <footer class="footer-main">
     <div class="container">
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 5px;">
@@ -375,7 +366,6 @@
     </div>
 </footer>
 
-<!-- SCRIPT INTERAKSI DROP DOWN MENUS & FAQ ACCORDION -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const hamburgerBtn = document.getElementById('hamburgerBtn');
@@ -396,18 +386,11 @@
         }
     });
 
-    /* FUNGSI DROPDOWN FAQ ACCORDION */
     function toggleFaq(element) {
         const faqItem = element.parentElement;
-        
-        // Tutup item FAQ lain yang sedang terbuka (opsional, untuk kerapian)
         document.querySelectorAll('.faq-item').forEach(item => {
-            if (item !== faqItem) {
-                item.classList.remove('active');
-            }
+            if (item !== faqItem) { item.classList.remove('active'); }
         });
-        
-        // Buka / tutup item yang dipilih
         faqItem.classList.toggle('active');
     }
 </script>
