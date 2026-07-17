@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Services - Vantone Musik</title>
+    <style>
+        /* --- KONSISTENSI PALET WARNA & BASE STYLE --- */
+        :root {
+            --bg-main: #0b0c10;       /* Latar belakang utama (Gelap) */
+            --bg-card: #1f2833;       /* Latar belakang kartu layanan */
+            --accent: #66fcf1;        /* Warna aksen utama (Cyan/Neon Aqua) */
+            --accent-hover: #45a29e;  /* Warna aksen saat hover */
+            --text-light: #ffffff;    /* Teks judul */
+            --text-muted: #c5c6c7;    /* Teks deskripsi */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-muted);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            width: 100%;
+        }
+
+        /* --- HEADER HALAMAN --- */
+        .header-area {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            color: var(--text-light);
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .section-subtitle {
+            color: var(--accent);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* --- GRID & KARTU LAYANAN (SERVICES) --- */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .service-card {
+            background-color: var(--bg-card);
+            border: 1px solid rgba(102, 252, 241, 0.2);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent);
+            box-shadow: 0 12px 24px rgba(102, 252, 241, 0.15);
+        }
+
+        /* --- MULTI-LAYER IMAGE PROTECTION BLOCK --- */
+        .image-container {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 22px;
+            background-color: var(--bg-main);
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none; /* Lapisan Proteksi 1: Mencegah gambar diseret (Anti-Drag) */
+            user-select: none;
+        }
+
+        /* Lapisan Proteksi 2: Overlay Transparan di atas gambar (Mencegah Klik Kanan Langsung ke Objek Gambar) */
+        .image-container .shield-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            z-index: 10;
+        }
+
+        .service-card h3 {
+            color: var(--text-light);
+            font-size: 1.35rem;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .service-card p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            text-align: justify;
+            text-justify: inter-word;
+        }
+
+        /* --- TOMBOL BACK TO HOME --- */
+        .navigation-area {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: transparent;
+            color: var(--accent);
+            border: 2px solid var(--accent);
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-back:hover {
+            background-color: var(--accent);
+            color: var(--bg-main);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(102, 252, 241, 0.4);
+        }
+
+        /* Responsif untuk layar HP */
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 2rem;
+            }
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- HEADER -->
+        <header class="header-area">
+            <h1 class="section-title">Our Premium Services</h1>
+            <p class="section-subtitle">Infrastruktur distribusi musik mutakhir yang dirancang khusus untuk memperluas jangkauan aset industri Anda.</p>
+        </header>
+
+        <!-- GRID LAYANAN -->
+        <main class="services-grid">
+            
+            <!-- Layanan 1: Global Streaming -->
+            <div class="service-card">
+                <div class="image-container protected-zone">
+                    <img src="https://vantone.store/images/vantone-streaming.jpeg" alt="Global Streaming Distribution" draggable="false">
+                    <div class="shield-overlay"></div>
+                </div>
+                <h3>Global Streaming</h3>
+                <p>Jembatan global untuk karya Anda. Kami menyalurkan katalog musik Anda langsung ke lebih dari 20 platform streaming digital terkemuka di seluruh penjuru dunia dengan stabilitas tinggi.</p>
+            </div>
+
+            <!-- Layanan 2: Advanced Analytics -->
+            <div class="service-card">
+                <div class="image-container protected-zone">
+                    <img src="https://vantone.store/images/vantone-analytics.jpeg" alt="Advanced Analytics Dashboard" draggable="false">
+                    <div class="shield-overlay"></div>
+                </div>
+                <h3>Advanced Analytics</h3>
+                <p>Kendali penuh atas data Anda. Pantau perkembangan grafik pendengar, performa peluncuran lagu, dan metrik demografis audiens secara terperinci melalui dasbor analisis real-time kami.</p>
+            </div>
+
+            <!-- Layanan 3: Royalty Transparancy -->
+            <div class="service-card">
+                <div class="image-container protected-zone">
+                    <img src="https://vantone.store/images/vantone-financial-infographic.jpeg" alt="Royalty Financial Splits" draggable="false">
+                    <div class="shield-overlay"></div>
+                </div>
+                <h3>Royalty Transparency</h3>
+                <p>Akuntabilitas tanpa celah. Kami menyajikan pembukuan finansial yang jujur dan transparan, mempermudah Anda melacak setiap arus pendapatan royalti yang masuk tanpa potongan tersembunyi.</p>
+            </div>
+
+            <!-- Layanan 4: Copyright Protection -->
+            <div class="service-card">
+                <div class="image-container protected-zone">
+                    <img src="https://vantone.store/images/vantone-copyright-protection.jpeg" alt="Digital Copyright Protection" draggable="false">
+                    <div class="shield-overlay"></div>
+                </div>
+                <h3>Copyright Protection</h3>
+                <p>Benteng perlindungan karya cipta. Kami mengamankan sidik jari digital aset musik Anda dari potensi klaim palsu, pembajakan, dan eksploitasi pihak ketiga yang tidak bertanggung jawab.</p>
+            </div>
+
+        </main>
+        
+                <!-- FOOTER RESMI -->
+        <footer class="site-footer">
+            <div class="navigation-area">
+                <a href="index.html" class="btn-back">
+                    &larr; Back to Home
+                </a>
+            </div>
+            <p class="footer-copyright">
+                &copy; 2026 Vantone Musik. All Rights Reserved. Protecting and Distributing Independent Sound.
+            </p>
+        </footer>
+
+    </div>
+
+    <!-- Lapisan Proteksi 3: JavaScript Blokir Klik Kanan Spesifik Area Gambar -->
+    <script>
+        document.querySelectorAll('.protected-zone').forEach(zone => {
+            zone.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+            });
+        });
+    </script>
+</body>
+</html>
