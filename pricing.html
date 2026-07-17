@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXFQE2LLMY"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXFQE2LLMY');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing Plans | VanTone Musik</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- PALET WARNA & CORE STYLE (SOUNDON BLACK & RED) --- */
+        :root { 
+            --primary: #ff0050; 
+            --dark: #000000; 
+            --gray: #0d0d0d; 
+            --card-bg: #121212;
+            --border-color: #222222;
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body { 
+            background-color: var(--dark); 
+            color: var(--text-main); 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            padding-top: 70px; 
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        
+        /* --- NAVIGATION BAR GLOBAL --- */
+        .main-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background-color: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 9999;
+        }
+        .nav-container {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-logo { display: flex; align-items: center; text-decoration: none; gap: 10px; }
+        .nav-logo img { height: 35px; width: auto; }
+        .nav-logo span { color: white; font-weight: 800; font-size: 1.4rem; letter-spacing: 1px; }
+        
+        .nav-menu-desktop { display: flex; gap: 24px; }
+        .nav-menu-desktop a { color: var(--text-muted); text-decoration: none; font-size: 0.95rem; font-weight: 600; transition: color 0.2s; }
+        .nav-menu-desktop a:hover { color: var(--primary); }
+        
+        .hamburger-toggle { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; gap: 6px; }
+        .hamburger-toggle .bar { width: 25px; height: 2px; background-color: white; transition: all 0.3s; }
+        .hamburger-toggle.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .hamburger-toggle.active .bar:nth-child(2) { opacity: 0; }
+        .hamburger-toggle.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+        /* PANEL DROPDOWN KANAN */
+        .dropdown-panel {
+            position: absolute;
+            top: 70px;
+            right: -320px;
+            width: 300px;
+            background-color: var(--card-bg);
+            border-left: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 30px 24px;
+            box-shadow: -10px 10px 30px rgba(0,0,0,0.5);
+            transition: right 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            border-bottom-left-radius: 16px;
+        }
+        .dropdown-panel.open { right: 0; }
+        .dropdown-divider { border: none; border-top: 1px solid var(--border-color); margin: 5px 0; }
+        .dropdown-link, .dropdown-link-sub { color: var(--text-muted); text-decoration: none; display: block; }
+        .dropdown-link:hover, .dropdown-link-sub:hover { color: var(--primary); }
+        .dropdown-link { font-size: 1.1rem; font-weight: 600; padding: 6px 0; }
+        .dropdown-link-sub { font-size: 0.95rem; padding: 4px 0; }
+        
+        .dropdown-socials p { font-size: 0.85rem; color: #555; font-weight: 600; margin-bottom: 10px; letter-spacing: 0.5px; }
+        .social-icons { display: flex; gap: 16px; }
+        .social-icons a { color: white; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: color 0.2s; }
+        .social-icons a:hover { color: var(--primary); }
+        .mobile-only-links { display: none; }
+
+        /* --- PRICING PAGE CONTENT --- */
+        .pricing-hero {
+            padding: 80px 20px 40px;
+            text-align: center;
+            background: radial-gradient(circle at top left, #1f000b 0%, var(--dark) 70%);
+        }
+        .pricing-hero h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 15px; }
+        .pricing-hero h1 span { color: var(--primary); }
+        .pricing-hero p { color: var(--text-muted); font-size: 1rem; max-width: 600px; margin: 0 auto; line-height: 1.6; }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 50px auto;
+            max-width: 1000px;
+            padding: 0 20px;
+        }
+
+        .price-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        .price-card:hover {
+            transform: translateY(-5px);
+            border-color: #333;
+        }
+        .price-card.featured {
+            border-color: var(--primary);
+            background: linear-gradient(180deg, #161213 0%, #121212 100%);
+        }
+        .badge {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            background: var(--primary);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 6px 14px;
+            border-radius: 50px;
+            text-transform: uppercase;
+        }
+
+        .price-card h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 10px; }
+        .price-tag { font-size: 2.2rem; font-weight: 800; margin-bottom: 25px; color: white; }
+        .price-tag span { font-size: 0.9rem; color: var(--text-muted); font-weight: 400; }
+        
+        .feature-list { list-style: none; margin-bottom: 35px; flex-grow: 1; }
+        .feature-list li { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+        .feature-list li::before { content: "✓"; color: var(--primary); font-weight: 800; }
+
+        .btn-pricing {
+            background: transparent;
+            color: white;
+            border: 2px solid var(--border-color);
+            padding: 14px;
+            border-radius: 50px;
+            font-weight: 700;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .btn-pricing:hover {
+            background: white;
+            color: black;
+            border-color: white;
+        }
+        .price-card.featured .btn-pricing {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+        .price-card.featured .btn-pricing:hover {
+            background: #ff2a6d;
+            border-color: #ff2a6d;
+            box-shadow: 0 8px 20px rgba(255, 0, 80, 0.3);
+        }
+
+        /* --- FOOTER MAIN AREA --- */
+        .footer-main { background: #000000; color: white; padding: 80px 0 30px; border-top: 1px solid var(--border-color); margin-top: 60px; }
+        .footer-link { color: var(--text-muted); text-decoration: none; display: block; margin-bottom: 12px; font-size: 0.9rem; transition: color 0.2s; }
+        .footer-link:hover { color: var(--primary); }
+        
+        .hidden { display: none !important; }
+
+        @media (max-width: 992px) {
+            .nav-menu-desktop { display: none; }
+            .mobile-only-links { display: block; }
+            .dropdown-panel { width: 100%; right: -100%; border-left: none; }
+            .dropdown-panel.open { right: 0; }
+            .pricing-hero h1 { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVIGATION HEADER GLOBAL -->
+<header class="main-navbar">
+    <div class="container nav-container">
+        <a href="index.html" class="nav-logo">
+            <img src="images/vantonelogo.png" alt="Vantone Musik Logo" onerror="this.src='vantonelogo.png';">
+            <span>VANTONE</span>
+        </a>
+        <nav class="nav-menu-desktop">
+            <a href="index.html">Home</a>
+            <a href="what-is-vantone.html">What is VanTone</a>
+            <a href="about.html">About</a>
+            <a href="outservice.html">Our Services</a>
+            <a href="faq-vantone.html">FAQ</a>
+            <a href="pricing.html" style="color: var(--primary);">Pricing</a>
+        </nav>
+        <button class="hamburger-toggle" id="hamburgerBtn" aria-label="Toggle Menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+    </div>
+
+    <!-- DROPDOWN SLIDE PANEL -->
+    <div class="dropdown-panel" id="dropdownPanel">
+        <div class="dropdown-section mobile-only-links">
+            <a href="index.html" class="dropdown-link">Home</a>
+            <a href="what-is-vantone.html" class="dropdown-link">What is VanTone</a>
+            <a href="about.html" class="dropdown-link">About</a>
+            <a href="outservice.html" class="dropdown-link">Our Services</a>
+            <a href="faq-vantone.html" class="dropdown-link">FAQ</a>
+            <a href="pricing.html" class="dropdown-link" style="color: var(--primary);">Pricing</a>
+            <hr class="dropdown-divider">
+        </div>
+        
+        <div class="dropdown-extra-links">
+            <a href="contact.html" class="dropdown-link-sub">Contact Us</a>
+            <a href="terms-of-service.html" class="dropdown-link-sub">Terms of Service</a>
+            <a href="privacy-policy.html" class="dropdown-link-sub">Privacy Policy</a>
+        </div>
+        
+        <div class="dropdown-socials">
+            <p>FOLLOW OUR SOUND</p>
+            <div class="social-icons">
+                <a href="https://www.tiktok.com/@vantone_label" target="_blank">TikTok</a>
+                <a href="https://www.instagram.com/vantone.store" target="_blank">Instagram</a>
+                <a href="https://youtube.com/@vantone_store" target="_blank">YouTube</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- PRICING CONTENT AREA -->
+<div id="pricing-page" style="background-color: #000000; display: block;">
+    <section class="pricing-hero">
+        <div class="container">
+            <h1>Pilihan Rencana <span>Tarif</span></h1>
+            <p>Transparan, fleksibel, dan tanpa biaya tersembunyi. Pilih paket yang paling sesuai dengan kebutuhan distribusi musik mandiri atau label Anda.</p>
+        </div>
+    </section>
+
+    <section class="pricing-grid">
+        <!-- PLAN 1: SINGLE ARTIST -->
+        <div class="price-card">
+            <h3>Single Creator</h3>
+            <div class="price-tag">Free <span>/ Permanent</span></div>
+            <ul class="feature-list">
+                <li>Distribusi ke 150+ DSPs Global</li>
+                <li>Retensi 80% Hak Royalti Aset</li>
+                <li>Laporan Finansial Bulanan</li>
+                <li>1 Slot Nama Artis Eksklusif</li>
+                <li>Master Ownership Tetap 100%</li>
+            </ul>
+            <a href="contact.html" class="btn-pricing">Mulai Sekarang</a>
+        </div>
+
+        <!-- PLAN 2: ENTERPRISE / LABEL PARTNER -->
+        <div class="price-card featured">
+            <div class="badge">Popular</div>
+            <h3>Label Partnership</h3>
+            <div class="price-tag">Custom <span>/ Per Kuota</span></div>
+            <ul class="feature-list">
+                <li>Semua Fitur Single Creator</li>
+                <li>Multi-Slot Slot Nama Artis Kontrak</li>
+                <li>Akses Dasbor Kemitraan Khusus</li>
+                <li>Penanganan Turnaround Prioritas</li>
+                <li>Dukungan CS Enarumusic Dedicated</li>
+            </ul>
+            <a href="contact.html" class="btn-pricing" style="color: white;">Hubungi Kami</a>
+        </div>
+    </section>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer-main">
+    <div class="container">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 5px;">
+            <div>
+                <h3 style="margin-bottom: 15px; font-weight: 800;">VANTONE MUSIK</h3>
+                <p style="color:var(--text-muted); font-size:12px; line-height: 1.6;">Solusi terpercaya untuk kemitraan white-label penyiaran lagu digital independen ke 150+ global streaming platforms.</p>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 15px; font-weight: 800;">Navigasi Menu</h4>
+                <a href="index.html" class="footer-link">Home</a>
+                <a href="what-is-vantone.html" class="footer-link">What is VanTone</a>
+                <a href="about.html" class="footer-link">About Us</a>
+                <a href="outservice.html" class="footer-link">Our Services</a>
+                <a href="pricing.html" class="footer-link">Pricing Plans</a>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 15px; font-weight: 800;">Kebijakan Hukum</h4>
+                <a href="privacy-policy.html" class="footer-link">Privacy Policy</a>
+                <a href="terms-of-service.html" class="footer-link">Terms & Service</a>
+                <a href="contact.html" class="footer-link">Contact Support</a>
+            </div>
+        </div>
+        <hr style="border-color:var(--border-color); margin: 30px 0 20px;">
+        <p style="text-align:center; color:#555; font-size:12px;">&copy; 2026 VanTone Musik. All rights reserved. White-Label Distribution Network.</p>
+    </div>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const dropdownPanel = document.getElementById('dropdownPanel');
+        
+        if (hamburgerBtn && dropdownPanel) {
+            hamburgerBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                hamburgerBtn.classList.toggle('active');
+                dropdownPanel.classList.toggle('open');
+            });
+            document.addEventListener('click', (e) => {
+                if (!dropdownPanel.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+                    hamburgerBtn.classList.remove('active');
+                    dropdownPanel.classList.remove('open');
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>
