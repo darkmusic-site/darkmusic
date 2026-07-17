@@ -20,48 +20,61 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
     
     <style>
-        /* --- CORE VARIABEL & PALET WARNA (SOUNDON STYLE) --- */
+        /* --- PALET WARNA & CORE STYLE (SOUNDON BLACK & RED) --- */
         :root { 
             --primary: #ff0050; 
-            --dark: #0a0a0a; 
-            --gray: #1a1a1a; 
-            --border-color: #262626;
+            --dark: #000000; 
+            --gray: #0d0d0d; 
+            --card-bg: #121212;
+            --border-color: #222222;
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
         }
         
-        body { 
-            background-color: #000000; 
-            color: #e0e0e0; 
-            font-family: 'Plus Jakarta Sans', sans-serif;
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
+        }
+
+        body { 
+            background-color: var(--dark); 
+            color: var(--text-main); 
+            font-family: 'Plus Jakarta Sans', sans-serif;
             padding-top: 70px; 
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
         }
         
-        /* --- STYLING NAVBAR TERPADU --- */
+        /* --- NAVIGATION BAR GLOBAL --- */
         .main-navbar {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 70px;
-            background-color: rgba(0, 0, 0, 0.95);
+            background-color: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border-color);
             z-index: 9999;
         }
         .nav-container {
-            max-width: 1200px;
             height: 100%;
-            margin: 0 auto;
-            padding: 0 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
         .nav-logo { display: flex; align-items: center; text-decoration: none; gap: 10px; }
         .nav-logo img { height: 35px; width: auto; }
-        .nav-logo span { color: white; font-weight: 800; font-size: 1.3rem; letter-spacing: 1.5px; }
-        .nav-menu-desktop { display: flex; gap: 20px; }
-        .nav-menu-desktop a { color: #b3b3b3; text-decoration: none; font-size: 0.95rem; font-weight: 600; transition: color 0.3s; }
+        .nav-logo span { color: white; font-weight: 800; font-size: 1.4rem; letter-spacing: 1px; }
+        
+        .nav-menu-desktop { display: flex; gap: 24px; }
+        .nav-menu-desktop a { color: var(--text-muted); text-decoration: none; font-size: 0.95rem; font-weight: 600; transition: color 0.2s; }
         .nav-menu-desktop a:hover { color: var(--primary); }
         
         .hamburger-toggle { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; gap: 6px; }
@@ -70,130 +83,135 @@
         .hamburger-toggle.active .bar:nth-child(2) { opacity: 0; }
         .hamburger-toggle.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
+        /* PANEL DROPDOWN KANAN */
         .dropdown-panel {
             position: absolute;
             top: 70px;
             right: -320px;
             width: 300px;
-            background-color: #121212;
+            background-color: var(--card-bg);
             border-left: 1px solid var(--border-color);
             border-bottom: 1px solid var(--border-color);
-            padding: 25px;
+            padding: 30px 24px;
             box-shadow: -10px 10px 30px rgba(0,0,0,0.5);
             transition: right 0.3s ease-in-out;
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            border-bottom-left-radius: 12px;
+            gap: 24px;
+            border-bottom-left-radius: 16px;
         }
         .dropdown-panel.open { right: 0; }
         .dropdown-divider { border: none; border-top: 1px solid var(--border-color); margin: 5px 0; }
-        .dropdown-link, .dropdown-link-sub { color: #b3b3b3; text-decoration: none; display: block; }
+        .dropdown-link, .dropdown-link-sub { color: var(--text-muted); text-decoration: none; display: block; }
         .dropdown-link:hover, .dropdown-link-sub:hover { color: var(--primary); }
-        .dropdown-socials p { font-size: 0.85rem; color: #666; margin-bottom: 8px; }
-        .social-icons { display: flex; gap: 15px; }
-        .social-icons a { color: white; text-decoration: none; font-size: 0.85rem; }
+        .dropdown-link { font-size: 1.1rem; font-weight: 600; padding: 6px 0; }
+        .dropdown-link-sub { font-size: 0.95rem; padding: 4px 0; }
+        
+        .dropdown-socials p { font-size: 0.85rem; color: #555; font-weight: 600; margin-bottom: 10px; letter-spacing: 0.5px; }
+        .social-icons { display: flex; gap: 16px; }
+        .social-icons a { color: white; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: color 0.2s; }
+        .social-icons a:hover { color: var(--primary); }
         .mobile-only-links { display: none; }
 
-        /* --- STYLING POPUP MAINTENANCE --- */
-        .maintenance-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.85); 
-            backdrop-filter: blur(8px); 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000; 
-            opacity: 1;
-            transition: opacity 0.4s ease;
-        }
-        .maintenance-box {
-            background-color: #111111;
-            border: 1px solid var(--border-color);
-            padding: 40px;
-            border-radius: 24px;
-            max-width: 500px;
-            width: 90%;
+        /* --- HERO & BODY CONTENT DISPLAY --- */
+        .hero-soundon { 
             position: relative;
-            text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            background: radial-gradient(circle at top right, #1f000b 0%, var(--dark) 60%);
+            padding: 120px 0 100px; 
+            text-align: center; 
+            border-bottom: 1px solid var(--border-color);
         }
-        .close-popup-btn {
-            position: absolute;
-            top: 20px;
-            right: 25px;
-            background: none;
-            border: none;
-            color: #666;
-            font-size: 24px;
-            cursor: pointer;
-            transition: color 0.2s;
+        .hero-soundon h1 { font-size: 3.8rem; font-weight: 800; line-height: 1.1; margin-bottom: 24px; letter-spacing: -1px; }
+        .hero-soundon h1 span { color: var(--primary); }
+        .hero-soundon p { color: var(--text-muted); font-size: 1.2rem; max-width: 600px; margin: 0 auto 40px; line-height: 1.6; }
+        
+        .btn-soundon { 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 16px 44px; 
+            border-radius: 50px; 
+            font-weight: 800; 
+            cursor: pointer; 
+            font-size: 16px; 
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.2s, box-shadow 0.2s; 
         }
-        .close-popup-btn:hover { color: var(--primary); }
-        .maintenance-icon { font-size: 40px; margin-bottom: 15px; display: inline-block; }
-        .maintenance-box h2 { color: white; margin-bottom: 15px; font-weight: 800; font-size: 1.6rem; }
-        .maintenance-box p { color: #aaa; font-size: 0.95rem; line-height: 1.6; margin-bottom: 25px; }
-        .btn-ack { background: var(--primary); color: white; border: none; padding: 12px 30px; border-radius: 50px; font-weight: 800; cursor: pointer; font-size: 14px; width: 100%; transition: opacity 0.2s; }
-        .btn-ack:hover { opacity: 0.9; }
+        .btn-soundon:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255, 0, 80, 0.4);
+        }
+        
+        /* GRID KARTU KONTEN */
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; margin: 60px 0; }
+        .card-dark { background: var(--card-bg); border: 1px solid var(--border-color); padding: 40px; border-radius: 24px; }
+        .card-dark h3 { font-size: 1.5rem; margin-bottom: 15px; font-weight: 800; }
+        .card-dark p { color: var(--text-muted); line-height: 1.6; font-size: 0.95rem; }
+        
+        .center-promo-block { background: linear-gradient(135deg, #090909 0%, #111111 100%); border: 1px solid var(--border-color); text-align: center; padding: 50px; border-radius: 24px; margin: 40px 0; }
+        .center-promo-block h2 { font-size: 2rem; font-weight: 800; margin-bottom: 30px; }
+        .horizontal-specs { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; }
+        .horizontal-specs div { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 15px 30px; border-radius: 50px; font-weight: 600; font-size: 0.95rem; }
 
-        /* --- STYLE BAWAAN KODE LAMA --- */
-        .hero-soundon { background: var(--dark); color: white; padding: 100px 0; text-align: center; border-radius: 0 0 50px 50px; }
-        .hero-soundon h1 { font-size: 3.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 20px; }
-        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 50px 0; }
-        .card-dark { background: var(--dark); color: white; padding: 40px; border-radius: 24px; border: 1px solid var(--border-color); }
-        .card-light { background: #111; border: 1px solid var(--border-color); padding: 40px; border-radius: 24px; color: #ccc; }
-        .card-light h2, .card-light h3 { color: white; }
-        .footer-main { background: #000; color: white; padding: 60px 0 20px; margin-top: 100px; border-top: 1px solid var(--border-color); }
-        .footer-link { color: #aaa; text-decoration: none; display: block; margin-bottom: 8px; }
+        /* DATA STATISTIK & TESTIMONI */
+        .stats-grid { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 30px; padding: 60px 0; border-top: 1px solid var(--border-color); }
+        .stat-item { text-align: center; }
+        .stat-number { font-size: 3rem; font-weight: 800; color: var(--primary); margin-bottom: 5px; }
+        .stat-label { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; }
+
+        /* --- FAQ DROPDOWN ACCORDION STYLE --- */
+        .faq-section { margin: 80px auto 40px; max-width: 800px; }
+        .section-title { font-size: 2.2rem; font-weight: 800; text-align: center; margin-bottom: 40px; }
+        .faq-accordion { display: flex; flex-direction: column; gap: 15px; }
+        .faq-item { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden; transition: border-color 0.2s; }
+        .faq-item:hover { border-color: #333; }
+        
+        .faq-header { width: 100%; background: none; border: none; padding: 22px 28px; text-align: left; color: white; font-size: 1.1rem; font-weight: 700; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .faq-icon { font-size: 1.3rem; color: var(--text-muted); transition: transform 0.3s; }
+        
+        .faq-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background: rgba(0,0,0,0.2); }
+        .faq-content p { padding: 0 28px 24px; color: var(--text-muted); line-height: 1.6; font-size: 0.95rem; }
+        
+        /* Kondisi FAQ Aktif */
+        .faq-item.active .faq-icon { transform: rotate(45deg); color: var(--primary); }
+        .faq-item.active .faq-content { max-height: 200px; }
+
+        /* --- FOOTER MAIN AREA --- */
+        .footer-main { background: #000000; color: white; padding: 80px 0 30px; border-top: 1px solid var(--border-color); }
+        .footer-link { color: var(--text-muted); text-decoration: none; display: block; margin-bottom: 12px; font-size: 0.9rem; transition: color 0.2s; }
         .footer-link:hover { color: var(--primary); }
-        .btn-soundon { background: var(--primary); color: white; border: none; padding: 15px 40px; border-radius: 50px; font-weight: 800; cursor: pointer; font-size: 16px; }
         .hidden { display: none !important; }
         
         @media (max-width: 992px) {
             .nav-menu-desktop { display: none; }
             .mobile-only-links { display: block; }
-            .dropdown-panel { width: 100%; right: -100%; }
+            .dropdown-panel { width: 100%; right: -100%; border-left: none; }
             .dropdown-panel.open { right: 0; }
+            .hero-soundon h1 { font-size: 2.6rem; }
         }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-<!-- POPUP MAINTENANCE OVERLAY -->
-<div class="maintenance-overlay" id="maintenancePopup">
-    <div class="maintenance-box">
-        <button class="close-popup-btn" onclick="closeMaintenance()">&times;</button>
-        <span class="maintenance-icon">🚀</span>
-        <h2>System Infrastructure Upgrade</h2>
-        <p>
-            Guna menghadirkan pengalaman manajemen distribusi yang lebih advanced, tim pengembang kami sedang melakukan pemutakhiran infrastruktur berskala besar untuk portal kemitraan <strong>Enarumusic</strong>. 
-            <br><br>
-            Seluruh halaman informasi katalog, harga, layanan, dan bantuan tetap dapat Anda jelajahi seperti biasa. Akses masuk sistem dasbor artis ditutup sementara selama proses perilisan sistem baru ini berlangsung.
-        </p>
-        <button class="btn-ack" onclick="closeMaintenance()">Jelajahi VanTone Musik</button>
-    </div>
-</div>
-
-<!-- NAVBAR UTAMA (TOMBOL LOGIN/REGISTER DI-HIDDEN) -->
+<!-- NAVIGATION HEADER GLOBAL -->
 <header class="main-navbar">
-    <div class="nav-container">
+    <div class="container nav-container">
+        <!-- Logo Vantone -->
         <a href="index.html" class="nav-logo">
             <img src="images/vantonelogo.png" alt="Vantone Musik Logo" onerror="this.src='vantonelogo.png';">
             <span>VANTONE</span>
         </a>
+        <!-- Navigasi Menu Utama -->
         <nav class="nav-menu-desktop">
-            <a href="index.html">Home</a>
+            <a href="index.html" style="color: var(--primary);">Home</a>
             <a href="what-is-vantone.html">What is VanTone</a>
             <a href="about.html">About</a>
             <a href="outservice.html">Our Services</a>
             <a href="faq-vantone.html">FAQ</a>
             <a href="pricing.html">Pricing</a>
         </nav>
+        <!-- Tombol Garis Bar / Hamburger Dropdown -->
         <button class="hamburger-toggle" id="hamburgerBtn" aria-label="Toggle Menu">
             <span class="bar"></span>
             <span class="bar"></span>
@@ -201,7 +219,9 @@
         </button>
     </div>
 
+    <!-- DROPDOWN SLIDE PANEL -->
     <div class="dropdown-panel" id="dropdownPanel">
+        <!-- Menu Tautan di Mobile -->
         <div class="dropdown-section mobile-only-links">
             <a href="index.html" class="dropdown-link">Home</a>
             <a href="what-is-vantone.html" class="dropdown-link">What is VanTone</a>
@@ -212,13 +232,16 @@
             <hr class="dropdown-divider">
         </div>
         
+        <!-- Tautan Pendukung Hukum & Kontak Support -->
         <div class="dropdown-extra-links">
             <a href="contact.html" class="dropdown-link-sub">Contact Us</a>
             <a href="terms-of-service.html" class="dropdown-link-sub">Terms of Service</a>
             <a href="privacy-policy.html" class="dropdown-link-sub">Privacy Policy</a>
         </div>
+        
+        <!-- Media Sosial Resmi -->
         <div class="dropdown-socials">
-            <p>Follow Our Sound:</p>
+            <p>FOLLOW OUR SOUND</p>
             <div class="social-icons">
                 <a href="https://www.tiktok.com/@vantone_label" target="_blank">TikTok</a>
                 <a href="https://www.instagram.com/vantone.store" target="_blank">Instagram</a>
@@ -228,170 +251,166 @@
     </div>
 </header>
 
-    <!-- NATIVE KODE LAMA FIREBASE (DI-HIDDEN UNTUK MENCEGAH BREAKING LOGIC) -->
-    <nav id="nav-guest" class="hidden"></nav>
-    <nav id="nav-user" class="hidden"></nav>
+<!-- BACKEND FIREBASE LINK STUB (DI-HIDDEN UNTUK MENJAGA KEUTUHAN SCRIPT) -->
+<nav id="nav-guest" class="hidden"></nav>
+<nav id="nav-user" class="hidden"></nav>
 
-    <!-- AREA LANDING PAGE UTAMA -->
-    <div id="landing-page">
-        <section class="hero-soundon">
-            <div class="container">
-                <h1>Distribute and promote<br>your music globally</h1>
-                <p style="color: #888; margin-bottom: 30px;">TikTok's all-in-one platform for artists and labels.</p>
-                <button onclick="openMaintenance()" class="btn-soundon">Sistem Sedang Diupgrade</button>
-            </div>
-        </section>
-
-        <section class="container">
-            <div class="feature-grid">
-                <div class="card-light">
-                    <h3>Powered by VanTone Ecosystem</h3>
-                    <p>Inspirasi kreator di seluruh dunia untuk menggunakan musikmu di video mereka.</p>
-                </div>
-                <div class="card-dark">
-                    <h3 style="color:var(--primary)">Stay in control with 100% ownership</h3>
-                    <p>Pertahankan hak master Anda sambil menikmati royalti yang kompetitif.</p>
-                </div>
-            </div>
-            <div class="card-light" style="text-align: center; background: #0c0c0c;">
-                <h2>Get your earnings effortlessly</h2>
-                <div class="feature-grid" style="margin-top:30px;">
-                    <div><strong>Free royalty splits</strong></div>
-                    <div><strong>Monthly payments</strong></div>
-                    <div><strong>Hassle-free withdrawals</strong></div>
-                </div>
-            </div>
-        </section>
-
-        <div class="landing-extras">
-            <section class="stats-section">
-                <div class="container">
-                    <div class="stats-grid" style="display:flex; justify-content:space-around; text-align:center; margin: 40px 0;">
-                        <div class="stat-item"><div class="stat-number" style="font-size:2rem; font-weight:800;">10,000+</div><div class="stat-label">Artis Independen</div></div>
-                        <div class="stat-item"><div class="stat-number" style="font-size:2rem; font-weight:800;">50,000+</div><div class="stat-label">Lagu Terdistribusi</div></div>
-                        <div class="stat-item"><div class="stat-number" style="font-size:2rem; font-weight:800;">150+</div><div class="stat-label">Negara Terjangkau</div></div>
-                    </div>
-                </div>
-            </section>
-            <section class="testimonial-section container">
-                <h2 style="color:white; text-align:center; margin-bottom:25px;">Apa Kata Mereka?</h2>
-                <div class="feature-grid">
-                    <div class="card-dark"><p>"Proses distribusinya cepat dan transparan."</p><strong>Rian K.</strong></div>
-                    <div class="card-dark"><p>"Kontrol penuh atas hak master saya."</p><strong>Sita A.</strong></div>
-                    <div class="card-dark"><p>"Fitur promosi TikTok sangat membantu."</p><strong>Dimas J.</strong></div>
-                </div>
-            </section>
-            <section class="faq-section container">
-                <h2 style="color:white; text-align:center; margin-bottom:25px;">Pertanyaan Umum</h2>
-                <div class="card-light">
-                    <p style="margin-bottom:10px;"><strong>Berapa lama waktu rilis musik?</strong><br>1-3 hari kerja untuk moderasi ekspor digital.</p>
-                    <p><strong>Apakah saya memegang 100% hak cipta?</strong><br>Ya, Anda memegang kendali penuh.</p>
-                </div>
-            </section>
-        </div>
-    </div>
-
-    <!-- SEMUA ELEMENT DASHBOARD DAN LOGIKA FIREBASE DATA UTUH AMAN DI SINI -->
-    <main id="dashboard-content" class="hidden">
-        <section id="library" class="dashboard container">
-            <div id="real-upload-form" class="hidden">
-                <input type="file" id="audio-file"><input type="file" id="artwork-file">
-                <input type="text" id="song-title"><input type="text" id="artist-name">
-                <input type="text" id="song-writer"><input type="text" id="song-producer">
-                <select id="genre"></select><input type="date" id="release-date">
-                <input type="checkbox" id="check-copyright"><input type="checkbox" id="check-royalty">
-                <button id="btn-submit"></button>
-            </div>
-            <p id="total-release-count">0</p><p id="user-balance">0.00</p>
-        </section>
-        <section id="my-releases" class="hidden"><tbody id="my-release-body"></tbody></section>
-        <section id="earnings-history" class="hidden">
-            <p id="total-streams-display">0</p><p id="top-song-display">-</p>
-            <canvas id="analyticsChart"></canvas>
-            <tbody id="royalty-table-body"></tbody><tbody id="earnings-table-body"></tbody>
-        </section>
-        <section id="withdraw" class="hidden">
-            <span id="user-balance-wd">0.00</span>
-            <input type="text" id="wd-paypal-name"><input type="email" id="wd-paypal-email">
-        </section>
-        <section id="admin-panel" class="hidden">
-            <input type="text" id="admin-user-id"><input type="number" id="admin-amount">
-            <input type="text" id="admin-royalty-uid"><input type="text" id="admin-royalty-title">
-            <input type="text" id="admin-royalty-platform"><input type="number" id="admin-royalty-streams"><input type="number" id="admin-royalty-amount">
-            <div id="admin-release-list"></div>
-        </section>
-    </main>
-
-    <!-- FOOTER UTAMA KONSISTEN & HAK CIPTA UTUH -->
-    <footer class="footer-main">
+<!-- KONTEN UTAMA HALAMAN HOME -->
+<div id="landing-page">
+    <!-- SECTION HERO MAIN BANNER -->
+    <section class="hero-soundon">
         <div class="container">
-            <div class="feature-grid" style="margin:0 0 40px 0;">
-                <div>
-                    <h3>VANTONE</h3>
-                    <p style="color:#666; font-size:12px;">Distribusi musik independen skala global dengan teknologi penyiaran modern.</p>
-                </div>
-                <div>
-                    <h4>Menu</h4>
-                    <a href="index.html" class="footer-link">Home</a>
-                    <a href="what-is-vantone.html" class="footer-link">What is VanTone</a>
-                    <a href="about.html" class="footer-link">About Us</a>
-                    <a href="outservice.html" class="footer-link">Our Services</a>
-                    <a href="pricing.html" class="footer-link">Pricing</a>
-                </div>
-                <div>
-                    <h4>Legal</h4>
-                    <a href="privacy-policy.html" class="footer-link">Privacy Policy</a>
-                    <a href="terms-of-service.html" class="footer-link">Terms & Service</a>
-                    <a href="contact.html" class="footer-link">Contact Us</a>
+            <h1>Distribute and promote<br>your music <span>globally</span></h1>
+            <p>Platform terintegrasi all-in-one skala premium untuk musisi dan label independen. Ekspor karyamu ke ranah internasional dengan kendali penuh.</p>
+            <!-- Tombol Jelajahi Lebih Lanjut Sesuai Permintaan -->
+            <a href="outservice.html" class="btn-soundon">Jelajahi Lebih Lanjut</a>
+        </div>
+    </section>
+
+    <!-- SECTION FITUR UTAMA -->
+    <section class="container">
+        <div class="feature-grid">
+            <div class="card-dark">
+                <h3>Powered by VanTone Ecosystem</h3>
+                <p>Menghubungkan karya audio Anda ke ekosistem jaringan media global, memberikan peluang besar bagi kreator dunia untuk menggunakan trek Anda.</p>
+            </div>
+            <div class="card-dark">
+                <h3 style="color:var(--primary)">100% Master Ownership</h3>
+                <p>Pertahankan hak kepemilikan cipta penuh atas musik Anda. Kami mendistribusikan aset Anda tanpa mengikat hak kepemilikan jangka panjang.</p>
+            </div>
+        </div>
+
+        <div class="center-promo-block">
+            <h2>Dapatkan Royalti Secara Transparan</h2>
+            <div class="horizontal-specs">
+                <div>Skema Bagi Hasil Kompetitif</div>
+                <div>Laporan Finansial Bulanan</div>
+                <div>Penarikan Dana PayPal Praktis</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION STATISTIK PENYIARAN -->
+    <section class="container">
+        <div class="stats-grid">
+            <div class="stat-item"><div class="stat-number">150+</div><div class="stat-label">DSPs Terintegrasi Global</div></div>
+            <div class="stat-item"><div class="stat-number">1-3</div><div class="stat-label">Hari Kerja Turnaround Time</div></div>
+            <div class="stat-item"><div class="stat-number">100%</div><div class="stat-label">Independen White-Label Jaringan</div></div>
+        </div>
+    </section>
+
+    <!-- SECTION FAQ DROPDOWN ACCORDION INTERAKTIF -->
+    <section class="container faq-section">
+        <h2 class="section-title">Pertanyaan Umum</h2>
+        <div class="faq-accordion">
+            
+            <div class="faq-item">
+                <button class="faq-header" onclick="toggleFaq(this)">
+                    <span>Berapa lama waktu proses rilis musik ke platform digital?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-content">
+                    <p>Proses peninjauan kualitas konten dan ekspor aset ke seluruh mitra global (DSPs) membutuhkan waktu sekitar 1 hingga 3 hari kerja setelah dokumen pengajuan dinyatakan lengkap.</p>
                 </div>
             </div>
-            <hr style="border-color:var(--border-color);">
-            <p style="text-align:center; color:#555; font-size:12px; margin-top:20px;">&copy; 2026 VanTone. All rights reserved.</p>
-        </div>
-    </footer>
 
-    <!-- INTERAKSI JAVASCRIPT POPUP & NAV HAMBURGER -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const hamburgerBtn = document.getElementById('hamburgerBtn');
-            const dropdownPanel = document.getElementById('dropdownPanel');
-            
-            if (hamburgerBtn && dropdownPanel) {
-                hamburgerBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    hamburgerBtn.classList.toggle('active');
-                    dropdownPanel.classList.toggle('open');
-                });
-                document.addEventListener('click', (e) => {
-                    if (!dropdownPanel.contains(e.target) && !hamburgerBtn.contains(e.target)) {
-                        hamburgerBtn.classList.remove('active');
-                        dropdownPanel.classList.remove('open');
-                    }
-                });
+            <div class="faq-item">
+                <button class="faq-header" onclick="toggleFaq(this)">
+                    <span>Apakah saya memegang kendali atas hak cipta musik saya?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-content">
+                    <p>Tentu saja. Sebagai platform kemitraan white-label, Anda memegang kendali penuh 100% atas hak kepemilikan lagu, aransemen master, lirik, dan seluruh materi seni penunjang.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-header" onclick="toggleFaq(this)">
+                    <span>Bagaimana pembagian royalti yang diterapkan platform?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-content">
+                    <p>Kami beroperasi dengan skema pembagian yang sangat transparan dan adil, yakni 80% royalti untuk pihak Artis dan 20% untuk biaya administrasi platform.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
+
+<!-- DATA DASBOR INTERNAL (TETAP TERJAGA AMAN DI DALAM STRUKTUR) -->
+<main id="dashboard-content" class="hidden">
+    <section id="library"><input type="file" id="audio-file"><input type="file" id="artwork-file"><input type="text" id="song-title"><input type="text" id="artist-name"><input type="text" id="song-writer"><input type="text" id="song-producer"><select id="genre"></select><input type="date" id="release-date"><input type="checkbox" id="check-copyright"><input type="checkbox" id="check-royalty"><button id="btn-submit"></button><p id="total-release-count">0</p><p id="user-balance">0.00</p></section>
+    <section id="my-releases"><tbody id="my-release-body"></tbody></section>
+    <section id="earnings-history"><canvas id="analyticsChart"></canvas><tbody id="royalty-table-body"></tbody><tbody id="earnings-table-body"></tbody><p id="total-streams-display">0</p><p id="top-song-display">-</p></section>
+    <section id="withdraw"><span id="user-balance-wd">0.00</span><input type="text" id="wd-paypal-name"><input type="email" id="wd-paypal-email"></section>
+    <section id="admin-panel"><input type="text" id="admin-user-id"><input type="number" id="admin-amount"><input type="text" id="admin-royalty-uid"><input type="text" id="admin-royalty-title"><input type="text" id="admin-royalty-platform"><input type="number" id="admin-royalty-streams"><input type="number" id="admin-royalty-amount"><div id="admin-release-list"></div></section>
+</main>
+
+<!-- FOOTER UTAMA DENGAN HAK CIPTA HAK KONSISTEN -->
+<footer class="footer-main">
+    <div class="container">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 5px;">
+            <div>
+                <h3 style="margin-bottom: 15px; font-weight: 800;">VANTONE MUSIK</h3>
+                <p style="color:var(--text-muted); font-size:12px; line-height: 1.6;">Solusi terpercaya untuk kemitraan white-label penyiaran lagu digital independen ke 150+ global streaming platforms.</p>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 15px; font-weight: 800;">Navigasi Menu</h4>
+                <a href="index.html" class="footer-link">Home</a>
+                <a href="what-is-vantone.html" class="footer-link">What is VanTone</a>
+                <a href="about.html" class="footer-link">About Us</a>
+                <a href="outservice.html" class="footer-link">Our Services</a>
+                <a href="pricing.html" class="footer-link">Pricing Plans</a>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 15px; font-weight: 800;">Kebijakan Hukum</h4>
+                <a href="privacy-policy.html" class="footer-link">Privacy Policy</a>
+                <a href="terms-of-service.html" class="footer-link">Terms & Service</a>
+                <a href="contact.html" class="footer-link">Contact Support</a>
+            </div>
+        </div>
+        <hr style="border-color:var(--border-color); margin: 30px 0 20px;">
+        <p style="text-align:center; color:#555; font-size:12px;">&copy; 2026 VanTone Musik. All rights reserved. White-Label Distribution Network.</p>
+    </div>
+</footer>
+
+<!-- SCRIPT INTERAKSI DROP DOWN MENUS & FAQ ACCORDION -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const dropdownPanel = document.getElementById('dropdownPanel');
+        
+        if (hamburgerBtn && dropdownPanel) {
+            hamburgerBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                hamburgerBtn.classList.toggle('active');
+                dropdownPanel.classList.toggle('open');
+            });
+            document.addEventListener('click', (e) => {
+                if (!dropdownPanel.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+                    hamburgerBtn.classList.remove('active');
+                    dropdownPanel.classList.remove('open');
+                }
+            });
+        }
+    });
+
+    /* FUNGSI DROPDOWN FAQ ACCORDION */
+    function toggleFaq(element) {
+        const faqItem = element.parentElement;
+        
+        // Tutup item FAQ lain yang sedang terbuka (opsional, untuk kerapian)
+        document.querySelectorAll('.faq-item').forEach(item => {
+            if (item !== faqItem) {
+                item.classList.remove('active');
             }
         });
-
-        // Manajemen Aksi Jendela Popup Maintenance
-        function closeMaintenance() {
-            const popup = document.getElementById('maintenancePopup');
-            if(popup) {
-                popup.style.opacity = '0';
-                setTimeout(() => {
-                    popup.style.display = 'none';
-                }, 400);
-            }
-        }
-
-        function openMaintenance() {
-            const popup = document.getElementById('maintenancePopup');
-            if(popup) {
-                popup.style.display = 'flex';
-                setTimeout(() => {
-                    popup.style.opacity = '1';
-                }, 10);
-            }
-        }
-    </script>
-    <script src="script.js"></script>
+        
+        // Buka / tutup item yang dipilih
+        faqItem.classList.toggle('active');
+    }
+</script>
+<script src="script.js"></script>
 </body>
 </html>
