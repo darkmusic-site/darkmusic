@@ -1,30 +1,37 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXFQE2LLMY"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXFQE2LLMY');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAQ & Testimoni Artis - Vantone Music Premium</title>
+    <title>FAQ & Testimoni Artis | VanTone Musik</title>
     
     <!-- SEO & Metadata -->
-    <meta name="description" content="Pusat Bantuan Resmi Vantone Musik. Temukan jawaban seputar distribusi musik global, royalti, ISRC, dan testimoni jujur dari para musisi independen.">
+    <meta name="description" content="Pusat Bantuan Resmi VanTone Musik. Temukan jawaban seputar distribusi musik global, royalti, ISRC, dan testimoni jujur dari para musisi independen.">
     <meta name="robots" content="index, follow">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:italic,wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        /* --- Root & Premium Themes --- */
-        :root {
-            --bg-dark: #0a0a0c;
-            --card-bg: #121216;
-            --accent-gold: #e5c07b;
-            --accent-gold-glow: rgba(229, 192, 123, 0.15);
-            --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
-            --border-color: rgba(255, 255, 255, 0.06);
-            --grad-gold: linear-gradient(135deg, #f3d9a9 0%, #c69d52 100%);
+        /* --- PALET WARNA & CORE STYLE (SOUNDON BLACK & RED) --- */
+        :root { 
+            --primary: #ff0050; 
+            --dark: #000000; 
+            --gray: #0d0d0d; 
+            --card-bg: #121212;
+            --border-color: #222222;
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
         }
 
         *, *::before, *::after {
@@ -35,51 +42,99 @@
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-dark);
+            background-color: var(--dark);
             color: var(--text-main);
             line-height: 1.6;
             overflow-x: hidden;
-            padding-bottom: 80px;
+            padding-top: 70px; 
         }
 
-        /* --- Decorative Background Elements --- */
-        .ambient-glow-1 {
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* --- NAVIGATION BAR GLOBAL --- */
+        .main-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background-color: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 9999;
+        }
+        .nav-container {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-logo { display: flex; align-items: center; text-decoration: none; gap: 10px; }
+        .nav-logo img { height: 35px; width: auto; }
+        .nav-logo span { color: white; font-weight: 800; font-size: 1.4rem; letter-spacing: 1px; }
+        
+        .nav-menu-desktop { display: flex; gap: 24px; }
+        .nav-menu-desktop a { color: var(--text-muted); text-decoration: none; font-size: 0.95rem; font-weight: 600; transition: color 0.2s; }
+        .nav-menu-desktop a:hover { color: var(--primary); }
+        
+        .hamburger-toggle { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; gap: 6px; }
+        .hamburger-toggle .bar { width: 25px; height: 2px; background-color: white; transition: all 0.3s; }
+        .hamburger-toggle.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .hamburger-toggle.active .bar:nth-child(2) { opacity: 0; }
+        .hamburger-toggle.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+        /* PANEL DROPDOWN KANAN (SIDEBAR) */
+        .dropdown-panel {
+            position: absolute;
+            top: 70px;
+            right: -320px;
+            width: 300px;
+            background-color: var(--card-bg);
+            border-left: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 30px 24px;
+            box-shadow: -10px 10px 30px rgba(0,0,0,0.5);
+            transition: right 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            border-bottom-left-radius: 16px;
+        }
+        .dropdown-panel.open { right: 0; }
+        .dropdown-divider { border: none; border-top: 1px solid var(--border-color); margin: 5px 0; }
+        .dropdown-link, .dropdown-link-sub { color: var(--text-muted); text-decoration: none; display: block; }
+        .dropdown-link:hover, .dropdown-link-sub:hover { color: var(--primary); }
+        .dropdown-link { font-size: 1.1rem; font-weight: 600; padding: 6px 0; }
+        .dropdown-link-sub { font-size: 0.95rem; padding: 4px 0; }
+        
+        .dropdown-socials p { font-size: 0.85rem; color: #555; font-weight: 600; margin-bottom: 10px; letter-spacing: 0.5px; }
+        .social-icons { display: flex; gap: 16px; }
+        .social-icons a { color: white; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: color 0.2s; }
+        .social-icons a:hover { color: var(--primary); }
+        .mobile-only-links { display: none; }
+
+        /* --- DECORATIVE BACKGROUND GLOW --- */
+        .ambient-glow-faq {
             position: absolute;
             top: -10%;
             left: -10%;
             width: 50vw;
             height: 50vw;
-            background: radial-gradient(circle, rgba(198, 157, 82, 0.06) 0%, transparent 70%);
-            z-index: -1;
-            pointer-events: none;
-        }
-        .ambient-glow-2 {
-            position: absolute;
-            top: 40%;
-            right: -10%;
-            width: 45vw;
-            height: 45vw;
-            background: radial-gradient(circle, rgba(229, 192, 123, 0.04) 0%, transparent 60%);
+            background: radial-gradient(circle, rgba(255, 0, 80, 0.04) 0%, transparent 70%);
             z-index: -1;
             pointer-events: none;
         }
 
-        /* --- Header Section --- */
+        /* --- PREMIUM FAQ HEADER --- */
         .premium-header {
             text-align: center;
             padding: 80px 20px 40px 20px;
             position: relative;
-        }
-
-        .logo-box {
-            margin-bottom: 25px;
-            animation: fadeInDown 1s ease;
-        }
-
-        .logo-box img {
-            max-width: 200px;
-            height: auto;
-            filter: drop-shadow(0 0 12px rgba(255,255,255,0.1));
+            background: radial-gradient(circle at top left, #1f000b 0%, var(--dark) 70%);
         }
 
         .premium-badge {
@@ -87,65 +142,67 @@
             font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 4px;
-            color: var(--accent-gold);
-            border: 1px solid rgba(229, 192, 123, 0.3);
+            color: var(--primary);
+            border: 1px solid rgba(255, 0, 80, 0.3);
             padding: 6px 16px;
             border-radius: 30px;
             margin-bottom: 20px;
-            background: rgba(229, 192, 123, 0.03);
+            background: rgba(255, 0, 80, 0.03);
             font-weight: 600;
         }
 
         h1 {
-            font-size: 2.8rem;
-            font-weight: 700;
+            font-size: 2.6rem;
+            font-weight: 800;
             letter-spacing: -1px;
             line-height: 1.2;
             margin-bottom: 15px;
-            background: linear-gradient(180deg, #ffffff 30%, #a1a1aa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--text-main);
+        }
+
+        h1 span {
+            color: var(--primary);
         }
 
         .subtitle {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             color: var(--text-muted);
             max-width: 600px;
             margin: 0 auto;
-            font-weight: 300;
+            font-weight: 400;
         }
 
-        /* --- Layout Container --- */
+        /* --- LAYOUT CONTAINER WRAPPER --- */
         .wrapper {
-            max-width: 1050px;
+            max-width: 950px;
             margin: 0 auto;
             padding: 0 20px;
         }
 
-        /* --- Section Titles --- */
+        /* --- SECTION TITLES --- */
         .section-title {
-            font-size: 1.8rem;
-            font-weight: 600;
+            font-size: 1.6rem;
+            font-weight: 800;
             margin: 60px 0 30px 0;
             display: flex;
             align-items: center;
             gap: 15px;
             color: #ffffff;
+            letter-spacing: 0.5px;
         }
 
         .section-title::after {
             content: '';
             flex: 1;
             height: 1px;
-            background: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+            background: linear-gradient(90deg, var(--border-color) 0%, transparent 100%);
         }
 
         .section-title span {
-            color: var(--accent-gold);
-            font-family: 'Playfair Display', serif;
+            color: var(--primary);
         }
 
-        /* --- Modern FAQ Accordion (Pure CSS & High Styling) --- */
+        /* --- MODERN FAQ ACCORDION (PURE CSS TEMA HITAM MERAH) --- */
         .faq-container {
             display: flex;
             flex-direction: column;
@@ -161,7 +218,6 @@
             position: relative;
         }
 
-        /* Masked radio for pure CSS toggle */
         .faq-input {
             position: absolute;
             opacity: 0;
@@ -182,7 +238,7 @@
         }
 
         .faq-question {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 600;
             color: #ffffff;
             transition: color 0.3s ease;
@@ -204,14 +260,12 @@
             transition: background-color 0.3s ease;
         }
 
-        /* Horizontal bar */
         .faq-icon::before {
             top: 11px;
             left: 4px;
             width: 16px;
             height: 2px;
         }
-        /* Vertical bar */
         .faq-icon::after {
             top: 4px;
             left: 11px;
@@ -235,17 +289,18 @@
             opacity: 0;
             transform: translateY(10px);
             transition: opacity 0.3s ease, transform 0.3s ease;
+            line-height: 1.8;
         }
 
-        /* --- FAQ Active / Open States --- */
+        /* --- FAQ ACTIVE STATES --- */
         .faq-item:hover {
-            border-color: rgba(229, 192, 123, 0.3);
+            border-color: #333;
             box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
             transform: translateY(-2px);
         }
 
         .faq-input:checked ~ .faq-trigger .faq-question {
-            color: var(--accent-gold);
+            color: var(--primary);
         }
 
         .faq-input:checked ~ .faq-trigger .faq-icon {
@@ -254,14 +309,14 @@
 
         .faq-input:checked ~ .faq-trigger .faq-icon::before,
         .faq-input:checked ~ .faq-trigger .faq-icon::after {
-            background-color: var(--accent-gold);
+            background-color: var(--primary);
         }
 
         .faq-input:checked ~ .faq-content {
-            max-height: 500px; /* high generic constraint for safe expansion */
+            max-height: 500px;
             padding: 0 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.03);
-            background: linear-gradient(180deg, rgba(229, 192, 123, 0.01) 0%, transparent 100%);
+            border-top: 1px solid rgba(255, 255, 255, 0.02);
+            background: linear-gradient(180deg, rgba(255, 0, 80, 0.01) 0%, transparent 100%);
         }
 
         .faq-input:checked ~ .faq-content p {
@@ -271,10 +326,10 @@
             transition-delay: 0.1s;
         }
 
-        /* --- Artist Testimonial Slider Grid --- */
+        /* --- ARTIST TESTIMONIAL GRID --- */
         .testimonials-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 24px;
             margin-top: 10px;
         }
@@ -296,26 +351,27 @@
             position: absolute;
             top: 15px;
             left: 25px;
-            font-family: 'Playfair Display', serif;
             font-size: 5rem;
-            color: rgba(229, 192, 123, 0.08);
+            color: rgba(255, 0, 80, 0.06);
             line-height: 1;
+            font-weight: 800;
         }
 
         .testimonial-card:hover {
-            border-color: rgba(229, 192, 123, 0.25);
+            border-color: rgba(255, 0, 80, 0.25);
             transform: translateY(-5px);
             box-shadow: 0 20px 40px -15px rgba(0,0,0,0.6);
         }
 
         .quote-text {
-            font-size: 1.05rem;
+            font-size: 0.98rem;
             font-style: italic;
             color: #e5e7eb;
             position: relative;
             z-index: 2;
             margin-bottom: 25px;
-            font-weight: 300;
+            font-weight: 400;
+            line-height: 1.7;
         }
 
         .artist-profile {
@@ -327,58 +383,43 @@
         }
 
         .artist-avatar {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            background: #27272a;
+            background: #1a1a1a;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            color: var(--accent-gold);
-            border: 2px solid rgba(229, 192, 123, 0.4);
-            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--primary);
+            border: 2px solid rgba(255, 0, 80, 0.3);
+            font-size: 0.9rem;
             letter-spacing: 0.5px;
         }
 
         .artist-info h4 {
-            font-size: 1rem;
-            font-weight: 600;
+            font-size: 0.95rem;
+            font-weight: 700;
             color: #ffffff;
         }
 
         .artist-info p {
-            font-size: 0.8rem;
-            color: var(--accent-gold);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
             margin-top: 2px;
         }
 
-        /* --- Footer --- */
-        footer {
-            text-align: center;
-            margin-top: 100px;
-            padding-top: 30px;
-            border-top: 1px solid var(--border-color);
-            color: #4b5563;
-            font-size: 0.85rem;
-        }
+        /* --- FOOTER MAIN AREA --- */
+        .footer-main { background: #000000; color: white; padding: 80px 0 30px; border-top: 1px solid var(--border-color); margin-top: 80px; text-align: left; }
+        .footer-link { color: var(--text-muted); text-decoration: none; display: block; margin-bottom: 12px; font-size: 0.9rem; transition: color 0.2s; }
+        .footer-link:hover { color: var(--primary); }
 
-        /* --- Keyframe Animations --- */
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Responsive */
-        @media (max-width: 640px) {
+        @media (max-width: 992px) {
+            .nav-menu-desktop { display: none; }
+            .mobile-only-links { display: block; }
+            .dropdown-panel { width: 100%; right: -100%; border-left: none; }
+            .dropdown-panel.open { right: 0; }
             h1 { font-size: 2.1rem; }
             .faq-trigger { padding: 20px 22px; }
             .faq-question { font-size: 0.98rem; }
@@ -388,195 +429,287 @@
 </head>
 <body>
 
-    <div class="ambient-glow-1"></div>
-    <div class="ambient-glow-2"></div>
+<div class="ambient-glow-faq"></div>
 
-    <header class="premium-header">
-        <div class="logo-box">
-            <img src="https://vantone.store/vantonelogo.png" alt="Vantone Music Premium Logo">
+<!-- NAVIGATION HEADER GLOBAL -->
+<header class="main-navbar">
+    <div class="container nav-container">
+        <a href="index.html" class="nav-logo">
+            <img src="images/vantonelogo.png" alt="Vantone Musik Logo" onerror="this.src='vantonelogo.png';">
+            <span>VANTONE</span>
+        </a>
+        <nav class="nav-menu-desktop">
+            <a href="index.html">Home</a>
+            <a href="what-is-vantone.html">What is VanTone</a>
+            <a href="about.html">About</a>
+            <a href="outservice.html">Our Services</a>
+            <a href="faq-vantone.html" style="color: var(--primary);">FAQ</a>
+            <a href="pricing.html">Pricing</a>
+        </nav>
+        <button class="hamburger-toggle" id="hamburgerBtn" aria-label="Toggle Menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+    </div>
+
+    <!-- DROPDOWN SLIDE PANEL (SIDEBAR) -->
+    <div class="dropdown-panel" id="dropdownPanel">
+        <div class="dropdown-section mobile-only-links">
+            <a href="index.html" class="dropdown-link">Home</a>
+            <a href="what-is-vantone.html" class="dropdown-link">What is VanTone</a>
+            <a href="about.html" class="dropdown-link">About</a>
+            <a href="outservice.html" class="dropdown-link">Our Services</a>
+            <a href="faq-vantone.html" class="dropdown-link" style="color: var(--primary);">FAQ</a>
+            <a href="pricing.html" class="dropdown-link">Pricing</a>
+            <hr class="dropdown-divider">
         </div>
-        <div class="premium-badge">Artist Support Hub</div>
-        <h1>Pusat Bantuan & Kebanggaan Kreator</h1>
-        <p class="subtitle">Semua hal yang perlu Anda ketahui tentang ekosistem Vantone Musik, langsung dari jawaban pakar dan pengalaman nyata rekan musisi.</p>
-    </header>
-
-    <div class="wrapper">
-
-        <!-- SECTION 1: FAQ (10 ITEM DENGAN ANIMASI ACCORDION MEWAH) -->
-        <h2 class="section-title">Pertanyaan Kerap <span>Diajukan (FAQ)</span></h2>
         
-        <div class="faq-container">
-            
-            <!-- Item 1 -->
-            <div class="faq-item">
-                <input type="radio" name="faq-group" class="faq-input" checked>
-                <div class="faq-trigger">
-                    <span class="faq-question">1. Apa itu Vantone Musik dan bagaimana cara kerjanya?</span>
-                    <div class="faq-icon"></div>
-                </div>
-                <div class="faq-content">
-                    <p>Vantone Musik adalah platform distribusi digital dan agregator musik modern global. Kami bekerja dengan menerima file audio master dan metadata lagu dari Anda, mendistribusikannya secara otomatis ke 100+ platform streaming dunia (seperti Spotify, Apple Music, TikTok, dll.), serta memantau dan mengumpulkan seluruh royalti hak mekanik Anda secara transparan.</p>
-                </div>
-            </div>
-
-            <!-- Item 2 -->
-            <div class="faq-item">
-                <input type="radio" name="faq-group" class="faq-input">
-                <div class="faq-trigger">
-                    <span class="faq-question">2. Platform musik global apa saja yang dijangkau oleh Vantone?</span>
-                    <div class="faq-icon"></div>
-                </div>
-                <div class="faq-content">
-                    <p>Rilisan musik Anda akan didistribusikan langsung ke platform global terkemuka termasuk Spotify, Apple Music, iTunes, TikTok, Instagram Music, YouTube Music, Amazon Music, Deezer, Tidal, Beatport, dan puluhan gerbang pemutaran digital regional di seluruh Amerika, Eropa, dan Asia.</p>
-                </div>
-            </div>
-
-            <!-- Item 3 -->
-            <div class="faq-item">
-                <input type="radio" name="faq-group" class="faq-input">
-                <div class="faq-trigger">
-                    <span class="faq-question">3. Bagaimana sistem pembagian royalti di Vantone Musik?</span>
-                    <div class="faq-icon"></div>
-                </div>
-                <div class="faq-content">
-                    <p>Kami menjunjung tinggi asas demokratisasi industri dengan memberikan skema pembagian pendapatan yang sangat adil dan transparan. Semua data analitik perputaran lagu, jumlah pendengar, asal wilayah, hingga nominal royalti hak publikasi terperinci dapat dipantau langsung dan ditarik secara berkala tanpa potongan tersembunyi.</p>
-                </div>
-            </div>
-
-            <!-- Item 4 -->
-            <div class="faq-item">
-                <input type="radio" name="faq-group" class="faq-input">
-                <div class="faq-trigger">
-                    <span class="faq-question">4. Apakah saya akan otomatis mendapatkan kode ISRC dan UPC?</span>
-                    <div class="faq-icon"></div>
-                </div>
-                <div class="faq-content">
-                    <p>Ya, benar. Setiap paket rilisan baru (album/EP/single) yang Anda daftarkan di Vantone Musik akan otomatis mendapatkan kode identifikasi internasional standar global, yaitu kode UPC untuk identitas album dan kode ISRC unik khusus untuk masing-masing trek lagu Anda tanpa biaya tambahan.</p>
-                </div>
-            </div>
-
-            <!-- Item 5 -->
-            <div class="faq-item">
-                <input type="radio" name="faq-group" class="faq-input">
-                <div class="faq-trigger">
-                    <span class="faq-question">5. Berapa lama waktu yang dibutuhkan hingga lagu saya tayang di toko digital?</span>
-                    <div class="faq-icon"></div>
-                </div>
-                <div class="faq-content">
-                    <p>Proses peninjauan teknis internal kami membutuhkan waktu 1-3 hari kerja. Setelah disetujui, lagu biasanya mulai tayang di beberapa toko digital utama dalam waktu 24 hingga 48 jam. Namun, kami sangat menyarankan Anda mengajukan rilisan 2-3 minggu sebelum tanggal rilis demi strategi promosi (pitching playlist) yang optimal.</p>
-                </div>
-            </div>
-
-            <!-- Item 6 -->
-            <div class="faq-item">
-                <input type="radio" name="faq-group" class="faq-input">
-                <div class="faq-trigger">
-                    <span class="faq-question">6. Apakah Vantone menyediakan fasilitas fisik untuk produksi audio?</span>
-                    <div class="faq-icon"></div>
-                </div>
-                <div class="faq-content">
-                    <p>Ya. Vantone Musik memiliki infrastruktur internal premium berupa studio rekaman khusus dan ruang kendali audio (*audio kontrol/mastering room*) berstandar internasional yang dilengkapi dengan teknologi pemrosesan mutakhir untuk memastikan kualitas audio rilisan Anda siap bersaing secara global.</p>
-                </div>
-            </div>
-
-            <!-- Item 7 -->
-            <div class="faq-item">
-                <input type="radio" name="faq-group" class="faq-input">
-                <div class="faq-trigger">
-                    <span class="faq-question">7. Apakah saya tetap memegang 100% hak cipta atas lagu saya?</span>
-                    <div class="faq-icon"></div>
-                </div>
-                <div class="faq-content">
-                    <p>Mutlak ya. Vantone Musik murni bertindak sebagai penyedia layanan distribusi dan administrasi hak publikasi digital. Kepemilikan hak cipta atas karya seni, master rekaman, dan lirik sepenuhnya tetap menjadi milik Anda atau perusahaan rekaman mandiri Anda secara hukum jangka panjang.</p>
-                </div>
-            </div>
-
-            <!-- Item 8 -->
-            <div class="faq-item">
-                <input type="radio" name="faq-group" class="faq-input">
-                <div class="faq-trigger">
-                    <span class="faq-question">8. Bagaimana cara menghubungkan rilisan saya dengan akun Sentric Publishing?</span>
-                    <div class="faq-icon"></div>
-                </div>
-                <div class="faq-content">
-                    <p>Setelah lagu Anda berhasil didistribusikan oleh Vantone dan kode ISRC terbit, Anda dapat menyalin kode ISRC dan durasi eksak tersebut untuk didaftarkan di bagian 'Recordings' pada dasbor Sentric Publishing Anda. Hal ini memastikan seluruh hak cipta lagu (*Publishing*) dan hak mekanik (*Recording*) sinkron secara internasional.</p>
-                </div>
-            </div>
-
-            <!-- Item 9 -->
-            <div class="faq-item">
-                <input type="radio" name="faq-group" class="faq-input">
-                <div class="faq-trigger">
-                    <span class="faq-question">9. Format file audio seperti apa yang harus saya unggah?</span>
-                    <div class="faq-icon"></div>
-                </div>
-                <div class="faq-content">
-                    <p>Untuk menjaga orisinalitas dan standar kualitas siaran komersial global, Anda wajib mengunggah file lagu dalam format koding audio tanpa kompresi kualitas tinggi (Lossless Audio), yaitu format WAV stereo, 16-bit atau 24-bit, dengan sample rate minimal 44.1 kHz.</p>
-                </div>
-            </div>
-
-            <!-- Item 10 -->
-            <div class="faq-item">
-                <input type="radio" name="faq-group" class="faq-input">
-                <div class="faq-trigger">
-                    <span class="faq-question">10. Bagaimana jika saya membutuhkan bantuan darurat atau perubahan metadata?</span>
-                    <div class="faq-icon"></div>
-                </div>
-                <div class="faq-content">
-                    <p>Tim dukungan artis kami selalu siap membantu Anda. Silakan kirimkan email ke <a href="mailto:contact@vantone.store" style="color: #e5c07b; text-decoration: underline;">contact@vantone.store</a> untuk pertanyaan yang bersifat umum. Sementara itu, untuk kendala teknis terkait masalah rilisan lagu atau laporan royalti, Anda dapat menghubungi tim spesialis kami melalui email ke <a href="mailto:support@vantone.store" style="color: #e5c07b; text-decoration: underline;">support@vantone.store</a> agar dapat ditangani dengan cepat.</p>
-                </div>
-            </div>
-
+        <div class="dropdown-extra-links">
+            <a href="contact.html" class="dropdown-link-sub">Contact Us</a>
+            <a href="terms-of-service.html" class="dropdown-link-sub">Terms of Service</a>
+            <a href="privacy-policy.html" class="dropdown-link-sub">Privacy Policy</a>
         </div>
-
-        <!-- SECTION 2: TESTIMONI ARTIS (KATA MEREKA) -->
-        <h2 class="section-title">Apa Kata Mereka: <span>Suara Para Artis</span></h2>
         
-        <div class="testimonials-container">
-            
-            <!-- Artis 1 -->
-            <div class="testimonial-card">
-                <p class="quote-text">"Sebelumnya saya selalu kesulitan melacak royalti hasil streaming luar negeri saya. Sejak mempercayakan master lagu ke Vantone Musik, pelaporan analitik bulanan yang dikirim sangat detail dan transparan. Studio mastering mereka juga luar biasa membantu peningkatan kualitas audio saya."</p>
-                <div class="artist-profile">
-                    <div class="artist-avatar">CC</div>
-                    <div class="artist-info">
-                        <h4>Chairil Cena</h4>
-                        <p>Electronic Music Producer</p>
-                    </div>
-                </div>
+        <div class="dropdown-socials">
+            <p>FOLLOW OUR SOUND</p>
+            <div class="social-icons">
+                <a href="https://www.tiktok.com/@vantone_label" target="_blank">TikTok</a>
+                <a href="https://www.instagram.com/vantone.store" target="_blank">Instagram</a>
+                <a href="https://youtube.com/@vantone_store" target="_blank">YouTube</a>
             </div>
+        </div>
+    </div>
+</header>
 
-            <!-- Artis 2 -->
-            <div class="testimonial-card">
-                <p class="quote-text">"Distribusi di Vantone super cepat. Hanya butuh beberapa hari, single saya sudah aktif dan diverifikasi di Spotify serta TikTok. Yang paling menyenangkan adalah mereka membiarkan kami sebagai musisi memegang penuh kepemilikan hak cipta master 100%!"</p>
-                <div class="artist-profile">
-                    <div class="artist-avatar">AM</div>
-                    <div class="artist-info">
-                        <h4>Aria Mahardika</h4>
-                        <p>Indie Folk Songwriter</p>
-                    </div>
-                </div>
+<!-- HERO HEADER -->
+<header class="premium-header">
+    <div class="premium-badge">Artist Support Hub</div>
+    <h1>Pusat Bantuan & <span>Kebanggaan Kreator</span></h1>
+    <p class="subtitle">Semua hal yang perlu Anda ketahui tentang ekosistem VanTone Musik, langsung dari jawaban pakar dan pengalaman nyata rekan musisi.</p>
+</header>
+
+<div class="wrapper">
+
+    <!-- SECTION 1: FAQ -->
+    <h2 class="section-title">Pertanyaan Kerap <span>Diajukan (FAQ)</span></h2>
+    
+    <div class="faq-container">
+        
+        <!-- Item 1 -->
+        <div class="faq-item">
+            <input type="radio" name="faq-group" class="faq-input" checked>
+            <div class="faq-trigger">
+                <span class="faq-question">1. Apa itu Vantone Musik dan bagaimana cara kerjanya?</span>
+                <div class="faq-icon"></div>
             </div>
-
-            <!-- Artis 3 -->
-            <div class="testimonial-card">
-                <p class="quote-text">"Integrasi antara data distribusi Vantone dengan sistem hak cipta penerbitan saya sangat mulus berkat sinkronisasi kode ISRC yang instan. Sangat direkomendasikan untuk produser independen yang ingin merambah pasar global tanpa birokrasi berbelit."</p>
-                <div class="artist-profile">
-                    <div class="artist-avatar">DS</div>
-                    <div class="artist-info">
-                        <h4>Darmawan S.</h4>
-                        <p>Composer & Arranger</p>
-                    </div>
-                </div>
+            <div class="faq-content">
+                <p>Vantone Musik adalah platform distribusi digital dan agregator musik modern global. Kami bekerja dengan menerima file audio master dan metadata lagu dari Anda, mendistribusikannya secara otomatis ke 100+ platform streaming dunia (seperti Spotify, Apple Music, TikTok, dll.), serta memantau dan mengumpulkan seluruh royalti hak mekanik Anda secara transparan.</p>
             </div>
-
         </div>
 
-        <footer>
-            <p>&copy; 2026 Vantone Musik. Premium Artist Experience & Global Music Publishing.</p>
-        </footer>
+        <!-- Item 2 -->
+        <div class="faq-item">
+            <input type="radio" name="faq-group" class="faq-input">
+            <div class="faq-trigger">
+                <span class="faq-question">2. Platform musik global apa saja yang dijangkau oleh Vantone?</span>
+                <div class="faq-icon"></div>
+            </div>
+            <div class="faq-content">
+                <p>Rilisan musik Anda akan didistribusikan langsung ke platform global terkemuka termasuk Spotify, Apple Music, iTunes, TikTok, Instagram Music, YouTube Music, Amazon Music, Deezer, Tidal, Beatport, dan puluhan gerbang pemutaran digital regional di seluruh Amerika, Eropa, dan Asia.</p>
+            </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="faq-item">
+            <input type="radio" name="faq-group" class="faq-input">
+            <div class="faq-trigger">
+                <span class="faq-question">3. Bagaimana sistem pembagian royalti di Vantone Musik?</span>
+                <div class="faq-icon"></div>
+            </div>
+            <div class="faq-content">
+                <p>Kami menjunjung tinggi asas demokratisasi industri dengan memberikan skema pembagian pendapatan yang sangat adil dan transparan. Semua data analitik perputaran lagu, jumlah pendengar, asal wilayah, hingga nominal royalti hak publikasi terperinci dapat dipantau langsung dan ditarik secara berkala tanpa potongan tersembunyi.</p>
+            </div>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="faq-item">
+            <input type="radio" name="faq-group" class="faq-input">
+            <div class="faq-trigger">
+                <span class="faq-question">4. Apakah saya akan otomatis mendapatkan kode ISRC dan UPC?</span>
+                <div class="faq-icon"></div>
+            </div>
+            <div class="faq-content">
+                <p>Ya, benar. Setiap paket rilisan baru (album/EP/single) yang Anda daftarkan di Vantone Musik akan otomatis mendapatkan kode identifikasi internasional standar global, yaitu kode UPC untuk identitas album dan kode ISRC unik khusus untuk masing-masing trek lagu Anda tanpa biaya tambahan.</p>
+            </div>
+        </div>
+
+        <!-- Item 5 -->
+        <div class="faq-item">
+            <input type="radio" name="faq-group" class="faq-input">
+            <div class="faq-trigger">
+                <span class="faq-question">5. Berapa lama waktu yang dibutuhkan hingga lagu saya tayang di toko digital?</span>
+                <div class="faq-icon"></div>
+            </div>
+            <div class="faq-content">
+                <p>Proses peninjauan teknis internal kami membutuhkan waktu 1-3 hari kerja. Setelah disetujui, lagu biasanya mulai tayang di beberapa toko digital utama dalam waktu 24 hingga 48 jam. Namun, kami sangat menyarankan Anda mengajukan rilisan 2-3 minggu sebelum tanggal rilis demi strategi promosi (pitching playlist) yang optimal.</p>
+            </div>
+        </div>
+
+        <!-- Item 6 -->
+        <div class="faq-item">
+            <input type="radio" name="faq-group" class="faq-input">
+            <div class="faq-trigger">
+                <span class="faq-question">6. Apakah Vantone menyediakan fasilitas fisik untuk produksi audio?</span>
+                <div class="faq-icon"></div>
+            </div>
+            <div class="faq-content">
+                <p>Ya. Vantone Musik memiliki infrastruktur internal premium berupa studio rekaman khusus dan ruang kendali audio (*audio kontrol/mastering room*) berstandar internasional yang dilengkapi dengan teknologi pemrosesan mutakhir untuk memastikan kualitas audio rilisan Anda siap bersaing secara global.</p>
+            </div>
+        </div>
+
+        <!-- Item 7 -->
+        <div class="faq-item">
+            <input type="radio" name="faq-group" class="faq-input">
+            <div class="faq-trigger">
+                <span class="faq-question">7. Apakah saya tetap memegang 100% hak cipta atas lagu saya?</span>
+                <div class="faq-icon"></div>
+            </div>
+            <div class="faq-content">
+                <p>Mutlak ya. Vantone Musik murni bertindak sebagai penyedia layanan distribusi dan administrasi hak publikasi digital. Kepemilikan hak cipta atas karya seni, master rekaman, dan lirik sepenuhnya tetap menjadi milik Anda atau perusahaan rekaman mandiri Anda secara hukum jangka panjang.</p>
+            </div>
+        </div>
+
+        <!-- Item 8 -->
+        <div class="faq-item">
+            <input type="radio" name="faq-group" class="faq-input">
+            <div class="faq-trigger">
+                <span class="faq-question">8. Bagaimana cara menghubungkan rilisan saya dengan akun Sentric Publishing?</span>
+                <div class="faq-icon"></div>
+            </div>
+            <div class="faq-content">
+                <p>Setelah lagu Anda berhasil didistribusikan oleh Vantone dan kode ISRC terbit, Anda dapat menyalin kode ISRC dan durasi eksak tersebut untuk didaftarkan di bagian 'Recordings' pada dasbor Sentric Publishing Anda. Hal ini memastikan seluruh hak cipta lagu (*Publishing*) dan hak mekanik (*Recording*) sinkron secara internasional.</p>
+            </div>
+        </div>
+
+        <!-- Item 9 -->
+        <div class="faq-item">
+            <input type="radio" name="faq-group" class="faq-input">
+            <div class="faq-trigger">
+                <span class="faq-question">9. Format file audio seperti apa yang harus saya unggah?</span>
+                <div class="faq-icon"></div>
+            </div>
+            <div class="faq-content">
+                <p>Untuk menjaga orisinalitas dan standar kualitas siaran komersial global, Anda wajib mengunggah file lagu dalam format koding audio tanpa kompresi kualitas tinggi (Lossless Audio), yaitu format WAV stereo, 16-bit atau 24-bit, dengan sample rate minimal 44.1 kHz.</p>
+            </div>
+        </div>
+
+        <!-- Item 10 -->
+        <div class="faq-item">
+            <input type="radio" name="faq-group" class="faq-input">
+            <div class="faq-trigger">
+                <span class="faq-question">10. Bagaimana jika saya membutuhkan bantuan darurat atau perubahan metadata?</span>
+                <div class="faq-icon"></div>
+            </div>
+            <div class="faq-content">
+                <p>Tim dukungan artis kami selalu siap membantu Anda. Silakan kirimkan email ke <a href="mailto:contact@vantone.store" style="color: var(--primary); text-decoration: underline;">contact@vantone.store</a> untuk pertanyaan yang bersifat umum. Sementara itu, untuk kendala teknis terkait masalah rilisan lagu atau laporan royalti, Anda dapat menghubungi tim spesialis kami melalui email ke <a href="mailto:support@vantone.store" style="color: var(--primary); text-decoration: underline;">support@vantone.store</a> agar dapat ditangani dengan cepat.</p>
+            </div>
+        </div>
 
     </div>
 
+    <!-- SECTION 2: TESTIMONI ARTIS -->
+    <h2 class="section-title">Apa Kata Mereka: <span>Suara Para Artis</span></h2>
+    
+    <div class="testimonials-container">
+        
+        <!-- Artis 1 -->
+        <div class="testimonial-card">
+            <p class="quote-text">"Sebelumnya saya selalu kesulitan melacak royalti hasil streaming luar negeri saya. Sejak mempercayakan master lagu ke Vantone Musik, pelaporan analitik bulanan yang dikirim sangat detail dan transparan. Studio mastering mereka juga luar biasa membantu peningkatan kualitas audio saya."</p>
+            <div class="artist-profile">
+                <div class="artist-avatar">CC</div>
+                <div class="artist-info">
+                    <h4>Chairil Cena</h4>
+                    <p>Electronic Music Producer</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Artis 2 -->
+        <div class="testimonial-card">
+            <p class="quote-text">"Distribusi di Vantone super cepat. Hanya butuh beberapa hari, single saya sudah aktif dan diverifikasi di Spotify serta TikTok. Yang paling menyenangkan adalah mereka membiarkan kami sebagai musisi memegang penuh kepemilikan hak cipta master 100%!"</p>
+            <div class="artist-profile">
+                <div class="artist-avatar">AM</div>
+                <div class="artist-info">
+                    <h4>Aria Mahardika</h4>
+                    <p>Indie Folk Songwriter</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Artis 3 -->
+        <div class="testimonial-card">
+            <p class="quote-text">"Integrasi antara data distribusi Vantone dengan sistem hak cipta penerbitan saya sangat mulus berkat sinkronisasi kode ISRC yang instan. Sangat direkomendasikan untuk produser independen yang ingin merambah pasar global tanpa birokrasi berbelit."</p>
+            <div class="artist-profile">
+                <div class="artist-avatar">DS</div>
+                <div class="artist-info">
+                    <h4>Darmawan S.</h4>
+                    <p>Composer & Arranger</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- FOOTER GLOBAL -->
+<footer class="footer-main">
+    <div class="container">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 5px;">
+            <div>
+                <h3 style="margin-bottom: 15px; font-weight: 800;">VANTONE MUSIK</h3>
+                <p style="color:var(--text-muted); font-size:12px; line-height: 1.6;">Solusi terpercaya untuk kemitraan white-label penyiaran lagu digital independen ke 150+ global streaming platforms.</p>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 15px; font-weight: 800;">Navigasi Menu</h4>
+                <a href="index.html" class="footer-link">Home</a>
+                <a href="what-is-vantone.html" class="footer-link">What is VanTone</a>
+                <a href="about.html" class="footer-link">About Us</a>
+                <a href="outservice.html" class="footer-link">Our Services</a>
+                <a href="pricing.html" class="footer-link">Pricing Plans</a>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 15px; font-weight: 800;">Kebijakan Hukum</h4>
+                <a href="privacy-policy.html" class="footer-link">Privacy Policy</a>
+                <a href="terms-of-service.html" class="footer-link">Terms & Service</a>
+                <a href="contact.html" class="footer-link">Contact Support</a>
+            </div>
+        </div>
+        <hr style="border-color:var(--border-color); margin: 30px 0 20px;">
+        <p style="text-align:center; color:#555; font-size:12px;">&copy; 2026 VanTone Musik. All rights reserved. White-Label Distribution Network.</p>
+    </div>
+</footer>
+
+<!-- SCRIPT SIDEBAR GLOBAL -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const dropdownPanel = document.getElementById('dropdownPanel');
+        
+        if (hamburgerBtn && dropdownPanel) {
+            hamburgerBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                hamburgerBtn.classList.toggle('active');
+                dropdownPanel.classList.toggle('open');
+            });
+            document.addEventListener('click', (e) => {
+                if (!dropdownPanel.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+                    hamburgerBtn.classList.remove('active');
+                    dropdownPanel.classList.remove('open');
+                }
+            });
+        }
+    });
+</script>
 </body>
 </html>
