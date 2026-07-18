@@ -6,7 +6,6 @@
     <!-- SEO Meta Tags -->
     <meta name="description" content="Siapa itu VanTone? VanTone Music adalah platform independen musik aggregator global skala premium yang membantu musisi mendistribusikan karya ke Spotify, Apple Music, dan TikTok dengan transparansi penuh.">
     <link rel="stylesheet" href="style.css">
-    <!-- Google Fonts untuk kesan premium -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -30,11 +29,11 @@
             overflow-x: hidden;
         }
 
-        /* Top Bar / Navigation - Disamakan dengan Landing Page */
+        /* Top Bar / Navigation dengan Logo Original */
         nav { 
             background: rgba(9, 9, 11, 0.95); 
             backdrop-filter: blur(10px);
-            padding: 20px 5%; 
+            padding: 15px 5%; 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
@@ -47,24 +46,13 @@
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 12px;
             text-decoration: none;
         }
 
-        /* Replika visual logo dari gambar utama */
-        .logo-icon {
-            width: 28px;
-            height: 28px;
-            background: linear-gradient(135deg, #c5a880 0%, #8a6f4d 100%);
-            clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
-            display: inline-block;
-        }
-
-        .logo-text { 
-            font-weight: 800; 
-            color: var(--text-white); 
-            font-size: 22px;
-            letter-spacing: 1px;
+        .logo-img {
+            height: 32px; /* Menyesuaikan proporsi navbar */
+            width: auto;
+            object-fit: contain;
         }
 
         .nav-link {
@@ -140,7 +128,6 @@
         /* Premium Table Design */
         .table-section {
             margin: 50px 0;
-            animation-delay: 0.3s;
         }
 
         .table-title {
@@ -200,7 +187,6 @@
             text-align: center;
             margin-top: 60px;
             box-shadow: 0 0 40px rgba(255, 0, 80, 0.05);
-            animation-delay: 0.5s;
         }
 
         .btn-premium {
@@ -245,11 +231,10 @@
 </head>
 <body>
 
-    <!-- Top Bar Navigation Fiksasi & Konsisten -->
+    <!-- Top Bar Navigation Resmi dengan Logo Original Anda -->
     <nav>
         <a href="index.html" class="logo-container">
-            <div class="logo-icon"></div>
-            <span class="logo-text">VANTONE</span>
+            <img src="https://vantone.store/vantonelogo.png" alt="VanTone Logo" class="logo-img">
         </a>
         <a href="index.html" class="nav-link">Home</a>
     </nav>
@@ -266,15 +251,15 @@
 
         <section class="animate-fade" style="animation-delay: 0.15s;">
             <p class="body-text">
-                Di era industri digital yang bergerak eksponensial, kami memahami tantangan terbesar musisi independen: transparansi, kecepatan penetrasi pasar, dan kepemilikan hak royalti yang adil. VanTone hadir untuk memangkas batasan tradisional tersebut, memosisikan karya Anda langsung ke telinga pendengar global melalui jaringan distribusi utama seperti Spotify, Apple Music, TikTok, Resso, Amazon Music, hingga puluhan platform global lainnya.
+                Di era industri digital yang bergerak eksponensial, kami memahami tantangan terbesar musisi independen: transparansi, kecepatan penetrasi pasar, dan kepemilikan hak royalti yang adil. VanTone hadir untuk memangkas batasan tradisional tersebut, memosisikan karya Anda langsung ke telinga pendengar global melalui jaringan distribusi utama seperti Spotify, Apple Music, TikTok, Amazon Music, hingga puluhan platform global lainnya.
             </p>
             <p class="body-text">
                 Komitmen utama kami berlandaskan pada kontrol penuh artis. Melalui arsitektur manajemen aset yang canggih, setiap kreator yang tergabung bersama VanTone memegang hak kepemilikan master 100%. Dengan model bagi hasil yang optimal (skema kemitraan 30/70), VanTone memfokuskan investasinya pada pemeliharaan infrastruktur data portal, memastikan pelaporan royalti tersaji secara akurat, transparan, dan dapat ditarik dengan fleksibilitas tinggi.
             </p>
         </section>
 
-        <!-- Tabel Megah & Premium Perbandingan Fitur -->
-        <section class="table-section animate-fade">
+        <!-- Tabel Perbandingan Fitur - DUA-DUANYA DIBUAT POSITIF & MENARIK -->
+        <section class="table-section animate-fade" style="animation-delay: 0.3s;">
             <div class="table-title">Mengapa Memilih Infrastruktur VanTone?</div>
             <div class="table-responsive">
                 <table>
@@ -298,17 +283,17 @@
                         </tr>
                         <tr>
                             <td>Skema Pembagian Royalti</td>
-                            <td>Potongan tersembunyi / Biaya tahunan</td>
+                            <td>Potongan tahunan / Biaya tetap</td>
                             <td class="highlight-td">30% Platform / 70% Hak Artis Bersih</td>
                         </tr>
                         <tr>
                             <td>Optimasi Monetisasi Sosial</td>
-                            <td>Proses klaim manual lambat</td>
+                            <td>Proses klaim manual secara berkala</td>
                             <td class="highlight-td">Prioritas Akses Audio TikTok & Tren Shorts</td>
                         </tr>
                         <tr>
                             <td>Sistem Pelaporan Data</td>
-                            <td>Tertunda 3-6 bulan</td>
+                            <td>Mengikuti siklus rilis standar</td>
                             <td class="highlight-td">Dashboard Transparan & Akurat</td>
                         </tr>
                     </tbody>
@@ -317,7 +302,7 @@
         </section>
 
         <!-- Call to Action Box Premium -->
-        <section class="action-box animate-fade">
+        <section class="action-box animate-fade" style="animation-delay: 0.45s;">
             <h2 style="margin-top: 0; font-size: 24px; font-weight: 700;">Siap Mengambil Kendali Penuh Atas Musik Anda?</h2>
             <p style="color: var(--text-gray); font-size: 15px; margin-bottom: 20px;">
                 Bergabunglah bersama ribuan musisi independen lainnya dan perluas jangkauan pendengar global Anda sekarang juga.
