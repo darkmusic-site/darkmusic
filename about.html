@@ -1,89 +1,136 @@
+<!DOCTYPE html>
 <html lang="id">
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXFQE2LLMY"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXFQE2LLMY');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Siapa itu VanTone? - Mengenal VanTone Music Agregator</title>
+    <title>Siapa itu VanTone? | VanTone Musik</title>
     <!-- SEO Meta Tags -->
     <meta name="description" content="Siapa itu VanTone? VanTone Music adalah platform independen musik aggregator global skala premium yang membantu musisi mendistribusikan karya ke Spotify, Apple Music, dan TikTok dengan transparansi penuh.">
     <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     
     <style>
-        :root {
-            --bg-dark: #09090b;
-            --card-dark: #121214;
-            --accent-pink: #ff0050;
-            --text-white: #ffffff;
-            --text-gray: #a1a1aa;
-            --border-glow: rgba(255, 0, 80, 0.15);
+        /* --- PALET WARNA & CORE STYLE (SOUNDON BLACK & RED) --- */
+        :root { 
+            --primary: #ff0050; 
+            --dark: #000000; 
+            --gray: #0d0d0d; 
+            --card-bg: #121212;
+            --border-color: #222222;
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: var(--bg-dark); 
-            color: var(--text-white);
-            padding: 0; 
-            margin: 0; 
+            background-color: var(--dark); 
+            color: var(--text-main); 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            padding-top: 70px; 
             overflow-x: hidden;
         }
 
-        /* Top Bar / Navigation dengan Logo Original */
-        nav { 
-            background: rgba(9, 9, 11, 0.95); 
-            backdrop-filter: blur(10px);
-            padding: 15px 5%; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
         }
-
-        .logo-container {
+        
+        /* --- NAVIGATION BAR GLOBAL --- */
+        .main-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background-color: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 9999;
+        }
+        .nav-container {
+            height: 100%;
             display: flex;
             align-items: center;
-            text-decoration: none;
+            justify-content: space-between;
+        }
+        .nav-logo { display: flex; align-items: center; text-decoration: none; gap: 10px; }
+        .nav-logo img { height: 35px; width: auto; object-fit: contain; }
+        .nav-logo span { color: white; font-weight: 800; font-size: 1.4rem; letter-spacing: 1px; }
+        
+        .nav-menu-desktop { display: flex; gap: 24px; }
+        .nav-menu-desktop a { color: var(--text-muted); text-decoration: none; font-size: 0.95rem; font-weight: 600; transition: color 0.2s; }
+        .nav-menu-desktop a:hover { color: var(--primary); }
+        
+        .hamburger-toggle { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; gap: 6px; }
+        .hamburger-toggle .bar { width: 25px; height: 2px; background-color: white; transition: all 0.3s; }
+        .hamburger-toggle.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .hamburger-toggle.active .bar:nth-child(2) { opacity: 0; }
+        .hamburger-toggle.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+        /* PANEL DROPDOWN KANAN (SIDEBAR) */
+        .dropdown-panel {
+            position: absolute;
+            top: 70px;
+            right: -320px;
+            width: 300px;
+            background-color: var(--card-bg);
+            border-left: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 30px 24px;
+            box-shadow: -10px 10px 30px rgba(0,0,0,0.5);
+            transition: right 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            border-bottom-left-radius: 16px;
+        }
+        .dropdown-panel.open { right: 0; }
+        .dropdown-divider { border: none; border-top: 1px solid var(--border-color); margin: 5px 0; }
+        .dropdown-link, .dropdown-link-sub { color: var(--text-muted); text-decoration: none; display: block; }
+        .dropdown-link:hover, .dropdown-link-sub:hover { color: var(--primary); }
+        .dropdown-link { font-size: 1.1rem; font-weight: 600; padding: 6px 0; }
+        .dropdown-link-sub { font-size: 0.95rem; padding: 4px 0; }
+        
+        .dropdown-socials p { font-size: 0.85rem; color: #555; font-weight: 600; margin-bottom: 10px; letter-spacing: 0.5px; }
+        .social-icons { display: flex; gap: 16px; }
+        .social-icons a { color: white; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: color 0.2s; }
+        .social-icons a:hover { color: var(--primary); }
+        .mobile-only-links { display: none; }
+
+        /* --- TENTANG KAMI AREA CONTENT --- */
+        .about-hero {
+            padding: 80px 20px 30px;
+            text-align: center;
+            background: radial-gradient(circle at top left, #1f000b 0%, var(--dark) 70%);
+        }
+        .about-hero h1 { font-size: 2.6rem; font-weight: 800; margin-bottom: 20px; line-height: 1.2; }
+        .about-hero h1 span { color: var(--primary); }
+        
+        .about-content-box {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
-        .logo-img {
-            height: 32px; /* Menyesuaikan proporsi navbar */
-            width: auto;
-            object-fit: contain;
-        }
-
-        .nav-link {
-            text-decoration: none; 
-            color: var(--text-white); 
-            font-weight: 600;
-            font-size: 14px;
-            letter-spacing: 0.5px;
-            transition: color 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 8px 16px;
-            border-radius: 20px;
-        }
-
-        .nav-link:hover {
-            color: var(--accent-pink);
-            border-color: var(--accent-pink);
-        }
-
-        /* Main Content Container */
-        .container { 
-            max-width: 900px; 
-            margin: 60px auto; 
-            padding: 20px; 
-        }
-
-        /* Animasi Efek Megah (Fade-in-up) */
-        .animate-fade {
-            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        /* Efek Animasi Megah */
+        .animate-fade-up {
             opacity: 0;
-            transform: translateY(30px);
+            transform: translateY(35px);
+            animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         @keyframes fadeInUp {
@@ -93,75 +140,62 @@
             }
         }
 
-        /* Typography */
-        h1 { 
-            font-size: 42px; 
-            font-weight: 800; 
-            line-height: 1.2;
-            margin-bottom: 24px;
-            background: linear-gradient(to right, #ffffff, #a1a1aa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        h1 span {
-            background: linear-gradient(to right, #ff0050, #ff4081);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: block;
-        }
-
         .lead-text {
-            font-size: 18px;
+            font-size: 1.15rem;
             line-height: 1.8;
-            color: var(--text-white);
+            color: var(--text-main);
             margin-bottom: 30px;
+            text-align: center;
         }
 
         .body-text { 
-            font-size: 16px;
+            font-size: 1rem;
             line-height: 1.9; 
-            color: var(--text-gray); 
-            margin-bottom: 20px;
+            color: var(--text-muted); 
+            margin-bottom: 24px;
+            text-align: justify;
         }
 
-        /* Premium Table Design */
+        /* Premium Table Design - Megah */
         .table-section {
-            margin: 50px 0;
+            margin: 60px 0;
         }
 
         .table-title {
-            font-size: 22px;
-            font-weight: 700;
+            font-size: 1.4rem;
+            font-weight: 800;
             margin-bottom: 20px;
-            color: var(--text-white);
+            color: var(--text-main);
+            letter-spacing: 0.5px;
         }
 
         .table-responsive {
             overflow-x: auto;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            background: var(--card-dark);
+            background: var(--card-bg);
             text-align: left;
-            font-size: 15px;
+            font-size: 0.95rem;
         }
 
         th, td {
-            padding: 16px 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border-color);
         }
 
         th {
             background-color: rgba(255, 255, 255, 0.02);
-            color: var(--text-white);
-            font-weight: 700;
+            color: var(--text-main);
+            font-weight: 800;
             letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
         }
 
         tr:last-child td {
@@ -169,150 +203,244 @@
         }
 
         tr:hover td {
-            background-color: rgba(255, 0, 80, 0.02);
-            color: var(--text-white);
+            background-color: rgba(255, 0, 80, 0.03);
+            color: var(--text-main);
         }
 
         .highlight-td {
-            color: var(--accent-pink);
+            color: var(--primary);
             font-weight: 600;
         }
 
-        /* Premium Action Button Section */
+        /* Action Box Call to Action */
         .action-box {
-            background: linear-gradient(135deg, rgba(18, 18, 20, 0.8) 0%, rgba(25, 25, 28, 0.8) 100%);
-            border: 1px solid var(--border-glow);
-            padding: 40px;
-            border-radius: 16px;
+            background: linear-gradient(180deg, #161213 0%, var(--card-bg) 100%);
+            border: 1px solid var(--border-color);
+            padding: 50px 30px;
+            border-radius: 24px;
             text-align: center;
-            margin-top: 60px;
-            box-shadow: 0 0 40px rgba(255, 0, 80, 0.05);
+            margin: 60px 0 20px;
         }
 
-        .btn-premium {
+        .btn-action-premium {
             display: inline-block;
-            background: var(--accent-pink);
+            background: var(--primary);
             color: white;
-            padding: 14px 36px;
-            border-radius: 30px;
+            padding: 14px 40px;
+            border-radius: 50px;
             text-decoration: none;
             font-weight: 700;
-            font-size: 16px;
-            letter-spacing: 0.5px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 4px 20px rgba(255, 0, 80, 0.4);
-            margin-top: 15px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            box-shadow: 0 8px 20px rgba(255, 0, 80, 0.2);
+            margin-top: 20px;
         }
 
-        .btn-premium:hover {
+        .btn-action-premium:hover {
+            background: #ff2a6d;
+            box-shadow: 0 8px 25px rgba(255, 0, 80, 0.4);
             transform: translateY(-2px);
-            box-shadow: 0 6px 30px rgba(255, 0, 80, 0.6);
         }
 
-        .btn-back {
-            display: inline-block;
-            margin-top: 25px;
-            text-decoration: none;
-            color: var(--text-gray);
-            font-size: 14px;
-            transition: color 0.2s ease;
-        }
+        /* --- FOOTER MAIN AREA --- */
+        .footer-main { background: #000000; color: white; padding: 80px 0 30px; border-top: 1px solid var(--border-color); margin-top: 60px; }
+        .footer-link { color: var(--text-muted); text-decoration: none; display: block; margin-bottom: 12px; font-size: 0.9rem; transition: color 0.2s; }
+        .footer-link:hover { color: var(--primary); }
 
-        .btn-back:hover {
-            color: var(--text-white);
-        }
-
-        @media (max-width: 768px) {
-            h1 { font-size: 32px; }
-            .container { padding: 15px; margin: 30px auto; }
-            th, td { padding: 12px 15px; font-size: 14px; }
+        @media (max-width: 992px) {
+            .nav-menu-desktop { display: none; }
+            .mobile-only-links { display: block; }
+            .dropdown-panel { width: 100%; right: -100%; border-left: none; }
+            .dropdown-panel.open { right: 0; }
+            .about-hero h1 { font-size: 2.1rem; }
+            th, td { padding: 14px 16px; font-size: 0.9rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Top Bar Navigation Resmi dengan Logo Original Anda -->
-    <nav>
-        <a href="index.html" class="logo-container">
-            <img src="https://vantone.store/vantonelogo.png" alt="VanTone Logo" class="logo-img">
+<!-- NAVIGATION HEADER GLOBAL (PERSIS DENGAN PRICING) -->
+<header class="main-navbar">
+    <div class="container nav-container">
+        <a href="index.html" class="nav-logo">
+            <img src="images/vantonelogo.png" alt="Vantone Musik Logo" onerror="this.src='vantonelogo.png';">
+            <span>VANTONE</span>
         </a>
-        <a href="index.html" class="nav-link">Home</a>
-    </nav>
+        <nav class="nav-menu-desktop">
+            <a href="index.html">Home</a>
+            <a href="what-is-vantone.html">What is VanTone</a>
+            <a href="about.html" style="color: var(--primary);">About</a>
+            <a href="outservice.html">Our Services</a>
+            <a href="faq-vantone.html">FAQ</a>
+            <a href="pricing.html">Pricing</a>
+        </nav>
+        <button class="hamburger-toggle" id="hamburgerBtn" aria-label="Toggle Menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+    </div>
 
-    <!-- Konten Utama dengan Konten Kaya SEO -->
-    <div class="container">
+    <!-- DROPDOWN SLIDE PANEL (SIDEBAR) -->
+    <div class="dropdown-panel" id="dropdownPanel">
+        <div class="dropdown-section mobile-only-links">
+            <a href="index.html" class="dropdown-link">Home</a>
+            <a href="what-is-vantone.html" class="dropdown-link">What is VanTone</a>
+            <a href="about.html" class="dropdown-link" style="color: var(--primary);">About</a>
+            <a href="outservice.html" class="dropdown-link">Our Services</a>
+            <a href="faq-vantone.html" class="dropdown-link">FAQ</a>
+            <a href="pricing.html" class="dropdown-link">Pricing</a>
+            <hr class="dropdown-divider">
+        </div>
         
-        <header class="animate-fade">
-            <h1>Siapa itu VanTone? <span>Infrastruktur Global Musik Independen.</span></h1>
+        <div class="dropdown-extra-links">
+            <a href="contact.html" class="dropdown-link-sub">Contact Us</a>
+            <a href="terms-of-service.html" class="dropdown-link-sub">Terms of Service</a>
+            <a href="privacy-policy.html" class="dropdown-link-sub">Privacy Policy</a>
+        </div>
+        
+        <div class="dropdown-socials">
+            <p>FOLLOW OUR SOUND</p>
+            <div class="social-icons">
+                <a href="https://www.tiktok.com/@vantone_label" target="_blank">TikTok</a>
+                <a href="https://www.instagram.com/vantone.store" target="_blank">Instagram</a>
+                <a href="https://youtube.com/@vantone_store" target="_blank">YouTube</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ABOUT CONTENT AREA -->
+<div style="background-color: #000000; display: block;">
+    
+    <section class="about-hero animate-fade-up">
+        <div class="container">
+            <h1>Siapa itu VanTone? <br><span>Infrastruktur Global Musik Independen</span></h1>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="about-content-box animate-fade-up" style="animation-delay: 0.1s;">
             <p class="lead-text">
                 VanTone Music adalah platform terintegrasi *all-in-one* skala premium yang dirancang khusus untuk memfasilitasi musisi, kreator, dan label independen dalam mengamankan serta mengeksplorasi potensi penuh distribusi musik di ranah internasional.
             </p>
-        </header>
-
-        <section class="animate-fade" style="animation-delay: 0.15s;">
+            
             <p class="body-text">
                 Di era industri digital yang bergerak eksponensial, kami memahami tantangan terbesar musisi independen: transparansi, kecepatan penetrasi pasar, dan kepemilikan hak royalti yang adil. VanTone hadir untuk memangkas batasan tradisional tersebut, memosisikan karya Anda langsung ke telinga pendengar global melalui jaringan distribusi utama seperti Spotify, Apple Music, TikTok, Amazon Music, hingga puluhan platform global lainnya.
             </p>
+            
             <p class="body-text">
                 Komitmen utama kami berlandaskan pada kontrol penuh artis. Melalui arsitektur manajemen aset yang canggih, setiap kreator yang tergabung bersama VanTone memegang hak kepemilikan master 100%. Dengan model bagi hasil yang optimal (skema kemitraan 30/70), VanTone memfokuskan investasinya pada pemeliharaan infrastruktur data portal, memastikan pelaporan royalti tersaji secara akurat, transparan, dan dapat ditarik dengan fleksibilitas tinggi.
             </p>
-        </section>
+        </div>
 
-        <!-- Tabel Perbandingan Fitur - DUA-DUANYA DIBUAT POSITIF & MENARIK -->
-        <section class="table-section animate-fade" style="animation-delay: 0.3s;">
-            <div class="table-title">Mengapa Memilih Infrastruktur VanTone?</div>
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Fitur & Layanan</th>
-                            <th>Agregator Tradisional</th>
-                            <th style="color: var(--accent-pink);">VanTone Premium</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Jangkauan Ekspor Musik</td>
-                            <td>Terbatas pada wilayah tertentu</td>
-                            <td class="highlight-td">Global / Ranah Internasional</td>
-                        </tr>
-                        <tr>
-                            <td>Kepemilikan Hak Master</td>
-                            <td>Kontrak mengikat / Berjangka</td>
-                            <td class="highlight-td">100% Kendali Penuh di Tangan Anda</td>
-                        </tr>
-                        <tr>
-                            <td>Skema Pembagian Royalti</td>
-                            <td>Potongan tahunan / Biaya tetap</td>
-                            <td class="highlight-td">30% Platform / 70% Hak Artis Bersih</td>
-                        </tr>
-                        <tr>
-                            <td>Optimasi Monetisasi Sosial</td>
-                            <td>Proses klaim manual secara berkala</td>
-                            <td class="highlight-td">Prioritas Akses Audio TikTok & Tren Shorts</td>
-                        </tr>
-                        <tr>
-                            <td>Sistem Pelaporan Data</td>
-                            <td>Mengikuti siklus rilis standar</td>
-                            <td class="highlight-td">Dashboard Transparan & Akurat</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <!-- Tabel Perbandingan Megah Premium (Bahasa Aman Taktis) -->
+        <section class="table-section animate-fade-up" style="animation-delay: 0.2s;">
+            <div class="about-content-box">
+                <div class="table-title">Mengapa Memilih Infrastruktur VanTone?</div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fitur & Layanan</th>
+                                <th>Agregator Tradisional</th>
+                                <th style="color: var(--primary);">VanTone Premium</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Jangkauan Ekspor Musik</td>
+                                <td>Terbatas pada wilayah tertentu</td>
+                                <td class="highlight-td">Global / Ranah Internasional</td>
+                            </tr>
+                            <tr>
+                                <td>Kepemilikan Hak Master</td>
+                                <td>Kontrak mengikat / Berjangka</td>
+                                <td class="highlight-td">100% Kendali Penuh di Tangan Anda</td>
+                            </tr>
+                            <tr>
+                                <td>Skema Pembagian Royalti</td>
+                                <td>Potongan tahunan / Biaya tetap</td>
+                                <td class="highlight-td">30% Platform / 70% Hak Artis Bersih</td>
+                            </tr>
+                            <tr>
+                                <td>Optimasi Monetisasi Sosial</td>
+                                <td>Proses klaim manual secara berkala</td>
+                                <td class="highlight-td">Prioritas Akses Audio TikTok & Tren Shorts</td>
+                            </tr>
+                            <tr>
+                                <td>Sistem Pelaporan Data</td>
+                                <td>Mengikuti siklus rilis standar</td>
+                                <td class="highlight-td">Dashboard Transparan & Akurat</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
-        <!-- Call to Action Box Premium -->
-        <section class="action-box animate-fade" style="animation-delay: 0.45s;">
-            <h2 style="margin-top: 0; font-size: 24px; font-weight: 700;">Siap Mengambil Kendali Penuh Atas Musik Anda?</h2>
-            <p style="color: var(--text-gray); font-size: 15px; margin-bottom: 20px;">
-                Bergabunglah bersama ribuan musisi independen lainnya dan perluas jangkauan pendengar global Anda sekarang juga.
-            </p>
-            <a href="index.html" class="btn-premium">Jelajahi Lebih Lanjut</a>
-            <br>
-            <a href="index.html" class="btn-back">&larr; Kembali ke Beranda</a>
-        </section>
+        <!-- Call to Action Box -->
+        <div class="about-content-box animate-fade-up" style="animation-delay: 0.3s;">
+            <section class="action-box">
+                <h2 style="margin-top: 0; font-size: 1.5rem; font-weight: 800; color: white;">Siap Mengambil Kendali Penuh Atas Musik Anda?</h2>
+                <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 10px;">
+                    Bergabunglah bersama ribuan musisi independen lainnya dan perluas jangkauan pendengar global Anda sekarang juga.
+                </p>
+                <a href="pricing.html" class="btn-action-premium">Lihat Pilihan Rencana</a>
+            </section>
+        </div>
 
     </div>
+</div>
 
+<!-- FOOTER GLOBAL (PERSIS DENGAN PRICING) -->
+<footer class="footer-main">
+    <div class="container">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 5px;">
+            <div>
+                <h3 style="margin-bottom: 15px; font-weight: 800;">VANTONE MUSIK</h3>
+                <p style="color:var(--text-muted); font-size:12px; line-height: 1.6;">Solusi terpercaya untuk kemitraan white-label penyiaran lagu digital independen ke 150+ global streaming platforms.</p>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 15px; font-weight: 800;">Navigasi Menu</h4>
+                <a href="index.html" class="footer-link">Home</a>
+                <a href="what-is-vantone.html" class="footer-link">What is VanTone</a>
+                <a href="about.html" class="footer-link">About Us</a>
+                <a href="outservice.html" class="footer-link">Our Services</a>
+                <a href="pricing.html" class="footer-link">Pricing Plans</a>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 15px; font-weight: 800;">Kebijakan Hukum</h4>
+                <a href="privacy-policy.html" class="footer-link">Privacy Policy</a>
+                <a href="terms-of-service.html" class="footer-link">Terms & Service</a>
+                <a href="contact.html" class="footer-link">Contact Support</a>
+            </div>
+        </div>
+        <hr style="border-color:var(--border-color); margin: 30px 0 20px;">
+        <p style="text-align:center; color:#555; font-size:12px;">&copy; 2026 VanTone Musik. All rights reserved. White-Label Distribution Network.</p>
+    </div>
+</footer>
+
+<!-- SCRIPT SIDEBAR GLOBAL -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const dropdownPanel = document.getElementById('dropdownPanel');
+        
+        if (hamburgerBtn && dropdownPanel) {
+            hamburgerBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                hamburgerBtn.classList.toggle('active');
+                dropdownPanel.classList.toggle('open');
+            });
+            document.addEventListener('click', (e) => {
+                if (!dropdownPanel.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+                    hamburgerBtn.classList.remove('active');
+                    dropdownPanel.classList.remove('open');
+                }
+            });
+        }
+    });
+</script>
 </body>
 </html>
