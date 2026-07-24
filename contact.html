@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Support - VanTone</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0f0f11;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .contact-container {
+            background-color: #18181c;
+            border: 1px solid #2a2a30;
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .contact-header {
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .contact-header h2 {
+            font-size: 24px;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .contact-header p {
+            font-size: 14px;
+            color: #a0a0ab;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            color: #ccc;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 14px;
+            background-color: #0f0f11;
+            border: 1px solid #33333c;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ff0050;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background-color: #ff0050;
+            border: none;
+            border-radius: 6px;
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: background-color 0.2s ease, opacity 0.2s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: #e00045;
+        }
+
+        .btn-submit:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        /* Status Alert Messages */
+        .alert-message {
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-bottom: 20px;
+            display: none;
+            line-height: 1.4;
+        }
+
+        .alert-success {
+            background-color: rgba(40, 167, 69, 0.15);
+            border: 1px solid #28a745;
+            color: #28a745;
+        }
+
+        .alert-error {
+            background-color: rgba(220, 53, 69, 0.15);
+            border: 1px solid #dc3545;
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="contact-container">
+        <div class="contact-header">
+            <h2>VanTone Support</h2>
+            <p>Kirimkan pesan atau pertanyaan Anda di bawah ini.</p>
+        </div>
+
+        <!-- Notifikasi Status Pengiriman -->
+        <div id="status-message" class="alert-message"></div>
+
+        <form id="contact-form">
+            <div class="form-group">
+                <label for="name">Nama Lengkap</label>
+                <input type="text" id="name" name="name" placeholder="Masukkan nama Anda" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Alamat Email</label>
+                <input type="email" id="email" name="email" placeholder="nama@email.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="subject">Subjek</label>
+                <input type="text" id="subject" name="subject" placeholder="Contoh: Pertanyaan Lisensi Lagu" required>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Pesan / Kendala</label>
+                <textarea id="message" name="message" placeholder="Jelaskan detail pertanyaan Anda..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn-submit" id="submit-btn">KIRIM PESAN</button>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById("contact-form");
+        const statusMessage = document.getElementById("status-message");
+        const submitBtn = document.getElementById("submit-btn");
+
+        // Cloudflare Worker Endpoint
+        const WORKER_URL = "https://contact-forum.samsungsultra665.workers.dev";
+
+        form.addEventListener("submit", async function(event) {
+            event.preventDefault();
+            
+            // Ubah state tombol saat proses pengiriman
+            submitBtn.disabled = true;
+            submitBtn.innerText = "MENGIRIM PESAN...";
+            statusMessage.style.display = "none";
+
+            // Mengambil data dari form
+            const formData = {
+                name: document.getElementById("name").value,
+                email: document.getElementById("email").value,
+                subject: document.getElementById("subject").value,
+                message: document.getElementById("message").value
+            };
+
+            try {
+                const response = await fetch(WORKER_URL, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    statusMessage.className = "alert-message alert-success";
+                    statusMessage.innerHTML = `Pesan berhasil dikirim! Ref Tiket: <strong>#${result.ticketId}</strong>.<br>Cek inbox email Anda untuk konfirmasi.`;
+                    statusMessage.style.display = "block";
+                    form.reset();
+                } else {
+                    throw new Error(result.error || "Gagal mengirim pesan.");
+                }
+            } catch (error) {
+                statusMessage.className = "alert-message alert-error";
+                statusMessage.innerText = "Gagal mengirim pesan. Silakan periksa koneksi atau coba lagi nanti.";
+                statusMessage.style.display = "block";
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = "KIRIM PESAN";
+            }
+        });
+    </script>
+
+</body>
+</html>
