@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://vantone.store/sitemap.xml
+Sitemap: https://article.vantone.store/sitemap.xml
