@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Jual Musik Anda Secara Online | Unggah Musik & Dapatkan Penghasilan | Vantone Music</title>
+    <meta name="description" content="Pelajari cara mendistribusikan musik Anda ke Spotify, Apple Music, YouTube, dan platform global lainnya bersama Vantone Music."/>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --vantone-black: #0a0a0a;
+            --vantone-card-bg: #141414;
+            --vantone-purple: #7928ca;
+            --vantone-pink: #ff0080;
+            --vantone-accent: linear-gradient(135deg, #7928ca 0%, #ff0080 100%);
+            --vantone-text: #ffffff;
+            --vantone-subtext: #a1a1a1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--vantone-black);
+            color: var(--vantone-text);
+            line-height: 1.6;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        mark {
+            background: var(--vantone-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background-color: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            border-bottom: 1px solid #222;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: var(--vantone-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 0.95rem;
+            color: var(--vantone-subtext);
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--vantone-text);
+        }
+
+        .btn-primary {
+            background: var(--vantone-accent);
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            display: inline-block;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 0, 128, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 160px 5% 80px;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            color: var(--vantone-subtext);
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        /* Grid Logo Toko Musik Digital */
+        .store-logos-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px 30px;
+            align-items: center;
+            justify-items: center;
+            max-width: 480px;
+            margin: 30px auto 40px;
+        }
+
+        .store-logos-grid img {
+            height: auto;
+            max-height: 32px;
+            width: auto;
+            max-width: 140px;
+            filter: brightness(0) invert(1);
+            opacity: 0.95;
+        }
+
+        /* Content Sections */
+        .section {
+            padding: 80px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .section-desc {
+            color: var(--vantone-subtext);
+            margin-bottom: 25px;
+            font-size: 1.05rem;
+        }
+
+        /* Mux Video Container - Non Interactive Loop Video */
+        .video-wrapper {
+            width: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid #222;
+            background: #000;
+        }
+
+        .video-wrapper iframe {
+            width: 100%;
+            border: none;
+            aspect-ratio: 16/9;
+            display: block;
+            pointer-events: none; /* Menyembunyikan interaksi & klik */
+        }
+
+        /* Step List */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .step-card {
+            background: var(--vantone-card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid #222;
+        }
+
+        .step-number {
+            font-size: 1.5rem;
+            font-weight: 800;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--vantone-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .step-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .step-card p {
+            color: var(--vantone-subtext);
+            font-size: 0.95rem;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid #222;
+            padding: 60px 5% 30px;
+            margin-top: 80px;
+            background-color: #050505;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-col h4 {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-col ul li a {
+            color: var(--vantone-subtext);
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .footer-col ul li a:hover {
+            color: var(--vantone-text);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .nav-links {
+                display: none; /* Mode simpel untuk seluler */
+            }
+
+            .store-logos-grid {
+                gap: 20px 20px;
+            }
+
+            .store-logos-grid img {
+                max-height: 26px;
+                max-width: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header / Navbar -->
+    <nav class="navbar">
+        <a href="vantone.store/vantonelogo.png" class="logo">VANTONE MUSIC</a>
+        <ul class="nav-links">
+            <li><a href="#fitur">Fitur</a></li>
+            <li><a href="#langkah">Cara Kerja</a></li>
+            <li><a href="#layanan">Layanan</a></li>
+            <li><a href="/login">Masuk</a></li>
+            <li><a href="/signup" class="btn-primary">Daftar</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <h1>Jual <mark>Musik Anda</mark> Secara Online dengan Vantone Music</h1>
+        <p>Unggah lagu Anda ke Spotify, Apple Music, YouTube, Amazon, dan 150+ platform musik global. Pertahankan 100% hak cipta dan dapatkan penghasilan penuh.</p>
+        
+        <!-- Grid Logo Toko Musik Digital -->
+        <div class="store-logos-grid">
+            <img src="https://www.datocms-assets.com/119568/1707246236-spotify-logo-white.png" alt="Spotify" />
+            <img src="https://www.datocms-assets.com/119568/1707246729-apple-logo-white.svg" alt="Apple Music" />
+            <img src="https://www.datocms-assets.com/119568/1707246830-youtube-logo-white.svg" alt="YouTube Music" />
+            <img src="https://www.datocms-assets.com/119568/1707246774-amazon-logo-white.svg" alt="Amazon Music" />
+            <img src="https://www.datocms-assets.com/119568/1707247188-tidal-logo-white.svg" alt="Tidal" />
+            <img src="https://www.datocms-assets.com/119568/1707246838-beatport-logo-white.svg" alt="Beatport" />
+        </div>
+
+        <a href="/signup" class="btn-primary" style="font-size: 1.1rem; padding: 14px 36px; border-radius: 50px;">Mulai Sekarang</a>
+    </header>
+
+    <!-- Section 1: Cara Kerja -->
+    <section id="langkah" class="section">
+        <div style="text-align: center; max-width: 700px; margin: 0 auto 50px;">
+            <h2 class="section-title">Cara Menjual <mark>Musik Anda</mark></h2>
+            <p class="section-desc">Proses cepat dan transparan untuk mendistribusikan karya musik Anda ke seluruh dunia.</p>
+        </div>
+
+        <div class="steps">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <h3>Unggah Musik Anda</h3>
+                <p>Unggah audio berkualitas tinggi, artwork, serta informasi rilisan Anda secara mudah melalui dasbor Vantone.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <h3>Kami Distribusikan</h3>
+                <p>Vantone Music akan mengirimkan karya Anda ke lebih dari 150 platform streaming utama di seluruh dunia.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <h3>Terima Penghasilan</h3>
+                <p>Dapatkan hasil dari setiap pemutaran dan unduhan. Tarik pendapatan Anda secara langsung tanpa potongan tersembunyi.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Video Embed Vantone (Video Mux Auto Play Loop) -->
+    <section id="fitur" class="section">
+        <div class="grid-2">
+            <div>
+                <h2 class="section-title">Nikmati <mark>Kolaborasi & Splits</mark> Tanpa Batas</h2>
+                <h3 style="color: var(--vantone-subtext); font-weight: 500; margin-bottom: 15px;">Pembagian Royalti Otomatis</h3>
+                <p class="section-desc">Atur pembagian royalti secara langsung kepada produser, penyanyi, maupun kolaborator Anda tanpa sistem administrasi yang rumit.</p>
+                <a href="/signup" class="btn-primary">Daftarkan Karya Anda</a>
+            </div>
+            
+            <!-- Integrasi Video Mux yang Disesuaikan (Autoplay, Loop, No Controls, No Click) -->
+            <div class="video-wrapper">
+                <iframe
+                  src="https://player.mux.com/1OBImWoAMtU8LhclQ7LDxEzZyBm9bZxO3k5SzXmHcaA?autoplay=muted&loop=true&controls=false"
+                  allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+                  allowfullscreen
+                ></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Layanan Vantone -->
+    <section id="layanan" class="section">
+        <div class="grid-2">
+            <div class="video-wrapper" style="order: 2;">
+                <!-- Ilustrasi Visual Tambahan / Placeholder Gambar Karya Vantone -->
+                <div style="padding: 60px; text-align: center; background: var(--vantone-card-bg);">
+                    <h3 style="font-size: 1.8rem; margin-bottom: 10px;">200+ Negara</h3>
+                    <p style="color: var(--vantone-subtext);">Jangkauan Distribusi Global Vantone Music</p>
+                </div>
+            </div>
+            <div style="order: 1;">
+                <h2 class="section-title">Distribusi Global <mark>Vantone Music</mark></h2>
+                <p class="section-desc"><strong>Jangkauan Internasional:</strong> Kami mengirimkan lagu Anda ke pendengar di seluruh penjuru dunia.</p>
+                <p class="section-desc"><strong>100% Hak Cipta:</strong> Kepemilikan penuh tetap milik Anda. Vantone tidak akan pernah mengambil alih hak master Anda.</p>
+                <a href="/signup" class="btn-primary">Pelajari Lebih Lanjut</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <div class="logo" style="margin-bottom: 15px;">VANTONE MUSIC</div>
+                <p style="color: var(--vantone-subtext); font-size: 0.85rem;">Platform distribusi musik independen masa depan.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Tentang Vantone</h4>
+                <ul>
+                    <li><a href="vantone.store/about">Tentang Kami</a></li>
+                    <li><a href="#">Karir</a></li>
+                    <li><a href="vantone.store/terms-of-service">Syarat & Ketentuan</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Layanan</h4>
+                <ul>
+                    <li><a href="#">Distribusi Digital</a></li>
+                    <li><a href="#">Vantone Splits</a></li>
+                    <li><a href="#">Promosi Musik</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Dukungan</h4>
+                <ul>
+                    <li><a href="vantone.store/contact">Pusat Bantuan</a></li>
+                    <li><a href="vantone.store/contact">Hubungi Kami</a></li>
+                    <li><a href="vantone.store/faq-vantone">FAQ</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
