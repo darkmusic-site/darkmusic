@@ -396,195 +396,110 @@
         faqItem.classList.toggle('active');
     }
 </script>
-<!-- ================= START: BANNER NOTIFIKASI UPGRADE VANTONE ================= -->
+<!-- ================= START: BANNER NOTIFIKASI UPGRADE VANTONE (RED GLOW) ================= -->
 <div id="vantone-bottom-banner" class="vantone-banner-container">
-  <!-- Tombol Tutup Banner -->
   <button class="banner-close-btn" onclick="closeVantoneBanner()" aria-label="Tutup Notifikasi">&times;</button>
   
   <div class="banner-content">
-    <!-- Ikon Gear Berputar -->
-    <div class="banner-icon-wrapper">
-      <svg class="gear-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="3"></circle>
-        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-      </svg>
+    <div class="banner-status-box">
+      <div class="banner-icon-wrapper">
+        <svg class="gear-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </div>
+      <div class="banner-status-text">
+        <span class="status-badge" style="color:#ff4d4d;">Update Berlangsung</span>
+        <span class="status-sub">Peralihan Layanan</span>
+      </div>
     </div>
 
-    <!-- Teks Pemberitahuan -->
+    <div class="banner-divider"></div>
+
     <div class="banner-text-wrapper">
-      <h4 class="banner-title">
-        MOHON PERHATIAN! WEBSITE INI SEDANG DALAM PENINGKATAN SISTEM SECARA MENYELURUH AGAR LAYANAN PENGGUNA TERINTEGRASI LEBIH BAIK.
-      </h4>
+      <div class="title-container">
+        <h4 class="banner-title shimmer-text-red">
+          MOHON PERHATIAN! WEBSITE INI SEDANG DALAM PENINGKATAN SISTEM SECARA MENYELURUH AGAR LAYANAN PENGGUNA TERINTEGRASI LEBIH BAIK.
+        </h4>
+        <span class="flare-sparkle">✦</span>
+      </div>
       <p class="banner-desc">
         Beberapa fitur portal, seperti (<code>portal.vantone.store</code>), sedang tahap upgrade & integrasi. Antarmuka utama tetap aktif. Harap maklum.
       </p>
     </div>
-
-    <!-- Ikon Sparkle / Kilau Aksen -->
-    <div class="banner-sparkle">✨</div>
   </div>
 </div>
 
 <style>
-  /* Container Banner Bawah */
+  /* Container Utama */
   .vantone-banner-container {
     position: fixed;
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%) translateY(100px);
     width: calc(100% - 40px);
-    max-width: 1080px;
-    background: rgba(18, 18, 18, 0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    max-width: 1100px;
+    background: rgba(18, 18, 20, 0.95);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 77, 77, 0.2);
     border-radius: 16px;
     padding: 16px 28px;
-    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.65), 0 0 20px rgba(255, 255, 255, 0.03);
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 77, 77, 0.15);
     z-index: 99999;
-    box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     opacity: 0;
     animation: bannerSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
-  /* Konten Dalam Banner */
-  .banner-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-  }
-
-  /* Wrapper & Animasi Ikon Gear */
-  .banner-icon-wrapper {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .gear-icon {
-    width: 26px;
-    height: 26px;
-    stroke: #ffffff;
-    animation: spinGear 6s linear infinite;
-  }
-
-  /* Format Teks */
-  .banner-text-wrapper {
-    text-align: center;
-    flex-grow: 1;
-  }
-
-  .banner-title {
-    margin: 0 0 6px 0;
+  /* Teks Merah Menyala (Glow Effect) */
+  .shimmer-text-red {
+    margin: 0 0 5px 0;
     font-size: 13.5px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    color: #ffffff;
+    font-weight: 800;
+    letter-spacing: 0.6px;
     line-height: 1.4;
     text-transform: uppercase;
+    /* Gradasi Merah ke Putih ke Merah */
+    background: linear-gradient(
+      90deg,
+      #ff5e5e 0%,
+      #ffffff 30%,
+      #ff0000 50%,
+      #ffffff 70%,
+      #ff5e5e 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* Glow effect */
+    text-shadow: 0 0 8px rgba(255, 0, 0, 0.4), 0 0 15px rgba(255, 0, 0, 0.2);
+    animation: textShimmer 3s linear infinite;
   }
 
-  .banner-desc {
-    margin: 0;
-    font-size: 12.5px;
-    color: #b0b0b0;
-    line-height: 1.5;
+  /* Animasi Kilau Teks Lebih Cepat & Hidup */
+  @keyframes textShimmer {
+    0% { background-position: 200% center; }
+    100% { background-position: -200% center; }
   }
 
-  .banner-desc code {
-    background: rgba(255, 255, 255, 0.1);
-    color: #e5e5e5;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 11.5px;
-  }
+  /* Komponen lainnya tetap sama agar stabil */
+  .banner-content { display: flex; align-items: center; gap: 20px; }
+  .banner-icon-wrapper { width: 44px; height: 44px; border-radius: 50%; background: rgba(255, 77, 77, 0.1); border: 1px solid rgba(255, 77, 77, 0.2); display: flex; align-items: center; justify-content: center; }
+  .gear-icon { width: 24px; height: 24px; stroke: #ff4d4d; animation: spinGear 6s linear infinite; }
+  .banner-divider { width: 1px; height: 40px; background: rgba(255, 77, 77, 0.2); }
+  .banner-desc { margin: 0; font-size: 12px; color: #d0d0d0; line-height: 1.5; }
+  .banner-desc code { background: rgba(255, 255, 255, 0.05); color: #fff; padding: 2px 6px; border-radius: 4px; }
+  .flare-sparkle { position: absolute; right: 0; top: -4px; color: #ff0000; font-size: 16px; text-shadow: 0 0 10px #ff0000; animation: periodicFlare 3s ease-in-out infinite; }
+  .banner-close-btn { position: absolute; top: 8px; right: 12px; background: transparent; border: none; color: #555; font-size: 22px; cursor: pointer; }
+  .banner-close-btn:hover { color: #fff; }
 
-  /* Ikon Kilau */
-  .banner-sparkle {
-    font-size: 20px;
-    flex-shrink: 0;
-    animation: pulseSparkle 2s infinite ease-in-out;
-  }
+  @keyframes spinGear { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes bannerSlideUp { to { transform: translateX(-50%) translateY(0); opacity: 1; } }
+  @keyframes periodicFlare { 0%, 70%, 100% { opacity: 0; transform: scale(0.6); } 80% { opacity: 1; transform: scale(1.5); } 90% { opacity: 0.2; transform: scale(0.9); } }
 
-  /* Tombol Tutup */
-  .banner-close-btn {
-    position: absolute;
-    top: 8px;
-    right: 14px;
-    background: transparent;
-    border: none;
-    color: #888888;
-    font-size: 22px;
-    cursor: pointer;
-    line-height: 1;
-    transition: color 0.2s ease, transform 0.2s ease;
-  }
-
-  .banner-close-btn:hover {
-    color: #ffffff;
-    transform: scale(1.15);
-  }
-
-  /* Keyframes Animasi */
-  @keyframes bannerSlideUp {
-    to {
-      transform: translateX(-50%) translateY(0);
-      opacity: 1;
-    }
-  }
-
-  @keyframes spinGear {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  @keyframes pulseSparkle {
-    0%, 100% {
-      transform: scale(1);
-      opacity: 0.7;
-    }
-    50% {
-      transform: scale(1.25);
-      opacity: 1;
-    }
-  }
-
-  /* Penyesuaian Tampilan Layar HP (Mobile Responsive) */
   @media (max-width: 768px) {
-    .vantone-banner-container {
-      bottom: 12px;
-      width: calc(100% - 24px);
-      padding: 14px 16px;
-    }
-
-    .banner-content {
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .banner-sparkle {
-      display: none;
-    }
-
-    .banner-title {
-      font-size: 12px;
-    }
-
-    .banner-desc {
-      font-size: 11.5px;
-    }
+    .vantone-banner-container { bottom: 12px; width: calc(100% - 24px); padding: 14px 16px; }
+    .banner-content { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .banner-divider { display: none; }
   }
 </style>
 
@@ -599,8 +514,7 @@
     }
   }
 </script>
-<!-- ================= END: BANNER NOTIFIKASI UPGRADE VANTONE ================= -->
-
+<!-- ================= END: BANNER NOTIFIKASI UPGRADE VANTONE (RED GLOW) ================= -->
 <script src="script.js"></script>
 </body>
 </html>
